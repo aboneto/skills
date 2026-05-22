@@ -1,0 +1,38 @@
+{
+  "skill_name": "consult-claude",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I've been trying for about 2 hours to get this FastAPI API endpoint to stop returning 500 when I send it a payload with a nested field. I've tried validating the schema with Pydantic, checking server logs, and even reinstalled dependencies. The error says something about `TypeError: 'NoneType' object is not subscriptable` but I can't find where the None is coming from. The file is at `src/api/routes/users.py`.",
+      "expected_output": "Identifies the bug in user.address without null check and provides a concrete solution",
+      "files": ["src/api/routes/users.py"],
+      "assertions": [
+        {"name": "identifies_bug_location", "description": "Identifies the exact line where the bug occurs"},
+        {"name": "provides_fix", "description": "Provides a concrete solution"},
+        {"name": "explains_root_cause", "description": "Explains why the error occurs"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I'm setting up a new personal project and can't decide between SQLite or PostgreSQL. It's a dashboard to track my expenses, probably around 10-20 tables, no more than 50k rows total, but I want it to be easy to deploy on a cheap VPS. What would you recommend?",
+      "expected_output": "Gives a clear recommendation with technical reasoning based on the user's constraints",
+      "files": [],
+      "assertions": [
+        {"name": "gives_clear_recommendation", "description": "Gives a clear recommendation"},
+        {"name": "considers_constraints", "description": "Mentions at least 2 of the user's constraints"},
+        {"name": "provides_reasoning", "description": "Explains the why with technical arguments"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I need to implement a parser for a custom log format that has lines with irregular timestamps, indented blocks, and sometimes breaks in the middle. I've never done anything like this and don't want to do it with regex spaghetti. How would you approach it?",
+      "expected_output": "Proposes a structured approach (not regex spaghetti) that handles irregular timestamps and broken lines",
+      "files": [],
+      "assertions": [
+        {"name": "avoids_regex_spaghetti", "description": "Doesn't propose a single giant regex"},
+        {"name": "handles_irregular_timestamps", "description": "Mentions how to handle irregular timestamps"},
+        {"name": "handles_broken_lines", "description": "Proposes a strategy for broken lines"}
+      ]
+    }
+  ]
+}

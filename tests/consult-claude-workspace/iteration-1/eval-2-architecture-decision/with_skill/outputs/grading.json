@@ -1,0 +1,9 @@
+{
+  "eval_id": 2,
+  "eval_name": "architecture-decision",
+  "expectations": [
+    {"text": "gives_clear_recommendation", "passed": true, "evidence": "Clearly recommended SQLite"},
+    {"text": "considers_constraints", "passed": true, "evidence": "Mentioned cheap VPS, 50k rows, zero ops, RAM consumption"},
+    {"text": "provides_reasoning", "passed": true, "evidence": "Explained tradeoffs: SQLite zero ops, no daemon, trivial backup vs PostgreSQL consumes RAM idle"}
+  ]
+}

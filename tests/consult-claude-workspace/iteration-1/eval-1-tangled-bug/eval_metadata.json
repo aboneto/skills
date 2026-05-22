@@ -1,0 +1,19 @@
+{
+  "eval_id": 1,
+  "eval_name": "tangled-bug",
+  "prompt": "I've been trying for about 2 hours to get this FastAPI API endpoint to stop returning 500 when I send it a payload with a nested field. I've tried validating the schema with Pydantic, checking server logs, and even reinstalled dependencies. The error says something about `TypeError: 'NoneType' object is not subscriptable` but I can't find where the None is coming from. The file is at `src/api/routes/users.py`.",
+  "assertions": [
+    {
+      "name": "identifies_bug_location",
+      "description": "Identifies the exact line where the bug occurs (accessing user.address without null check)"
+    },
+    {
+      "name": "provides_fix",
+      "description": "Provides a concrete solution (null check or making address required)"
+    },
+    {
+      "name": "explains_root_cause",
+      "description": "Explains why the error occurs (Optional[Address] can be None)"
+    }
+  ]
+}

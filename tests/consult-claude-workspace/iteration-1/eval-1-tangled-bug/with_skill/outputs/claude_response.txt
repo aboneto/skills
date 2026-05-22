@@ -1,0 +1,24 @@
+Line `user.address.street`. `address=None` → `None.street` = `TypeError`.
+
+Fix — guard `None`:
+
+```python
+@router.post("/users")
+async def create_user(user: UserCreate):
+    user_data = {
+        "name": user.name,
+        "email": user.email,
+        "street": user.address.street if user.address else None,
+        "city": user.address.city if user.address else None,
+    }
+    return {"id": 1, **user_data}
+```
+
+Or early unpack:
+
+```python
+street = user.address.street if user.address else None
+city = user.address.city if user.address else None
+```
+
+If `address` must be required → remove `Optional`, leave `address: Address` (Pydantic rejects `null` with 422).

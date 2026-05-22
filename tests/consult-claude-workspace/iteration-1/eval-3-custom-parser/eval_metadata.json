@@ -1,0 +1,19 @@
+{
+  "eval_id": 3,
+  "eval_name": "custom-parser",
+  "prompt": "I need to implement a parser for a custom log format that has lines with irregular timestamps, indented blocks, and sometimes breaks in the middle. I've never done anything like this and don't want to do it with regex spaghetti. How would you approach it?",
+  "assertions": [
+    {
+      "name": "avoids_regex_spaghetti",
+      "description": "Doesn't propose a single giant regex; suggests a structured approach (state machine, lexer, parser combinators, etc.)"
+    },
+    {
+      "name": "handles_irregular_timestamps",
+      "description": "Mentions how to handle irregular timestamps (multiple formats, try/parse, etc.)"
+    },
+    {
+      "name": "handles_broken_lines",
+      "description": "Proposes a strategy for lines that break in the middle (recovery, resynchronization, etc.)"
+    }
+  ]
+}
