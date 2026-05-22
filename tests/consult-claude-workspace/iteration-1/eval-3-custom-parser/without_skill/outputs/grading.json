@@ -1,0 +1,9 @@
+{
+  "eval_id": 3,
+  "eval_name": "custom-parser",
+  "expectations": [
+    {"text": "avoids_regex_spaghetti", "passed": true, "evidence": "Proposed classifying first with simple predicates + explicit state machine, not nested regex"},
+    {"text": "handles_irregular_timestamps", "passed": true, "evidence": "Mentioned simple predicates to detect timestamps by shape"},
+    {"text": "handles_broken_lines", "passed": true, "evidence": "Proposed recovery by resynchronization: accumulate broken lines until finding next timestamp"}
+  ]
+}

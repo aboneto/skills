@@ -1,0 +1,16 @@
+claude -p "
+I need to implement a parser for a custom log format that has these characteristics:
+- Lines with irregular timestamps (not always the same format, sometimes missing)
+- Indented blocks that belong to the previous entry (stack traces, context info)
+- Sometimes logs break in the middle (an entry continues on the next line without a clear marker)
+- I don't want to do it with regex spaghetti — it's hard to maintain and test
+
+I need:
+1. A robust parsing approach that isn't regex spaghetti
+2. How to handle indentation as a belonging signal
+3. How to detect when a line is a continuation of the previous one vs a new entry
+4. What data structure to use for the output
+5. If there are any known patterns or libraries for this type of problem
+
+The language is JavaScript/TypeScript (it's for a web project). Give me alternatives with tradeoffs if available.
+" --model opus

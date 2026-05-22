@@ -1,0 +1,15 @@
+{
+  "eval_id": 1,
+  "eval_name": "tangled-bug",
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 3,
+    "failed": 0,
+    "total": 3
+  },
+  "expectations": [
+    {"text": "identifies_bug_location", "passed": true, "evidence": "Identified src/api/routes/users.py:23-24 — user.address.street without checking if address is None"},
+    {"text": "provides_fix", "passed": true, "evidence": "Gave two solutions: guard conditional or make address required in the schema"},
+    {"text": "explains_root_cause", "passed": true, "evidence": "Explained that Optional[Address] = None causes None.street when payload sends address null"}
+  ]
+}

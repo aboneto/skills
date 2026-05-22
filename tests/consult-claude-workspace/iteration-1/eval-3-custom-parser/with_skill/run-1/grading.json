@@ -1,0 +1,15 @@
+{
+  "eval_id": 3,
+  "eval_name": "custom-parser",
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 3,
+    "failed": 0,
+    "total": 3
+  },
+  "expectations": [
+    {"text": "avoids_regex_spaghetti", "passed": true, "evidence": "Proposed Lexer + State Machine in 3 phases with small independent regexes, not a giant regex"},
+    {"text": "handles_irregular_timestamps", "passed": true, "evidence": "Mentioned tryParseTimestamp that tries N timestamp formats in order"},
+    {"text": "handles_broken_lines", "passed": true, "evidence": "Proposed heuristic: line without indent or parseable timestamp = continuation of previous entry"}
+  ]
+}

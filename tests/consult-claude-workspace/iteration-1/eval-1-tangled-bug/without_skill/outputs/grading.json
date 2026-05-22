@@ -1,0 +1,9 @@
+{
+  "eval_id": 1,
+  "eval_name": "tangled-bug",
+  "expectations": [
+    {"text": "identifies_bug_location", "passed": true, "evidence": "Identified src/api/routes/users.py:23-24 — direct access to user.address.street without null check"},
+    {"text": "provides_fix", "passed": true, "evidence": "Proposed null check: user.address.street if user.address else None"},
+    {"text": "explains_root_cause", "passed": true, "evidence": "Explained that Optional[Address] = None causes the TypeError when payload doesn't include address"}
+  ]
+}

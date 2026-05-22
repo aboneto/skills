@@ -1,0 +1,15 @@
+{
+  "eval_id": 2,
+  "eval_name": "architecture-decision",
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 3,
+    "failed": 0,
+    "total": 3
+  },
+  "expectations": [
+    {"text": "gives_clear_recommendation", "passed": true, "evidence": "Clearly recommended SQLite"},
+    {"text": "considers_constraints", "passed": true, "evidence": "Mentioned cheap VPS, 50k rows, zero ops, PostgreSQL RAM consumption"},
+    {"text": "provides_reasoning", "passed": true, "evidence": "Explained that SQLite doesn't need a server, trivial backups, more than enough performance for this workload"}
+  ]
+}

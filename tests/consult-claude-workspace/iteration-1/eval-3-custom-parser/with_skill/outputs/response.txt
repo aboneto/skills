@@ -1,0 +1,91 @@
+# Approach: lexer + state machine, not monolithic regex
+
+Separate into **3 phases**. Each phase testable in isolation.
+
+## Phase 1 — Line classifier (lexer)
+
+Each line → token with type. One small regex per type, not a mega-regex.
+
+```ts
+type LineKind =
+  | { kind: 'entry-start'; ts: Date | null; level?: string; rest: string }
+  | { kind: 'indented'; depth: number; text: string }
+  | { kind: 'continuation'; text: string }   // no indent, no ts, no new entry
+  | { kind: 'blank' };
+
+function classify(line: string): LineKind {
+  if (/^\s*$/.test(line)) return { kind: 'blank' };
+  const indent = line.match(/^(\s+)/);
+  if (indent) return { kind: 'indented', depth: indent[1].length, text: line.trimStart() };
+  const ts = tryParseTimestamp(line); // tries N known formats, returns null if fails
+  if (ts) return { kind: 'entry-start', ts: ts.date, level: ts.level, rest: ts.rest };
+  return { kind: 'continuation', text: line };
+}
+```
+
+`tryParseTimestamp` = ordered list of formats. Each one a small function. Easy to add new format without touching others.
+
+## Phase 2 — State machine (parser)
+
+Accumulator `current: Entry | null`. Rules:
+
+| Token | Action |
+|-------|--------|
+| `entry-start` | flush `current`, open new |
+| `indented` | append to `current.children` (with depth) |
+| `continuation` | append to `current.message` (with `\n`) |
+| `blank` | if next token is `entry-start` → flush; otherwise → ignore or preserve as preferred |
+
+"Continuation vs new entry" heuristic = **absence of parseable timestamp + no indent**. If unsure, add weak signals: line starts with lowercase, no level keyword (`ERROR|WARN|INFO`), etc. Sum score, threshold.
+
+## Phase 3 — Tree builder (optional)
+
+If you want hierarchy by indent (nested stack trace), convert flat `children` to tree using depth like YAML/Markdown parsers. Stack of nodes per indent level.
+
+## Output structure
+
+```ts
+interface LogEntry {
+  timestamp: Date | null;
+  level: string | null;
+  message: string;        // first line + continuations
+  context: ContextNode[]; // indented, possibly nested
+  raw: string;            // original text — for debug/round-trip
+  lineRange: [number, number];
+}
+
+interface ContextNode {
+  text: string;
+  depth: number;
+  children: ContextNode[];
+}
+```
+
+`raw` + `lineRange` key for debugging when parser fails.
+
+## Known patterns/libs
+
+- **Chevrotain** — JS/TS parser toolkit. Overkill for logs but works if format grows to real grammar.
+- **nearley** / **peggy** — PEG parsers. Useful if you can define grammar; problematic with multi-format timestamps.
+- **Pino / Bunyan** parsers — only work if logs are NDJSON. Not your case.
+- **logfmt** — only if format is `k=v`.
+- General pattern: **"line-oriented parser with lookahead"**. Same approach Python `logging` uses for multiline, Logstash multiline codec, Vector `parse_logfmt`. Search "multiline log parser state machine".
+
+## Tradeoffs
+
+| Approach | Pro | Con |
+|----------|-----|-----|
+| **Lexer + SM (recommended)** | Each part testable, easy to add formats, debuggable | More code than a regex |
+| Mega-regex with groups | Short | Impossible to maintain, edge cases kill you |
+| PEG (peggy/nearley) | Declarative | Irregular timestamps break formal grammar |
+| Streaming line-by-line with callbacks | Works on huge files | More complex if you need lookahead |
+
+## Testing
+
+Goldens: input file → expected JSON file. Snapshot per fixture. Each new bug = new fixture. Unit tests for isolated `classify()` (very fast) + SM integration tests.
+
+## Recommendation
+
+Start with **classifier + synchronous SM over array of lines**. If files >100MB later, migrate to stream (Node's `readline`). Don't premature-optimize.
+
+Continuation heuristic: start simple (no-indent + no-timestamp = continuation). Measure false positives on real logs before adding scoring. Probably sufficient.

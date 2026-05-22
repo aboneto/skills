@@ -1,0 +1,19 @@
+{
+  "eval_id": 2,
+  "eval_name": "architecture-decision",
+  "prompt": "I'm setting up a new personal project and can't decide between SQLite or PostgreSQL. It's a dashboard to track my expenses, probably around 10-20 tables, no more than 50k rows total, but I want it to be easy to deploy on a cheap VPS. What would you recommend?",
+  "assertions": [
+    {
+      "name": "gives_clear_recommendation",
+      "description": "Gives a clear recommendation (SQLite or PostgreSQL), doesn't just say 'it depends'"
+    },
+    {
+      "name": "considers_constraints",
+      "description": "Mentions at least 2 of the user's constraints (cheap VPS, 50k rows, easy deploy)"
+    },
+    {
+      "name": "provides_reasoning",
+      "description": "Explains the reasoning behind the recommendation with technical arguments"
+    }
+  ]
+}
