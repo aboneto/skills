@@ -1,0 +1,34 @@
+{
+  "assertions": [
+    {
+      "text": "Gemfile includes jekyll-picture-tag or similar responsive image plugin",
+      "passed": true,
+      "evidence": "Lines 12-14: jekyll-picture-tag, sharp, image_processing gems included"
+    },
+    {
+      "text": "_config.yml has picture plugin configured with WebP and widths",
+      "passed": true,
+      "evidence": "Lines 39-43: picture widths, formats: [webp, original], lazy: true"
+    },
+    {
+      "text": "Layout/post.html uses responsive image markup (picture tag or srcset with sizes)",
+      "passed": true,
+      "evidence": "Lines 62-98: _includes/responsive-image.html with picture element, srcset, WebP source; Lines 104-148: post.html using responsive_image tag"
+    },
+    {
+      "text": "Build pipeline includes sharp pre-processing or similar for image optimization",
+      "passed": true,
+      "evidence": "Lines 154-179: scripts/generate-images.sh using sharp for image processing; Lines 181-194: netlify.toml hooks it into build"
+    },
+    {
+      "text": "Netlify deployment configuration present (netlify.toml or _headers)",
+      "passed": true,
+      "evidence": "Lines 181-194: netlify.toml with build command; Lines 251-258: _headers with Cache-Control"
+    },
+    {
+      "text": "Mentions that hero/lcp images should NOT be lazy loaded (loading eager for above-fold)",
+      "passed": false,
+      "evidence": "No explicit mention that hero images should use loading=\"eager\". Line 292 mentions 'Preloading the primary hero image' but doesn't address lazy loading distinction for above-fold images."
+    }
+  ]
+}

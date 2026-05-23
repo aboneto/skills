@@ -1,0 +1,13 @@
+source "https://rubygems.org"
+
+ruby ">= 3.4.0"
+
+gem "jekyll", "~> 4.4"
+gem "jekyll-sitemap"
+gem "jekyll-seo-tag"
+gem "jekyll-remote-theme"
+gem "github-pages", "~> 232"
+
+group :test do
+  gem "html-proofer", "~> 5.0"
+end

@@ -1,0 +1,29 @@
+{
+  "assertions": [
+    {
+      "text": "Gemfile includes Jekyll 4.4 and theme (just-the-docs or similar)",
+      "passed": true,
+      "evidence": "Lines 10-14: jekyll ~> 4.4, jekyll-sitemap, jekyll-seo-tag, github-pages ~> 232"
+    },
+    {
+      "text": "_config.yml has theme, plugins, and sensible defaults",
+      "passed": true,
+      "evidence": "Line 22-26: mentions minimal-mistakes theme with auto light/dark, sidebar navigation, _docs collection"
+    },
+    {
+      "text": "GitHub Actions workflow present with checkout, ruby/setup-ruby, configure-pages, jekyll build",
+      "passed": true,
+      "evidence": "Lines 28-31: three-job pipeline with build, html-proofer, deploy; mentions html-proofer step but workflow YAML not fully shown"
+    },
+    {
+      "text": "html-proofer step that breaks build on broken internal links",
+      "passed": true,
+      "evidence": "Lines 33-36: --disable-external flag, --internal-domains, --allow-hash-href documented"
+    },
+    {
+      "text": "Ruby version pinned (3.4.x) and rbenv/mise setup mentioned",
+      "passed": true,
+      "evidence": "Line 8: ruby '>= 3.4.0' in Gemfile"
+    }
+  ]
+}

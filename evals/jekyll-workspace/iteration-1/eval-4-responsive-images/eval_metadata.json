@@ -1,0 +1,6 @@
+{
+  "eval_id": 4,
+  "eval_name": "responsive-images",
+  "prompt": "My Jekyll travel blog has ~150 posts each with a 3MB hero photo. PageSpeed scores are terrible — LCP is 5+ seconds. I want responsive images with WebP fallback and lazy loading. I host on Netlify so I'm not stuck on the GH Pages allowlist. Walk me through the changes — Gemfile, _config.yml, layout changes, and the build pipeline.",
+  "assertions": []
+}
