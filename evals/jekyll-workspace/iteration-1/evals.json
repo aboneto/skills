@@ -1,0 +1,33 @@
+{
+  "skill_name": "jekyll",
+  "evals": [
+    {
+      "id": 1,
+      "name": "gh-pages-paginate-v2-failure",
+      "prompt": "I pushed my Jekyll blog to GitHub Pages and the Actions build is failing with `Could not find gem 'jekyll-paginate-v2'`. My Gemfile has both `github-pages` and `jekyll-paginate-v2` in `:jekyll_plugins`. It builds fine locally with `bundle exec jekyll serve`. Repo is at github.com/me/blog and the site lives at me.github.io/blog. What do I need to change?",
+      "expected_output": "Diagnosis: jekyll-paginate-v2 is NOT on the GitHub Pages allowlist. Local works because Gemfile resolves locally; classic GH Pages builder rejects unlisted plugins. Two acceptable fixes: (1) drop jekyll-paginate-v2, fall back to jekyll-paginate, or (2) switch deployment to GitHub Actions (workflow building Jekyll site, then deploying to Pages) which removes the allowlist constraint. Should also mention baseurl /blog vs root in passing if relevant.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "post-page-liquid-features",
+      "prompt": "On my Jekyll site I have `_posts/*.md` and I want each post page to show: (a) estimated reading time, (b) a table of contents built from the post's H2 and H3 headings, (c) related posts that share at least one tag. I'm on Jekyll 4.4 and use kramdown. Where do I put this and what's the actual code?",
+      "expected_output": "Three pieces of working Liquid/kramdown code: (a) reading time via `page.content | number_of_words | divided_by: 200 | plus: 1` (or similar); (b) TOC via kramdown's `* TOC\\n{:toc}` with `toc_levels: 2..3` in _config.yml — NOT a heavy plugin solution; (c) related posts via tag overlap loop using `concat | uniq` size comparison (correct logic). All should be placed in `_layouts/post.html`. No invalid `{# #}` Liquid comments.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "docs-site-from-scratch",
+      "prompt": "Help me set up a Jekyll docs site from scratch on macOS. About 40 pages, sidebar nav, light/dark mode. Ruby 3.4. I deploy via GitHub Actions to GitHub Pages. Need: a working Gemfile, a `_config.yml`, the deployment workflow, and an html-proofer step that breaks the build on broken internal links.",
+      "expected_output": "Should produce: Ruby setup via rbenv/mise pinning 3.4.x with .ruby-version; Gemfile with Jekyll 4.4 + just-the-docs (or similar docs theme) + html-proofer in :test group; _config.yml with theme, plugins, sensible defaults; GitHub Actions workflow with actions/checkout, ruby/setup-ruby (with bundler-cache), configure-pages (with id: pages), jekyll build with --baseurl, htmlproofer step (--disable-external, --check-html), upload-pages-artifact, deploy-pages. JEKYLL_ENV=production set. Workflow should be syntactically valid and follow current action versions.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "responsive-images",
+      "prompt": "My Jekyll travel blog has ~150 posts each with a 3MB hero photo. PageSpeed scores are terrible — LCP is 5+ seconds. I want responsive images with WebP fallback and lazy loading. I host on Netlify so I'm not stuck on the GH Pages allowlist. Walk me through the changes — Gemfile, _config.yml, layout changes, and the build pipeline.",
+      "expected_output": "Should cover: (1) Gemfile additions - image_optim (or similar) for WebP conversion during build, optionally responsive_images or jekyll-picture-tag; (2) _config.yml - image_optim settings, maybe a new default for responsive; (3) layouts - use srcset and sizes for responsive, picture element or img with source for WebP fallback, native lazy loading with loading=\"lazy\", proper width/height attributes to avoid CLS; (4) build pipeline - asset pipeline changes or separate build step for image optimization; (5) optionally - Content-Security-Policy header considerations. Should reference specific file paths and code.",
+      "files": []
+    }
+  ]
+}

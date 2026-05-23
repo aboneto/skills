@@ -1,0 +1,75 @@
+{
+  "skill_name": "jekyll",
+  "iteration": 1,
+  "aggregated_at": "2026-05-23T15:50:00Z",
+  "results": [
+    {
+      "eval_name": "gh-pages-paginate-v2-failure",
+      "config": "with_skill",
+      "pass_rate": 1.0,
+      "avg_tokens": 35139,
+      "avg_duration_ms": 71190
+    },
+    {
+      "eval_name": "gh-pages-paginate-v2-failure",
+      "config": "without_skill",
+      "pass_rate": 0.0,
+      "avg_tokens": 21695,
+      "avg_duration_ms": 41531
+    },
+    {
+      "eval_name": "post-page-liquid-features",
+      "config": "with_skill",
+      "pass_rate": 1.0,
+      "avg_tokens": 38522,
+      "avg_duration_ms": 89307
+    },
+    {
+      "eval_name": "post-page-liquid-features",
+      "config": "without_skill",
+      "pass_rate": 0.0,
+      "avg_tokens": 23553,
+      "avg_duration_ms": 75996
+    },
+    {
+      "eval_name": "docs-site-from-scratch",
+      "config": "with_skill",
+      "pass_rate": 1.0,
+      "avg_tokens": 41830,
+      "avg_duration_ms": 88230
+    },
+    {
+      "eval_name": "docs-site-from-scratch",
+      "config": "without_skill",
+      "pass_rate": 0.8,
+      "avg_tokens": 24100,
+      "avg_duration_ms": 79800
+    },
+    {
+      "eval_name": "responsive-images",
+      "config": "with_skill",
+      "pass_rate": 1.0,
+      "avg_tokens": 45230,
+      "avg_duration_ms": 95123
+    },
+    {
+      "eval_name": "responsive-images",
+      "config": "without_skill",
+      "pass_rate": 0.833,
+      "avg_tokens": 28940,
+      "avg_duration_ms": 67340
+    }
+  ],
+  "summary": {
+    "total_evals": 4,
+    "with_skill_pass_rate": 1.0,
+    "without_skill_pass_rate": 0.476,
+    "delta_pass_rate": 0.524,
+    "avg_tokens_with_skill": 40180,
+    "avg_tokens_without_skill": 24572,
+    "delta_tokens": 15608,
+    "avg_duration_with_skill_ms": 85963,
+    "avg_duration_without_skill_ms": 66667,
+    "delta_duration_ms": 19296
+  }
+}

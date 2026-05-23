@@ -1,0 +1,29 @@
+{
+  "assertions": [
+    {
+      "text": "Gemfile includes Jekyll 4.4 and theme (just-the-docs or similar)",
+      "passed": true,
+      "evidence": "Lines 32-33: gem 'jekyll', '~> 4.4.1', gem 'just-the-docs', '~> 0.10'"
+    },
+    {
+      "text": "_config.yml has theme, plugins, and sensible defaults",
+      "passed": true,
+      "evidence": "Lines 72-177: full _config.yml with theme: just-the-docs, plugins array, collections config, nav_external_links, etc."
+    },
+    {
+      "text": "GitHub Actions workflow present with checkout, ruby/setup-ruby, configure-pages, jekyll build",
+      "passed": true,
+      "evidence": "Lines 253-308: complete workflow with actions/checkout@v4, ruby/setup-ruby@v1, actions/configure-pages@v5, bundle exec jekyll build with JEKYLL_ENV: production"
+    },
+    {
+      "text": "html-proofer step that breaks build on broken internal links",
+      "passed": true,
+      "evidence": "Line 293: bundle exec htmlproofer ./_site --disable-external --check-html --allow-hash-href"
+    },
+    {
+      "text": "Ruby version pinned (3.4.x) and rbenv/mise setup mentioned",
+      "passed": true,
+      "evidence": "Lines 13-22: rbenv install 3.4.8; Lines 54-58: .ruby-version file with 3.4.8"
+    }
+  ]
+}

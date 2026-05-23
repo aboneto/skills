@@ -1,0 +1,35 @@
+{
+  "eval_id": 2,
+  "eval_name": "post-page-liquid-features",
+  "prompt": "On my Jekyll site I have `_posts/*.md` and I want each post page to show: (a) estimated reading time, (b) a table of contents built from the post's H2 and H3 headings, (c) related posts that share at least one tag. I'm on Jekyll 4.4 and use kramdown. Where do I put this and what's the actual code?",
+  "assertions": [
+    {
+      "id": "reading_time_uses_built_in_filter",
+      "text": "Reading time uses Jekyll's built-in `number_of_words` filter (or `page.content | split | size`) rather than a heavy custom plugin"
+    },
+    {
+      "id": "toc_uses_kramdown_native",
+      "text": "TOC uses kramdown's native `* TOC\\n{:toc}` (or `{:toc}`) — does NOT introduce jekyll-toc or unrelated plugins"
+    },
+    {
+      "id": "toc_levels_h2_h3_only",
+      "text": "Restricts the TOC to H2 and H3 (e.g., `toc_levels: 2..3` in _config.yml)"
+    },
+    {
+      "id": "related_posts_correct_tag_overlap",
+      "text": "Related posts uses a correct tag-overlap algorithm (concat + uniq size comparison, or a where_exp/contains check) — logic actually finds overlapping tags"
+    },
+    {
+      "id": "no_invalid_liquid_comments",
+      "text": "Does NOT use the invalid `{# … #}` Liquid comment syntax anywhere in code samples"
+    },
+    {
+      "id": "code_placed_in_post_layout",
+      "text": "States that the code belongs in `_layouts/post.html` (or a clearly-scoped include used by post.html)"
+    },
+    {
+      "id": "mentions_jekyll_native_related_posts_tradeoff",
+      "text": "Either uses tag-overlap manually OR mentions Jekyll's built-in `site.related_posts` with its `--lsi`/classifier-reborn cost"
+    }
+  ]
+}

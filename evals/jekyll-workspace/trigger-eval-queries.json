@@ -1,0 +1,22 @@
+[
+  {"query": "ok so my jekyll blog on github pages is failing build with 'Liquid error: undefined method `map' for nil' - I haven't touched the code in months but it just started breaking", "should_trigger": true},
+  {"query": "I want to add a table of contents to my markdown posts that shows H2 and H3 headings, using kramdown syntax", "should_trigger": true},
+  {"query": "my _posts folder has like 200 posts and the build is taking 3+ minutes. Jekyll 4.4, hosted on Netlify. What can I do to speed it up?", "should_trigger": true},
+  {"query": "need to set up pagination on my blog - 10 posts per page, older/newer links at the bottom. Using jekyll-paginate-v2 gem", "should_trigger": true},
+  {"query": "just pushed my site to github pages and the build is failing with 'jekyll-feed: CI disabled' - how do I fix the github actions workflow?", "should_trigger": true},
+  {"query": "I'm using minima theme and want to add a dark mode toggle button in the header. Where do I start?", "should_trigger": true},
+  {"query": "in my liquid templates I keep writing {% if page.date %} but it breaks when posts don't have a date - how do I handle optional front matter fields?", "should_trigger": true},
+  {"query": "trying to use jekyll-picture-tag for responsive images but getting 'Gem not found' error on my Netlify deploy. Gemfile has it in :jekyll_plugins", "should_trigger": true},
+  {"query": "docs site with just-the-docs theme - how do I make the sidebar collapse/expand for nested sections?", "should_trigger": true},
+  {"query": "my site has /blog/ as baseurl and all my links are broken after moving from root. Do I need to change every hardcoded path?", "should_trigger": true},
+  {"query": "deploying to Cloudflare Pages instead of Netlify - what changes do I need in my build config and _config.yml?", "should_trigger": true},
+  {"query": "getting 'Error: File to import not found or unreadable: normalize.css/normalize' when I run bundle exec jekyll serve", "should_trigger": true},
+  {"query": "I have a static site with no _posts but I want to use Jekyll for the build pipeline and deploy via GitHub Actions. Is Jekyll overkill for this?", "should_trigger": true},
+  {"query": "can I use jekyll with a database? I want to pull product data from a sqlite file and generate pages for each product", "should_trigger": true},
+  {"query": "my company wants a blog with 3 developers publishing posts. We need role-based access where editors approve before posts go live. Is there a Jekyll solution?", "should_trigger": false},
+  {"query": "I'm writing a ruby gem that needs markdown documentation generated. Can Jekyll be used as a library to convert md to html?", "should_trigger": true},
+  {"query": "running `bundle exec jekyll serve` but changes to my CSS aren't showing up even after hard refresh", "should_trigger": true},
+  {"query": "I inherited a Middleman site (Ruby static site generator). How do I migrate it to Jekyll?", "should_trigger": false},
+  {"query": "I want to add giscus comments to my static blog. The docs say to put a script in the <head> but I'm confused about which layout file to edit", "should_trigger": true},
+  {"query": "my github pages build keeps timing out after 10 minutes. The site has 500 pages. Do I need a different host or can I optimize the build?", "should_trigger": true}
+]

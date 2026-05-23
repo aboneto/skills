@@ -1,0 +1,31 @@
+{
+  "eval_id": 1,
+  "eval_name": "gh-pages-paginate-v2",
+  "prompt": "I pushed my Jekyll blog to GitHub Pages and the Actions build is failing with `Could not find gem 'jekyll-paginate-v2'`. My Gemfile has both `github-pages` and `jekyll-paginate-v2` in `:jekyll_plugins`. It builds fine locally with `bundle exec jekyll serve`. Repo is at github.com/me/blog and the site lives at me.github.io/blog. What do I need to change?",
+  "assertions": [
+    {
+      "id": "identifies_allowlist_root_cause",
+      "text": "Identifies that jekyll-paginate-v2 is NOT on the GitHub Pages plugin allowlist as the root cause"
+    },
+    {
+      "id": "explains_local_vs_prod_divergence",
+      "text": "Explains why the same Gemfile works locally but fails on the GitHub Pages classic builder"
+    },
+    {
+      "id": "offers_github_actions_migration",
+      "text": "Offers migrating to GitHub Actions deployment as a fix (unlocks current Jekyll + any plugin)"
+    },
+    {
+      "id": "offers_fallback_to_paginate_v1",
+      "text": "Offers an in-allowlist alternative (e.g., drop jekyll-paginate-v2 and use jekyll-paginate)"
+    },
+    {
+      "id": "acknowledges_project_baseurl",
+      "text": "Acknowledges the site lives at /blog (project site) — does not assume root deployment"
+    },
+    {
+      "id": "no_misdiagnosis_lockfile_or_bundle",
+      "text": "Does not (incorrectly) attribute the failure solely to bundle install / Gemfile.lock issues"
+    }
+  ]
+}

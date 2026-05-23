@@ -1,0 +1,51 @@
+title: Documentation Site
+description: A Jekyll-powered documentation site
+remote_theme: mmistakes/minimal-mistakes@4.24.0
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-remote-theme
+
+ minima:
+   skin: auto
+   dark_mode_skin: dark
+
+navigation:
+  - title: Getting Started
+    url: /docs/getting-started/
+  - title: Installation
+    url: /docs/installation/
+  - title: Configuration
+    url: /docs/configuration/
+  - title: Writing Posts
+    url: /docs/writing-posts/
+  - title: Collections
+    url: /docs/collections/
+  - title: Helpers
+    url: /docs/helpers/
+  - title: Extras
+    url: /docs/extras/
+
+defaults:
+  - scope:
+      path: "_docs"
+    values:
+      layout: single
+      sidebar_nav: true
+
+github:
+  repository_url: https://github.com/example/docs
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+
+jekyll_plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-remote-theme
