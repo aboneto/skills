@@ -35,3 +35,19 @@ The idea behind this skill is to use the `claude` CLI as an "expert colleague" y
 - For repetitive tasks where you've already validated the pattern earlier in the same session.
 
 **Tests:** `tests/consult-claude-workspace`
+
+### jekyll
+
+A compact reference for working productively with Jekyll. Covers Liquid templates, kramdown Markdown, `_config.yml`, collections, themes, plugins, GitHub Pages/Actions deployment, and custom plugins/filters.
+
+**Use when:**
+
+- Setting up a new Jekyll site or migrating an existing one.
+- Working with Liquid templates, kramdown Markdown, or YAML front matter.
+- Configuring `_config.yml`, collections, data files, or permalinks.
+- Installing or troubleshooting plugins and themes.
+- Deploying to GitHub Pages, GitHub Actions, or Netlify.
+- Debugging build errors, future-dated posts, or Liquid syntax errors.
+- Adding responsive images, comments, or custom plugins/filters.
+
+**Tests:** `evals/jekyll-workspace`
