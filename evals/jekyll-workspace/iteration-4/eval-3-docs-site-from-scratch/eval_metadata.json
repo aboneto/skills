@@ -1,0 +1,19 @@
+{
+  "eval_id": 3,
+  "eval_name": "docs-site-from-scratch",
+  "prompt": "Help me set up a Jekyll docs site from scratch on macOS. About 40 pages, sidebar nav, light/dark mode. Ruby 3.4. I deploy via GitHub Actions to GitHub Pages. Need: a working Gemfile, a `_config.yml`, the deployment workflow, and an html-proofer step that breaks the build on broken internal links.",
+  "assertions": [
+    {"text": "Provides a `.ruby-version` (or `.tool-versions`) file pinning Ruby 3.4.x", "passed": false, "evidence": ""},
+    {"text": "Installs Ruby via rbenv/asdf/mise — does NOT recommend system Ruby", "passed": false, "evidence": ""},
+    {"text": "Gemfile pins Jekyll `~> 4.4`", "passed": false, "evidence": ""},
+    {"text": "Gemfile includes a docs-appropriate theme (e.g., just-the-docs) that supports sidebar nav and light/dark", "passed": false, "evidence": ""},
+    {"text": "Gemfile includes `html-proofer` in a `:test`/`:development` group (not `:jekyll_plugins`)", "passed": false, "evidence": ""},
+    {"text": "`_config.yml` sets the chosen `theme:` (or `remote_theme:`)", "passed": false, "evidence": ""},
+    {"text": "Workflow gives `actions/configure-pages` step an `id: pages` so `steps.pages.outputs.base_path` resolves", "passed": false, "evidence": ""},
+    {"text": "Workflow sets `JEKYLL_ENV=production` on the build step", "passed": false, "evidence": ""},
+    {"text": "Workflow has an htmlproofer step that runs against `_site` and fails on broken internal links", "passed": false, "evidence": ""},
+    {"text": "htmlproofer step is scoped to internal links (e.g., `--disable-external`) to keep PR checks fast and stable", "passed": false, "evidence": ""},
+    {"text": "Uses current major versions: actions/checkout@v4, ruby/setup-ruby@v1, actions/configure-pages@v5, actions/upload-pages-artifact@v3, actions/deploy-pages@v4", "passed": false, "evidence": ""},
+    {"text": "Build step passes `--baseurl` from `${{ steps.pages.outputs.base_path }}` (or equivalent)", "passed": false, "evidence": ""}
+  ]
+}

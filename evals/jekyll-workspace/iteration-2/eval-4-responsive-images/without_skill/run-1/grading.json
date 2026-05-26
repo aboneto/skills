@@ -1,0 +1,57 @@
+{
+  "expectations": [
+    {
+      "text": "Uses jekyll-picture-tag plugin (or equivalent responsive image solution)",
+      "passed": true,
+      "evidence": "Line 24: 'gem jekyll-picture-tag'"
+    },
+    {
+      "text": "Gemfile includes version pin for the plugin (e.g., ~> 2.1)",
+      "passed": false,
+      "evidence": "Line 24: 'gem jekyll-picture-tag' without version pin"
+    },
+    {
+      "text": "Configuration includes WebP format with fallback",
+      "passed": true,
+      "evidence": "Lines 37-42: webp config with enabled: true"
+    },
+    {
+      "text": "Configuration includes multiple widths for srcset (at least 480, 800, 1200)",
+      "passed": true,
+      "evidence": "Line 47: 'widths: [480, 768, 1024, 1920]'"
+    },
+    {
+      "text": "Includes lazy loading attribute in configuration",
+      "passed": true,
+      "evidence": "Lines 52-55: lazyload config with enabled: true"
+    },
+    {
+      "text": "Notes about LCP optimization for above-the-fold images",
+      "passed": true,
+      "evidence": "Lines 170-204: preload LCP image, and conditional lazy loading"
+    },
+    {
+      "text": "Mentions Netlify build pipeline (no extra setup needed)",
+      "passed": true,
+      "evidence": "Lines 208-240: netlify.toml config"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 1,
+    "total": 7,
+    "pass_rate": 0.86
+  },
+  "timing": {
+    "total_duration_seconds": 67.3
+  },
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Sin skill: falta version pin pero otherwise muy completo"
+  }
+}

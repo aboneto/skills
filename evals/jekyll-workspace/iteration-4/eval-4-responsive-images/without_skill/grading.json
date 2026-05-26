@@ -1,0 +1,14 @@
+{
+  "eval_id": 4,
+  "configuration": "without_skill",
+  "run_number": 1,
+  "expectations": [
+    {"text": "Uses jekyll-picture-tag plugin (or equivalent responsive image solution)", "passed": true, "evidence": "Uses Netlify Image CDN (equivalent solution)"},
+    {"text": "Gemfile includes version pin for the plugin", "passed": false, "evidence": "No gem to pin — uses CDN approach"},
+    {"text": "Configuration includes WebP format with fallback", "passed": true, "evidence": "Lines 58-65: source type=image/webp with JPEG fallback img"},
+    {"text": "Configuration includes multiple widths for srcset (at least 480, 800, 1200)", "passed": true, "evidence": "Lines 60-63: widths [400, 800, 1200, 1600, 2000]"},
+    {"text": "Includes lazy loading attribute in configuration", "passed": true, "evidence": "Line 80: 'loading=lazy'"},
+    {"text": "Notes about LCP optimization for above-the-fold images", "passed": true, "evidence": "Lines 89-128: separate critical variant with fetchpriority=high, no lazy loading"},
+    {"text": "Mentions Netlify build pipeline (no extra setup needed)", "passed": true, "evidence": "Lines 1-6: 'Netlify Image CDN works at the edge — no gems or plugins required'"}
+  ]
+}

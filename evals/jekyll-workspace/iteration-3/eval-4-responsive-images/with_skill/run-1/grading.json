@@ -1,0 +1,57 @@
+{
+  "expectations": [
+    {
+      "text": "Uses jekyll-picture-tag plugin (or equivalent responsive image solution)",
+      "passed": true,
+      "evidence": "Line 14: 'gem jekyll-picture-tag, ~> 2.1'"
+    },
+    {
+      "text": "Gemfile includes version pin for the plugin (e.g., ~> 2.1)",
+      "passed": true,
+      "evidence": "Line 14: 'gem jekyll-picture-tag, ~> 2.1'"
+    },
+    {
+      "text": "Configuration includes WebP format with fallback",
+      "passed": true,
+      "evidence": "Line 32: 'formats: [webp, original]'"
+    },
+    {
+      "text": "Configuration includes multiple widths for srcset (at least 480, 800, 1200)",
+      "passed": true,
+      "evidence": "Line 33: 'widths: [480, 800, 1200, 1600]'"
+    },
+    {
+      "text": "Includes lazy loading attribute in configuration",
+      "passed": true,
+      "evidence": "Line 35: 'loading=\"lazy\"'"
+    },
+    {
+      "text": "Notes about LCP optimization for above-the-fold images",
+      "passed": true,
+      "evidence": "Line 60: 'If these heroes are above-the-fold, remove loading=lazy for just those instances to improve LCP'"
+    },
+    {
+      "text": "Mentions Netlify build pipeline (no extra setup needed)",
+      "passed": true,
+      "evidence": "Lines 52-54: Netlify runs jekyll build automatically"
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "total": 7,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_duration_seconds": 1.2
+  },
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Respuesta completa con plugin, WebP, srcset, lazy loading y notas de LCP"
+  }
+}

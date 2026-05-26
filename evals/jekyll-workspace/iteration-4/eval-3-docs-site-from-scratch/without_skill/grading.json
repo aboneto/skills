@@ -1,0 +1,19 @@
+{
+  "eval_id": 3,
+  "configuration": "without_skill",
+  "run_number": 1,
+  "expectations": [
+    {"text": "Provides a .ruby-version file pinning Ruby 3.4.x", "passed": false, "evidence": "No .ruby-version file mentioned"},
+    {"text": "Installs Ruby via rbenv/asdf/mise — does NOT recommend system Ruby", "passed": false, "evidence": "Lines 6-14: 'brew install ruby@3.4' — uses Homebrew directly, not rbenv/mise"},
+    {"text": "Gemfile pins Jekyll ~> 4.4", "passed": true, "evidence": "Line 67: 'gem jekyll, ~> 4.4'"},
+    {"text": "Gemfile includes a docs-appropriate theme (just-the-docs)", "passed": false, "evidence": "No theme gem included — builds custom sidebar from scratch"},
+    {"text": "Gemfile includes html-proofer in a :test group", "passed": true, "evidence": "Lines 79-81: 'group :test do gem html-proofer, ~> 5.0 end'"},
+    {"text": "_config.yml sets the chosen theme:", "passed": false, "evidence": "No theme: set — uses custom layouts instead"},
+    {"text": "Workflow gives actions/configure-pages step an id: pages", "passed": false, "evidence": "Line 943: 'uses: actions/configure-pages@v5' but NO id: pages"},
+    {"text": "Workflow sets JEKYLL_ENV=production on the build step", "passed": true, "evidence": "Line 948: 'JEKYLL_ENV: production'"},
+    {"text": "Workflow has an htmlproofer step that runs against _site", "passed": true, "evidence": "Lines 951-961: 'bundle exec htmlproofer ./_site'"},
+    {"text": "htmlproofer step is scoped to internal links (--disable-external)", "passed": true, "evidence": "Line 953: '--disable-external'"},
+    {"text": "Uses current major versions", "passed": true, "evidence": "Lines 934, 937, 943, 970, 983"},
+    {"text": "Build step passes --baseurl from steps.pages.outputs.base_path", "passed": true, "evidence": "Line 946: '--baseurl ${{ steps.pages.outputs.base_path }}'"}
+  ]
+}

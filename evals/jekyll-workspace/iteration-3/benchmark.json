@@ -1,0 +1,530 @@
+{
+  "metadata": {
+    "skill_name": "jekyll",
+    "skill_path": "skills/jekyll",
+    "executor_model": "gemini-2.5-flash-lite",
+    "analyzer_model": "MiniMax M2.7",
+    "timestamp": "2026-05-25T23:23:33Z",
+    "evals_run": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.67,
+        "passed": 4,
+        "failed": 2,
+        "total": 6,
+        "time_seconds": 2.4,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Identifies that jekyll-paginate-v2 is NOT on the GitHub Pages plugin allowlist as the root cause",
+          "passed": true,
+          "evidence": "Line 3: 'jekyll-paginate-v2 plugin is not supported by the GitHub Pages built-in builder because it is not on their restricted plugin allowlist'"
+        },
+        {
+          "text": "Explains why the same Gemfile works locally but fails on the GitHub Pages classic builder",
+          "passed": true,
+          "evidence": "Line 3-4: 'Your site works locally because your local environment has no such restriction'"
+        },
+        {
+          "text": "Offers migrating to GitHub Actions deployment as a fix (unlocks current Jekyll + any plugin)",
+          "passed": true,
+          "evidence": "Line 7: 'move from the classic built-in build to a GitHub Actions-based build' and lines 11-13 with concrete steps"
+        },
+        {
+          "text": "Offers an in-allowlist alternative (e.g., drop jekyll-paginate-v2 and use jekyll-paginate)",
+          "passed": false,
+          "evidence": "Does not offer an alternative plugin solution - only GitHub Actions migration"
+        },
+        {
+          "text": "Acknowledges the site lives at /blog (project site) \u2014 does not assume root deployment",
+          "passed": false,
+          "evidence": "No mention of /blog subpath or project site handling"
+        },
+        {
+          "text": "Does not (incorrectly) attribute the failure solely to bundle install / Gemfile.lock issues",
+          "passed": true,
+          "evidence": "Correctly identifies allowlist as root cause, not bundle issues"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.86,
+        "passed": 6,
+        "failed": 1,
+        "total": 7,
+        "time_seconds": 0.45,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Reading time uses Jekyll's built-in `number_of_words` filter (or `page.content | split | size`) rather than a heavy custom plugin",
+          "passed": false,
+          "evidence": "Uses a custom plugin _plugins/reading_time.rb instead of Jekyll's built-in number_of_words filter"
+        },
+        {
+          "text": "TOC uses kramdown's native `* TOC\\n{:toc}` (or `{:toc}`) \u2014 does NOT introduce jekyll-toc or unrelated plugins",
+          "passed": true,
+          "evidence": "Uses {:toc} with kramdown native TOC"
+        },
+        {
+          "text": "Restricts the TOC to H2 and H3 (e.g., `toc_levels: 2..3` in _config.yml)",
+          "passed": true,
+          "evidence": "Line 38: 'toc_levels: 2..3'"
+        },
+        {
+          "text": "Related posts uses a correct tag-overlap algorithm (concat + uniq size comparison, or a where_exp/contains check) \u2014 logic actually finds overlapping tags",
+          "passed": true,
+          "evidence": "Lines 65-67: uses concat + uniq size comparison correctly"
+        },
+        {
+          "text": "Does NOT use the invalid `{# \u2026 #}` Liquid comment syntax anywhere in code samples",
+          "passed": true,
+          "evidence": "No invalid Liquid comment syntax found"
+        },
+        {
+          "text": "States that the code belongs in `_layouts/post.html` (or a clearly-scoped include used by post.html)",
+          "passed": true,
+          "evidence": "Lines 24-28, 41-48, 55-80: all code marked for '_layouts/post.html'"
+        },
+        {
+          "text": "Either uses tag-overlap manually OR mentions Jekyll's built-in `site.related_posts` with its `--lsi`/classifier-reborn cost",
+          "passed": true,
+          "evidence": "Uses tag-overlap manually with concat/uniq"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.58,
+        "passed": 7,
+        "failed": 5,
+        "total": 12,
+        "time_seconds": 120.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Provides a `.ruby-version` (or `.tool-versions`) file pinning Ruby 3.4.x",
+          "passed": false,
+          "evidence": "No .ruby-version file mentioned or created"
+        },
+        {
+          "text": "Installs Ruby via rbenv/asdf/mise \u2014 does NOT recommend system Ruby",
+          "passed": true,
+          "evidence": "Lines 9-14: uses rbenv to install Ruby 3.4.8"
+        },
+        {
+          "text": "Gemfile pins Jekyll `~> 4.4`",
+          "passed": true,
+          "evidence": "Line 23: gem 'jekyll', '~> 4.4.1'"
+        },
+        {
+          "text": "Gemfile includes a docs-appropriate theme (e.g., just-the-docs) that supports sidebar nav and light/dark",
+          "passed": false,
+          "evidence": "No theme gem included - only mentions Just the Docs as suggestion but doesn't include it in Gemfile"
+        },
+        {
+          "text": "Gemfile includes `html-proofer` in a `:test`/`:development` group (not `:jekyll_plugins`)",
+          "passed": true,
+          "evidence": "Lines 32-34: 'group :test do gem html-proofer, ~> 5.0 end'"
+        },
+        {
+          "text": "`_config.yml` sets the chosen `theme:` (or `remote_theme:`)",
+          "passed": false,
+          "evidence": "No theme: set in _config.yml - no theme included"
+        },
+        {
+          "text": "Workflow gives `actions/configure-pages` step an `id: pages` so `steps.pages.outputs.base_path` resolves",
+          "passed": false,
+          "evidence": "No id: pages in the workflow - missing configuration step"
+        },
+        {
+          "text": "Workflow sets `JEKYLL_ENV=production` on the build step",
+          "passed": true,
+          "evidence": "Line 100: 'JEKYLL_ENV: production'"
+        },
+        {
+          "text": "Workflow has an htmlproofer step that runs against `_site` and fails on broken internal links",
+          "passed": true,
+          "evidence": "Line 102: 'bundle exec htmlproofer ./_site --disable-external --check-html'"
+        },
+        {
+          "text": "htmlproofer step is scoped to internal links (e.g., `--disable-external`) to keep PR checks fast and stable",
+          "passed": true,
+          "evidence": "Line 102: includes --disable-external flag"
+        },
+        {
+          "text": "Uses current major versions: actions/checkout@v4, ruby/setup-ruby@v1, actions/configure-pages@v5, actions/upload-pages-artifact@v3, actions/deploy-pages@v4",
+          "passed": true,
+          "evidence": "Lines 92-114: uses v4, v1, v4, v3, v4 respectively"
+        },
+        {
+          "text": "Build step passes `--baseurl` from `${{ steps.pages.outputs.base_path }}` (or equivalent)",
+          "passed": false,
+          "evidence": "No --baseurl in build command - missing"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 1.2,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses jekyll-picture-tag plugin (or equivalent responsive image solution)",
+          "passed": true,
+          "evidence": "Line 14: 'gem jekyll-picture-tag, ~> 2.1'"
+        },
+        {
+          "text": "Gemfile includes version pin for the plugin (e.g., ~> 2.1)",
+          "passed": true,
+          "evidence": "Line 14: 'gem jekyll-picture-tag, ~> 2.1'"
+        },
+        {
+          "text": "Configuration includes WebP format with fallback",
+          "passed": true,
+          "evidence": "Line 32: 'formats: [webp, original]'"
+        },
+        {
+          "text": "Configuration includes multiple widths for srcset (at least 480, 800, 1200)",
+          "passed": true,
+          "evidence": "Line 33: 'widths: [480, 800, 1200, 1600]'"
+        },
+        {
+          "text": "Includes lazy loading attribute in configuration",
+          "passed": true,
+          "evidence": "Line 35: 'loading=\"lazy\"'"
+        },
+        {
+          "text": "Notes about LCP optimization for above-the-fold images",
+          "passed": true,
+          "evidence": "Line 60: 'If these heroes are above-the-fold, remove loading=lazy for just those instances to improve LCP'"
+        },
+        {
+          "text": "Mentions Netlify build pipeline (no extra setup needed)",
+          "passed": true,
+          "evidence": "Lines 52-54: Netlify runs jekyll build automatically"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 6,
+        "total": 6,
+        "time_seconds": 2.5,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Identifies that jekyll-paginate-v2 is NOT on the GitHub Pages plugin allowlist as the root cause",
+          "passed": false,
+          "evidence": "Only mentions 'not installing the gem' - does not identify allowlist restriction"
+        },
+        {
+          "text": "Explains why the same Gemfile works locally but fails on the GitHub Pages classic builder",
+          "passed": false,
+          "evidence": "No explanation of local vs CI difference"
+        },
+        {
+          "text": "Offers migrating to GitHub Actions deployment as a fix (unlocks current Jekyll + any plugin)",
+          "passed": false,
+          "evidence": "Does not suggest GitHub Actions migration"
+        },
+        {
+          "text": "Offers an in-allowlist alternative (e.g., drop jekyll-paginate-v2 and use jekyll-paginate)",
+          "passed": false,
+          "evidence": "No alternative plugin suggested"
+        },
+        {
+          "text": "Acknowledges the site lives at /blog (project site) \u2014 does not assume root deployment",
+          "passed": false,
+          "evidence": "No mention of /blog subpath"
+        },
+        {
+          "text": "Does not (incorrectly) attribute the failure solely to bundle install / Gemfile.lock issues",
+          "passed": false,
+          "evidence": "Incorrectly attributes to Gemfile.lock and bundle install (line 4-5)"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.71,
+        "passed": 5,
+        "failed": 2,
+        "total": 7,
+        "time_seconds": 1.5,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Reading time uses Jekyll's built-in `number_of_words` filter (or `page.content | split | size`) rather than a heavy custom plugin",
+          "passed": true,
+          "evidence": "Lines 7-10: uses content | number_of_words - built-in filter"
+        },
+        {
+          "text": "TOC uses kramdown's native `* TOC\\n{:toc}` (or `{:toc}`) \u2014 does NOT introduce jekyll-toc or unrelated plugins",
+          "passed": false,
+          "evidence": "Line 17: uses {:toc} but does NOT configure toc_levels to restrict to H2/H3"
+        },
+        {
+          "text": "Restricts the TOC to H2 and H3 (e.g., `toc_levels: 2..3` in _config.yml)",
+          "passed": false,
+          "evidence": "No toc_levels configuration in _config.yml"
+        },
+        {
+          "text": "Related posts uses a correct tag-overlap algorithm (concat + uniq size comparison, or a where_exp/contains check) \u2014 logic actually finds overlapping tags",
+          "passed": true,
+          "evidence": "Lines 30-34: uses nested loop with 'contains' - works but less elegant than concat/uniq"
+        },
+        {
+          "text": "Does NOT use the invalid `{# \u2026 #}` Liquid comment syntax anywhere in code samples",
+          "passed": true,
+          "evidence": "No invalid Liquid comment syntax found"
+        },
+        {
+          "text": "States that the code belongs in `_layouts/post.html` (or a clearly-scoped include used by post.html)",
+          "passed": true,
+          "evidence": "Line 4 and 22: code belongs in _layouts/post.html"
+        },
+        {
+          "text": "Either uses tag-overlap manually OR mentions Jekyll's built-in `site.related_posts` with its `--lsi`/classifier-reborn cost",
+          "passed": true,
+          "evidence": "Uses tag-overlap manually with nested loop"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.58,
+        "passed": 7,
+        "failed": 5,
+        "total": 12,
+        "time_seconds": 3.85,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Provides a `.ruby-version` (or `.tool-versions`) file pinning Ruby 3.4.x",
+          "passed": false,
+          "evidence": "No .ruby-version file mentioned"
+        },
+        {
+          "text": "Installs Ruby via rbenv/asdf/mise \u2014 does NOT recommend system Ruby",
+          "passed": false,
+          "evidence": "Line 71: 'uses: ruby/setup-ruby@v1' - no rbenv/asdf mentioned"
+        },
+        {
+          "text": "Gemfile pins Jekyll `~> 4.4`",
+          "passed": false,
+          "evidence": "Line 7: 'gem jekyll' without version pin"
+        },
+        {
+          "text": "Gemfile includes a docs-appropriate theme (e.g., just-the-docs) that supports sidebar nav and light/dark",
+          "passed": true,
+          "evidence": "Line 15: 'theme: minima'"
+        },
+        {
+          "text": "Gemfile includes `html-proofer` in a `:test`/`:development` group (not `:jekyll_plugins`)",
+          "passed": true,
+          "evidence": "Line 9: 'group :test do gem html-proofer'"
+        },
+        {
+          "text": "`_config.yml` sets the chosen `theme:` (or `remote_theme:`)",
+          "passed": true,
+          "evidence": "Line 15: 'theme: minima' in _config.yml"
+        },
+        {
+          "text": "Workflow gives `actions/configure-pages` step an `id: pages` so `steps.pages.outputs.base_path` resolves",
+          "passed": true,
+          "evidence": "Line 71: 'id: pages' present"
+        },
+        {
+          "text": "Workflow sets `JEKYLL_ENV=production` on the build step",
+          "passed": false,
+          "evidence": "No JEKYLL_ENV set"
+        },
+        {
+          "text": "Workflow has an htmlproofer step that runs against `_site` and fails on broken internal links",
+          "passed": true,
+          "evidence": "Lines 78-79: 'bundle exec htmlproofer ./_site --disable-external'"
+        },
+        {
+          "text": "htmlproofer step is scoped to internal links (e.g., `--disable-external`) to keep PR checks fast and stable",
+          "passed": true,
+          "evidence": "Line 79: --disable-external present"
+        },
+        {
+          "text": "Uses current major versions: actions/checkout@v4, ruby/setup-ruby@v1, actions/configure-pages@v5, actions/upload-pages-artifact@v3, actions/deploy-pages@v4",
+          "passed": true,
+          "evidence": "Lines 69-81: uses v4, v1, v4 correctly"
+        },
+        {
+          "text": "Build step passes `--baseurl` from `${{ steps.pages.outputs.base_path }}` (or equivalent)",
+          "passed": false,
+          "evidence": "No --baseurl in build command"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.57,
+        "passed": 4,
+        "failed": 3,
+        "total": 7,
+        "time_seconds": 1.2,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses jekyll-picture-tag plugin (or equivalent responsive image solution)",
+          "passed": true,
+          "evidence": "Line 6: 'gem jekyll-picture-tag'"
+        },
+        {
+          "text": "Gemfile includes version pin for the plugin (e.g., ~> 2.1)",
+          "passed": false,
+          "evidence": "Line 6: 'gem jekyll-picture-tag' without version pin"
+        },
+        {
+          "text": "Configuration includes WebP format with fallback",
+          "passed": true,
+          "evidence": "Line 15: 'formats: [webp, jpg]'"
+        },
+        {
+          "text": "Configuration includes multiple widths for srcset (at least 480, 800, 1200)",
+          "passed": false,
+          "evidence": "Line 16: 'widths: [400, 800, 1200]' - starts at 400 not 480, only 3 sizes instead of 4"
+        },
+        {
+          "text": "Includes lazy loading attribute in configuration",
+          "passed": true,
+          "evidence": "Line 22: '--img lazy'"
+        },
+        {
+          "text": "Notes about LCP optimization for above-the-fold images",
+          "passed": false,
+          "evidence": "No mention of above-the-fold vs below-the-fold optimization"
+        },
+        {
+          "text": "Mentions Netlify build pipeline (no extra setup needed)",
+          "passed": true,
+          "evidence": "Lines 25-26: 'Netlify automatically runs bundle install and jekyll build'"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.7775,
+        "stddev": 0.1887,
+        "min": 0.58,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 31.0125,
+        "stddev": 59.3304,
+        "min": 0.45,
+        "max": 120.0
+      },
+      "tokens": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.465,
+        "stddev": 0.3165,
+        "min": 0.0,
+        "max": 0.71
+      },
+      "time_seconds": {
+        "mean": 2.2625,
+        "stddev": 1.1954,
+        "min": 1.2,
+        "max": 3.85
+      },
+      "tokens": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.31",
+      "time_seconds": "+28.8",
+      "tokens": "+0"
+    }
+  },
+  "notes": []
+}

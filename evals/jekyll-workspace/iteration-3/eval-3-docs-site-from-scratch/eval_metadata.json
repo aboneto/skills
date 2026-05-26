@@ -1,0 +1,6 @@
+{
+  "eval_id": 3,
+  "eval_name": "docs-site-from-scratch",
+  "prompt": "Help me set up a Jekyll docs site from scratch on macOS. About 40 pages, sidebar nav, light/dark mode. Ruby 3.4. I deploy via GitHub Actions to GitHub Pages. Need: a working Gemfile, a `_config.yml`, the deployment workflow, and an html-proofer step that breaks the build on broken internal links.",
+  "assertions": []
+}

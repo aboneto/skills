@@ -1,0 +1,14 @@
+{
+  "eval_id": 2,
+  "configuration": "with_skill",
+  "run_number": 1,
+  "expectations": [
+    {"text": "Reading time uses Jekyll's built-in number_of_words filter rather than a heavy custom plugin", "passed": true, "evidence": "Lines 14-16: 'page.content | number_of_words | divided_by: 200 | plus: 1'"},
+    {"text": "TOC uses kramdown's native {:toc} — does NOT introduce jekyll-toc or unrelated plugins", "passed": true, "evidence": "Lines 80-83: '* TOC {:toc}'"},
+    {"text": "Restricts the TOC to H2 and H3 (e.g., toc_levels: 2..3 in _config.yml)", "passed": true, "evidence": "Line 71: 'toc_levels: 2..3'"},
+    {"text": "Related posts uses a correct tag-overlap algorithm", "passed": true, "evidence": "Lines 152-161: concat + uniq size comparison"},
+    {"text": "Does NOT use the invalid {# … #} Liquid comment syntax", "passed": true, "evidence": "No invalid comment syntax found"},
+    {"text": "States that the code belongs in _layouts/post.html", "passed": true, "evidence": "Line 11: 'in your post layout (_layouts/post.html)'"},
+    {"text": "Either uses tag-overlap manually OR mentions site.related_posts with --lsi cost", "passed": true, "evidence": "Line 149: 'no --lsi or classifier-reborn gem needed'"}
+  ]
+}

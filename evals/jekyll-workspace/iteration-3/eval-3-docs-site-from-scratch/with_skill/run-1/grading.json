@@ -1,64 +1,82 @@
 {
-  "assertions": [
+  "expectations": [
     {
       "text": "Provides a `.ruby-version` (or `.tool-versions`) file pinning Ruby 3.4.x",
       "passed": false,
-      "evidence": "No .ruby-version file mentioned. Only 'ruby >= 3.4.0' in Gemfile which is a version constraint, not a pin."
+      "evidence": "No .ruby-version file mentioned or created"
     },
     {
       "text": "Installs Ruby via rbenv/asdf/mise — does NOT recommend system Ruby",
-      "passed": false,
-      "evidence": "No Ruby installation method mentioned at all. Relies on system Ruby or assumes it's already installed."
+      "passed": true,
+      "evidence": "Lines 9-14: uses rbenv to install Ruby 3.4.8"
     },
     {
       "text": "Gemfile pins Jekyll `~> 4.4`",
       "passed": true,
-      "evidence": "Line 10: gem 'jekyll', '~> 4.4'"
+      "evidence": "Line 23: gem 'jekyll', '~> 4.4.1'"
     },
     {
       "text": "Gemfile includes a docs-appropriate theme (e.g., just-the-docs) that supports sidebar nav and light/dark",
       "passed": false,
-      "evidence": "Uses minimal-mistakes via github-pages gem, not a standalone theme gem. No just-the-docs or equivalent."
+      "evidence": "No theme gem included - only mentions Just the Docs as suggestion but doesn't include it in Gemfile"
     },
     {
       "text": "Gemfile includes `html-proofer` in a `:test`/`:development` group (not `:jekyll_plugins`)",
       "passed": true,
-      "evidence": "Lines 16-18: 'group :test do; gem \"html-proofer\", \"~> 5.0\"; end'"
+      "evidence": "Lines 32-34: 'group :test do gem html-proofer, ~> 5.0 end'"
     },
     {
       "text": "`_config.yml` sets the chosen `theme:` (or `remote_theme:`)",
       "passed": false,
-      "evidence": "No theme: or remote_theme: in _config.yml. Uses github-pages gem with minimal-mistakes but no explicit theme setting shown."
+      "evidence": "No theme: set in _config.yml - no theme included"
     },
     {
       "text": "Workflow gives `actions/configure-pages` step an `id: pages` so `steps.pages.outputs.base_path` resolves",
       "passed": false,
-      "evidence": "No actions/configure-pages step shown in the workflow. Uses peaceiris/actions-gh-pages instead."
+      "evidence": "No id: pages in the workflow - missing configuration step"
     },
     {
       "text": "Workflow sets `JEKYLL_ENV=production` on the build step",
-      "passed": false,
-      "evidence": "No JEKYLL_ENV: production shown in the workflow."
+      "passed": true,
+      "evidence": "Line 100: 'JEKYLL_ENV: production'"
     },
     {
       "text": "Workflow has an htmlproofer step that runs against `_site` and fails on broken internal links",
       "passed": true,
-      "evidence": "Lines 33-37: htmlproofer with --disable-external, --internal-domains, --allow-hash-href flags"
+      "evidence": "Line 102: 'bundle exec htmlproofer ./_site --disable-external --check-html'"
     },
     {
       "text": "htmlproofer step is scoped to internal links (e.g., `--disable-external`) to keep PR checks fast and stable",
       "passed": true,
-      "evidence": "Line 35: '--disable-external' flag present"
+      "evidence": "Line 102: includes --disable-external flag"
     },
     {
       "text": "Uses current major versions: actions/checkout@v4, ruby/setup-ruby@v1, actions/configure-pages@v5, actions/upload-pages-artifact@v3, actions/deploy-pages@v4",
-      "passed": false,
-      "evidence": "Uses peaceiris/actions-gh-pages instead of the modern actions/configure-pages + actions/deploy-pages pattern"
+      "passed": true,
+      "evidence": "Lines 92-114: uses v4, v1, v4, v3, v4 respectively"
     },
     {
       "text": "Build step passes `--baseurl` from `${{ steps.pages.outputs.base_path }}` (or equivalent)",
       "passed": false,
-      "evidence": "No --baseurl passed. Uses peaceiris/actions-gh-pages which deploys to root."
+      "evidence": "No --baseurl in build command - missing"
     }
-  ]
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 5,
+    "total": 12,
+    "pass_rate": 0.58
+  },
+  "timing": {
+    "total_duration_seconds": 120.0
+  },
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Faltan: .ruby-version, theme, id:pages, --baseurl"
+  }
 }

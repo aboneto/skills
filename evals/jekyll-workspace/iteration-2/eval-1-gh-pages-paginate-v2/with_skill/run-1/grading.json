@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "Identifies that jekyll-paginate-v2 is NOT on the GitHub Pages plugin allowlist as the root cause",
+      "passed": true,
+      "evidence": "Root Cause section: 'jekyll-paginate-v2 is not on the GitHub Pages plugin allowlist'"
+    },
+    {
+      "text": "Explains why the same Gemfile works locally but fails on the GitHub Pages classic builder",
+      "passed": true,
+      "evidence": "Explains local build works because gems are resolved freely, while GH Pages builder resolves against its own locked set"
+    },
+    {
+      "text": "Offers migrating to GitHub Actions deployment as a fix (unlocks current Jekyll + any plugin)",
+      "passed": true,
+      "evidence": "'Recommended: Move to GitHub Actions with a modern Jekyll build' — includes full workflow YAML"
+    },
+    {
+      "text": "Offers an in-allowlist alternative (e.g., drop jekyll-paginate-v2 and use jekyll-paginate)",
+      "passed": true,
+      "evidence": "'Alternative: Drop jekyll-paginate-v2 and stay on classic builder' with jekyll-paginate config"
+    },
+    {
+      "text": "Acknowledges the site lives at /blog (project site) — does not assume root deployment",
+      "passed": true,
+      "evidence": "Uses `${{ steps.pages.outputs.base_path }}` for baseurl in the build step, correctly handling project site subpath"
+    },
+    {
+      "text": "Does not (incorrectly) attribute the failure solely to bundle install / Gemfile.lock issues",
+      "passed": true,
+      "evidence": "Correctly identifies the root cause as the allowlist, not bundle install or lockfile issues"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  }
+}

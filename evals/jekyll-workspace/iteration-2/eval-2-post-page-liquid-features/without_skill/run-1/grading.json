@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "Reading time uses Jekyll's built-in `number_of_words` filter (or `page.content | split | size`) rather than a heavy custom plugin",
+      "passed": true,
+      "evidence": "Uses `{% assign words = content | number_of_words %}` — Jekyll's built-in filter"
+    },
+    {
+      "text": "TOC uses kramdown's native `* TOC\\n{:toc}` (or `{:toc}`) — does NOT introduce jekyll-toc or unrelated plugins",
+      "passed": false,
+      "evidence": "Does NOT use kramdown native TOC. Instead manually parses HTML by splitting on `<h2>` and `<h3>` tags"
+    },
+    {
+      "text": "Restricts the TOC to H2 and H3 (e.g., `toc_levels: 2..3` in _config.yml)",
+      "passed": true,
+      "evidence": "Manually restricts to H2 and H3 by parsing strategy, though via non-standard HTML splitting rather than kramdown config"
+    },
+    {
+      "text": "Related posts uses a correct tag-overlap algorithm (concat + uniq size comparison, or a where_exp/contains check) — logic actually finds overlapping tags",
+      "passed": true,
+      "evidence": "Uses Liquid's native `intersect` filter: `{% assign common = post.tags | intersect: page.tags %}`"
+    },
+    {
+      "text": "Does NOT use the invalid `{# … #}` Liquid comment syntax anywhere in code samples",
+      "passed": true,
+      "evidence": "No invalid Liquid comment syntax found"
+    },
+    {
+      "text": "States that the code belongs in `_layouts/post.html` (or a clearly-scoped include used by post.html)",
+      "passed": true,
+      "evidence": "'All three features live in your `_layouts/` and `_includes/` directories. The `_layouts/post.html` pulls everything together'"
+    },
+    {
+      "text": "Either uses tag-overlap manually OR mentions Jekyll's built-in `site.related_posts` with its `--lsi`/classifier-reborn cost",
+      "passed": true,
+      "evidence": "Uses tag-overlap manually with `intersect` filter"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 1,
+    "total": 7,
+    "pass_rate": 0.857
+  }
+}
