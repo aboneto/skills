@@ -642,6 +642,8 @@ Generate `post.amp.html` for each post via a generator + a separate AMP layout. 
 
 ## Remote data at build time
 
+> **Security warning:** Fetching external data at build time means untrusted content enters your build pipeline. Malicious API responses could inject arbitrary HTML/JS into your site or manipulate Liquid template logic. Always sanitize fetched data: strip HTML tags, validate expected structure, and never render raw remote values without escaping. Prefer Path 1 (pre-build script with manual review) over Path 2 (automatic fetching) for untrusted sources.
+
 You can fetch external data and treat it as `site.data`. Two paths:
 
 ### Path 1: a pre-build script

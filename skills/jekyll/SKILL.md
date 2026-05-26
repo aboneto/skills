@@ -4,7 +4,7 @@ description: Technical cheatsheet for Jekyll static site generator. Use when wor
 license: MIT
 metadata:
   author: aboneto
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # jekyll

@@ -1,5 +1,7 @@
 # Comments and Webmentions
 
+> **Security note:** All comment systems described here involve ingesting third-party or user-generated content into your site. This carries indirect prompt injection and XSS risks. Apply `strip_html`, URL validation, and content length limits on all external data before rendering. Treat remote content as untrusted input.
+
 Adding comments to a static site is a choice between accepting third-party JS, accepting infrastructure, or building a sync workflow that pulls comments at build time. This file covers what actually works in 2026.
 
 ## Table of contents
@@ -114,6 +116,8 @@ Cons: moderation UI is basic, fewer features than Discussions.
 
 ## Webmentions
 
+> **Security warning:** Webmentions are user-generated content from external sources. Fetched mention data (author names, URLs, content text) could contain malicious HTML or scripts. Always apply `strip_html` and URL validation when rendering webmentions. Never trust `w.content.text` or `w.author.name` without sanitization.
+
 A web-standard for "site A linked to site B". You receive webmentions when others link to you, and render them as a sort of comment thread of inbound mentions, replies, and bookmarks (e.g., from Mastodon, Bluesky bridges).
 
 ### Receiving
@@ -151,6 +155,8 @@ When you publish a post that links out, send webmentions to the sites you linked
 Webmentions are best when integrated into the IndieWeb stack — your own site sends and receives them, replacing some of what social media does. For pure comments, prefer giscus.
 
 ## Staticman — comments committed back to your repo
+
+> **Security warning:** Staticman commits user-generated content directly into your repository. Malicious comment submissions could contain crafted YAML that exploits your build pipeline, or inject content that manipulates template rendering. Always validate and sanitize Staticman YAML files before merging. Consider requiring moderation (manual merge) rather than auto-merge for untrusted submissions.
 
 The most ambitious option. Visitors submit a form; Staticman pushes the comment as a YAML file into `_data/comments/<post-slug>/<comment-id>.yml` via a pull request (or directly). On merge/auto-merge, your site rebuilds with the new comments rendered server-side — no client JS at runtime.
 

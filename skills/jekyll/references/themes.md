@@ -117,6 +117,8 @@ Then pick what you want to change and copy it locally.
 
 ## `remote_theme:` — GitHub Pages workaround
 
+> **Security warning:** `remote_theme` pulls and executes theme code (layouts, includes, plugins) from a remote GitHub repo at build time. A compromised or malicious theme repo could inject arbitrary content into your site. Always pin to a specific tag or commit hash, and audit the theme's source before using it. Avoid unpinned `remote_theme` references in production.
+
 If you're on GitHub Pages' classic builder and want a theme that *isn't* in the supported themes list (the classic builder only supports a small list: Minima, Cayman, Architect, etc.), the escape hatch is `remote_theme`.
 
 ```yaml
