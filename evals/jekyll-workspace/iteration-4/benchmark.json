@@ -1,0 +1,239 @@
+{
+  "metadata": {
+    "skill_name": "jekyll",
+    "skill_path": "skills/jekyll",
+    "executor_model": "mimo-v2.5-pro",
+    "analyzer_model": "mimo-v2.5-pro",
+    "timestamp": "2026-05-26T00:00:00Z",
+    "evals_run": [1, 2, 3, 4],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Identifies that jekyll-paginate-v2 is NOT on the GitHub Pages plugin allowlist as the root cause", "passed": true, "evidence": "Line 5: 'jekyll-paginate-v2 is not on the GitHub Pages plugin allowlist'"},
+        {"text": "Explains why the same Gemfile works locally but fails on the GitHub Pages classic builder", "passed": true, "evidence": "Line 5: 'locally you run bundle exec jekyll build with your own gems'"},
+        {"text": "Offers migrating to GitHub Actions deployment as a fix", "passed": true, "evidence": "Option A with full workflow"},
+        {"text": "Offers an in-allowlist alternative (jekyll-paginate)", "passed": true, "evidence": "Option B with jekyll-paginate"},
+        {"text": "Acknowledges the site lives at /blog (project site)", "passed": true, "evidence": "baseurl: '/blog'"},
+        {"text": "Does not attribute failure solely to bundle install issues", "passed": true, "evidence": "Correctly identifies allowlist as root cause"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Identifies that jekyll-paginate-v2 is NOT on the GitHub Pages plugin allowlist", "passed": true, "evidence": "'not on that whitelist'"},
+        {"text": "Explains why local works but GH Pages fails", "passed": true, "evidence": "'local Bundler resolves gems freely'"},
+        {"text": "Offers migrating to GitHub Actions deployment", "passed": true, "evidence": "Option B with full workflow"},
+        {"text": "Offers an in-allowlist alternative", "passed": true, "evidence": "Option A with jekyll-paginate"},
+        {"text": "Acknowledges /blog subpath", "passed": true, "evidence": "baseurl: '/blog'"},
+        {"text": "Does not blame bundle install", "passed": true, "evidence": "Correctly identifies whitelist"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Reading time uses number_of_words filter", "passed": true, "evidence": "page.content | number_of_words | divided_by: 200 | plus: 1"},
+        {"text": "TOC uses kramdown native {:toc}", "passed": true, "evidence": "* TOC {:toc}"},
+        {"text": "Restricts TOC to H2 and H3", "passed": true, "evidence": "toc_levels: 2..3"},
+        {"text": "Related posts uses correct tag-overlap algorithm", "passed": true, "evidence": "concat + uniq size comparison"},
+        {"text": "No invalid Liquid comment syntax", "passed": true, "evidence": "No {# … #} found"},
+        {"text": "Code belongs in _layouts/post.html", "passed": true, "evidence": "Explicitly states _layouts/post.html"},
+        {"text": "Mentions --lsi cost or uses tag-overlap", "passed": true, "evidence": "'no --lsi or classifier-reborn gem needed'"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.57,
+        "passed": 4,
+        "failed": 3,
+        "total": 7,
+        "time_seconds": 0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Reading time uses number_of_words filter", "passed": false, "evidence": "Uses custom plugin _plugins/reading_time.rb"},
+        {"text": "TOC uses kramdown native {:toc}", "passed": false, "evidence": "Custom HTML parsing include instead of kramdown"},
+        {"text": "Restricts TOC to H2 and H3", "passed": true, "evidence": "toc_levels: 2,3"},
+        {"text": "Related posts uses correct tag-overlap algorithm", "passed": true, "evidence": "Nested loop with contains check"},
+        {"text": "No invalid Liquid comment syntax", "passed": false, "evidence": "Uses {%- comment -%} pattern"},
+        {"text": "Code belongs in _layouts/post.html", "passed": true, "evidence": "post.html layout shown"},
+        {"text": "Mentions --lsi cost or uses tag-overlap", "passed": true, "evidence": "Uses tag-overlap manually"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 12,
+        "failed": 0,
+        "total": 12,
+        "time_seconds": 0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Provides .ruby-version pinning Ruby 3.4.x", "passed": true, "evidence": "echo 3.4.8 > .ruby-version"},
+        {"text": "Installs Ruby via rbenv/asdf/mise", "passed": true, "evidence": "brew install rbenv"},
+        {"text": "Gemfile pins Jekyll ~> 4.4", "passed": true, "evidence": "gem jekyll, ~> 4.4.1"},
+        {"text": "Gemfile includes docs theme (just-the-docs)", "passed": true, "evidence": "gem just-the-docs, ~> 0.10"},
+        {"text": "Gemfile includes html-proofer in :test group", "passed": true, "evidence": "group :test do gem html-proofer end"},
+        {"text": "_config.yml sets theme:", "passed": true, "evidence": "theme: just-the-docs"},
+        {"text": "Workflow has id: pages on configure-pages", "passed": true, "evidence": "id: pages"},
+        {"text": "Workflow sets JEKYLL_ENV=production", "passed": true, "evidence": "JEKYLL_ENV: production"},
+        {"text": "Workflow has htmlproofer step", "passed": true, "evidence": "bundle exec htmlproofer ./_site"},
+        {"text": "htmlproofer uses --disable-external", "passed": true, "evidence": "--disable-external"},
+        {"text": "Uses current action versions", "passed": true, "evidence": "checkout@v4, setup-ruby@v1, configure-pages@v5, upload-pages-artifact@v3, deploy-pages@v4"},
+        {"text": "Build passes --baseurl from pages output", "passed": true, "evidence": "--baseurl ${{ steps.pages.outputs.base_path }}"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 6,
+        "failed": 6,
+        "total": 12,
+        "time_seconds": 0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Provides .ruby-version pinning Ruby 3.4.x", "passed": false, "evidence": "No .ruby-version file"},
+        {"text": "Installs Ruby via rbenv/asdf/mise", "passed": false, "evidence": "Uses Homebrew directly, not rbenv"},
+        {"text": "Gemfile pins Jekyll ~> 4.4", "passed": true, "evidence": "gem jekyll, ~> 4.4"},
+        {"text": "Gemfile includes docs theme", "passed": false, "evidence": "No theme gem — builds custom sidebar"},
+        {"text": "Gemfile includes html-proofer in :test group", "passed": true, "evidence": "group :test do gem html-proofer end"},
+        {"text": "_config.yml sets theme:", "passed": false, "evidence": "No theme: set"},
+        {"text": "Workflow has id: pages on configure-pages", "passed": false, "evidence": "No id: pages"},
+        {"text": "Workflow sets JEKYLL_ENV=production", "passed": true, "evidence": "JEKYLL_ENV: production"},
+        {"text": "Workflow has htmlproofer step", "passed": true, "evidence": "bundle exec htmlproofer ./_site"},
+        {"text": "htmlproofer uses --disable-external", "passed": true, "evidence": "--disable-external"},
+        {"text": "Uses current action versions", "passed": true, "evidence": "checkout@v4, setup-ruby@v1, configure-pages@v5"},
+        {"text": "Build passes --baseurl from pages output", "passed": true, "evidence": "--baseurl ${{ steps.pages.outputs.base_path }}"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Uses jekyll-picture-tag plugin", "passed": true, "evidence": "gem jekyll-picture-tag, ~> 2.1"},
+        {"text": "Gemfile includes version pin", "passed": true, "evidence": "~> 2.1"},
+        {"text": "Configuration includes WebP with fallback", "passed": true, "evidence": "formats: [webp, original]"},
+        {"text": "Multiple widths for srcset", "passed": true, "evidence": "widths: [480, 720, 1200, 1920]"},
+        {"text": "Includes lazy loading", "passed": true, "evidence": "loading=lazy on thumbnail preset"},
+        {"text": "Notes about LCP optimization", "passed": true, "evidence": "hero images above fold — don't lazy-load"},
+        {"text": "Mentions Netlify build pipeline", "passed": true, "evidence": "netlify.toml configuration"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.71,
+        "passed": 5,
+        "failed": 2,
+        "total": 7,
+        "time_seconds": 0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Uses jekyll-picture-tag or equivalent", "passed": true, "evidence": "Netlify Image CDN"},
+        {"text": "Gemfile includes version pin", "passed": false, "evidence": "No gem to pin — CDN approach"},
+        {"text": "Configuration includes WebP with fallback", "passed": true, "evidence": "source type=image/webp with JPEG fallback"},
+        {"text": "Multiple widths for srcset", "passed": true, "evidence": "widths [400, 800, 1200, 1600, 2000]"},
+        {"text": "Includes lazy loading", "passed": true, "evidence": "loading=lazy"},
+        {"text": "Notes about LCP optimization", "passed": true, "evidence": "Separate critical variant with fetchpriority=high"},
+        {"text": "Mentions Netlify build pipeline", "passed": false, "evidence": "CDN approach — no build pipeline mentioned"}
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 0, "stddev": 0, "min": 0, "max": 0},
+      "tokens": {"mean": 0, "stddev": 0, "min": 0, "max": 0}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.695, "stddev": 0.228, "min": 0.5, "max": 1.0},
+      "time_seconds": {"mean": 0, "stddev": 0, "min": 0, "max": 0},
+      "tokens": {"mean": 0, "stddev": 0, "min": 0, "max": 0}
+    },
+    "delta": {
+      "pass_rate": "+0.31",
+      "time_seconds": "+0",
+      "tokens": "+0"
+    }
+  },
+  "notes": []
+}

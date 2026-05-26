@@ -1,0 +1,14 @@
+{
+  "eval_id": 4,
+  "eval_name": "responsive-images",
+  "prompt": "My Jekyll travel blog has ~150 posts each with a 3MB hero photo. PageSpeed scores are terrible — LCP is 5+ seconds. I want responsive images with WebP fallback and lazy loading. I host on Netlify so I'm not stuck on the GH Pages allowlist. Walk me through the changes — Gemfile, _config.yml, layout changes, and the build pipeline.",
+  "assertions": [
+    {"text": "Uses jekyll-picture-tag plugin (or equivalent responsive image solution)", "passed": false, "evidence": ""},
+    {"text": "Gemfile includes version pin for the plugin (e.g., ~> 2.1)", "passed": false, "evidence": ""},
+    {"text": "Configuration includes WebP format with fallback", "passed": false, "evidence": ""},
+    {"text": "Configuration includes multiple widths for srcset (at least 480, 800, 1200)", "passed": false, "evidence": ""},
+    {"text": "Includes lazy loading attribute in configuration", "passed": false, "evidence": ""},
+    {"text": "Notes about LCP optimization for above-the-fold images", "passed": false, "evidence": ""},
+    {"text": "Mentions Netlify build pipeline (no extra setup needed)", "passed": false, "evidence": ""}
+  ]
+}

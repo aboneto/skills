@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "Reading time uses Jekyll's built-in `number_of_words` filter (or `page.content | split | size`) rather than a heavy custom plugin",
+      "passed": true,
+      "evidence": "Uses `{% assign words = page.content | number_of_words %}` — Jekyll's built-in filter"
+    },
+    {
+      "text": "TOC uses kramdown's native `* TOC\\n{:toc}` (or `{:toc}`) — does NOT introduce jekyll-toc or unrelated plugins",
+      "passed": true,
+      "evidence": "Uses `* TOC\\n{:toc}` with `{% capture %}` in the layout — native kramdown, no plugins"
+    },
+    {
+      "text": "Restricts the TOC to H2 and H3 (e.g., `toc_levels: 2..3` in _config.yml)",
+      "passed": true,
+      "evidence": "Sets `toc_levels: 2..3` in _config.yml kramdown config"
+    },
+    {
+      "text": "Related posts uses a correct tag-overlap algorithm (concat + uniq size comparison, or a where_exp/contains check) — logic actually finds overlapping tags",
+      "passed": true,
+      "evidence": "Uses `concat` + `uniq` size comparison: if deduped.size < combined.size, tags overlap"
+    },
+    {
+      "text": "Does NOT use the invalid `{# … #}` Liquid comment syntax anywhere in code samples",
+      "passed": true,
+      "evidence": "Uses `{%- comment -%}...{%- endcomment -%}` — correct Liquid comment syntax"
+    },
+    {
+      "text": "States that the code belongs in `_layouts/post.html` (or a clearly-scoped include used by post.html)",
+      "passed": true,
+      "evidence": "'Everything below goes into `_layouts/post.html`' and provides a complete `_layouts/post.html` example"
+    },
+    {
+      "text": "Either uses tag-overlap manually OR mentions Jekyll's built-in `site.related_posts` with its `--lsi`/classifier-reborn cost",
+      "passed": true,
+      "evidence": "Uses tag-overlap manually AND mentions `site.related_posts` with its `--lsi` requirement"
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "total": 7,
+    "pass_rate": 1.0
+  }
+}

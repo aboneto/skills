@@ -1,0 +1,6 @@
+{
+  "eval_id": 2,
+  "eval_name": "post-page-liquid-features",
+  "prompt": "On my Jekyll site I have `_posts/*.md` and I want each post page to show: (a) estimated reading time, (b) a table of contents built from the post's H2 and H3 headings, (c) related posts that share at least one tag. I'm on Jekyll 4.4 and use kramdown. Where do I put this and what's the actual code?",
+  "assertions": []
+}

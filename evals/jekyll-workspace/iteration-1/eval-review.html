@@ -3,231 +3,1322 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jekyll Skill Eval Review</title>
+  <title>Eval Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" integrity="sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT" crossorigin="anonymous"></script>
   <style>
+    :root {
+      --bg: #faf9f5;
+      --surface: #ffffff;
+      --border: #e8e6dc;
+      --text: #141413;
+      --text-muted: #b0aea5;
+      --accent: #d97757;
+      --accent-hover: #c4613f;
+      --green: #788c5d;
+      --green-bg: #eef2e8;
+      --red: #c44;
+      --red-bg: #fceaea;
+      --header-bg: #141413;
+      --header-text: #faf9f5;
+      --radius: 6px;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #eee; min-height: 100vh; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-    h1 { color: #e94560; margin-bottom: 20px; }
-    .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-    .tab { padding: 10px 20px; background: #16213e; border: none; color: #aaa; cursor: pointer; border-radius: 6px; }
-    .tab.active { background: #e94560; color: white; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-    .eval-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .eval-nav button { padding: 8px 16px; background: #16213e; border: none; color: #eee; cursor: pointer; border-radius: 4px; }
-    .eval-card { background: #16213e; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
-    .eval-card h3 { color: #e94560; margin-bottom: 10px; }
-    .eval-card pre { background: #0f3460; padding: 15px; border-radius: 4px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; max-height: 300px; }
-    .grading { margin-top: 15px; padding: 10px; background: #0f3460; border-radius: 4px; }
-    .pass { color: #4ade80; }
-    .fail { color: #f87171; }
-    .feedback-section { margin-top: 20px; }
-    .feedback-section label { display: block; margin-bottom: 8px; color: #aaa; }
-    .feedback-section textarea { width: 100%; min-height: 100px; background: #0f3460; border: 1px solid #333; color: #eee; padding: 10px; border-radius: 4px; }
-    .benchmark-table { width: 100%; border-collapse: collapse; }
-    .benchmark-table th, .benchmark-table td { padding: 12px; text-align: left; border-bottom: 1px solid #333; }
-    .benchmark-table th { background: #16213e; color: #e94560; }
-    .benchmark-table tr:nth-child(even) { background: #16213e; }
-    .delta { color: #4ade80; }
-    .summary { background: #16213e; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
-    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 15px; }
-    .summary-item { text-align: center; }
-    .summary-item .value { font-size: 2em; color: #e94560; }
-    .summary-item .label { color: #aaa; font-size: 0.9em; }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .header .instructions {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+    }
+    .header .progress {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      text-align: right;
+    }
+
+    /* ---- Main content ---- */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* ---- Sections ---- */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      flex-shrink: 0;
+    }
+    .section-header {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .section-body {
+      padding: 1rem;
+    }
+
+    /* ---- Config badge ---- */
+    .config-badge {
+      display: inline-block;
+      padding: 0.2rem 0.625rem;
+      border-radius: 9999px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+    }
+    .config-badge.config-primary {
+      background: rgba(33, 150, 243, 0.12);
+      color: #1976d2;
+    }
+    .config-badge.config-baseline {
+      background: rgba(255, 193, 7, 0.15);
+      color: #f57f17;
+    }
+
+    /* ---- Prompt ---- */
+    .prompt-text {
+      white-space: pre-wrap;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* ---- Outputs ---- */
+    .output-file {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .output-file + .output-file {
+      margin-top: 1rem;
+    }
+    .output-file-header {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .output-file-header .dl-btn {
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .output-file-header .dl-btn:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    .output-file-content {
+      padding: 0.75rem;
+      overflow-x: auto;
+    }
+    .output-file-content pre {
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+    .output-file-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .output-file-content iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+    .output-file-content table {
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      width: 100%;
+    }
+    .output-file-content table td,
+    .output-file-content table th {
+      border: 1px solid var(--border);
+      padding: 0.375rem 0.5rem;
+      text-align: left;
+    }
+    .output-file-content table th {
+      background: var(--bg);
+      font-weight: 600;
+    }
+    .output-file-content .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .output-file-content .download-link:hover {
+      background: var(--border);
+    }
+    .empty-state {
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* ---- Feedback ---- */
+    .prev-feedback {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.625rem 0.75rem;
+      margin-top: 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .prev-feedback-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+      color: var(--text-muted);
+    }
+    .feedback-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      resize: vertical;
+      color: var(--text);
+    }
+    .feedback-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .feedback-status {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      min-height: 1.1em;
+    }
+
+    /* ---- Grades (collapsible) ---- */
+    .grades-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .grades-toggle:hover {
+      color: var(--accent);
+    }
+    .grades-toggle .arrow {
+      margin-right: 0.5rem;
+      transition: transform 0.15s;
+      font-size: 0.75rem;
+    }
+    .grades-toggle .arrow.open {
+      transform: rotate(90deg);
+    }
+    .grades-content {
+      display: none;
+      margin-top: 0.75rem;
+    }
+    .grades-content.open {
+      display: block;
+    }
+    .grades-summary {
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .grade-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .grade-pass { background: var(--green-bg); color: var(--green); }
+    .grade-fail { background: var(--red-bg); color: var(--red); }
+    .assertion-list {
+      list-style: none;
+    }
+    .assertion-item {
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8125rem;
+    }
+    .assertion-item:last-child { border-bottom: none; }
+    .assertion-status {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    .assertion-status.pass { color: var(--green); }
+    .assertion-status.fail { color: var(--red); }
+    .assertion-evidence {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      padding-left: 1.5rem;
+    }
+
+    /* ---- View tabs ---- */
+    .view-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .view-tab {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.625rem 1.25rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .view-tab:hover { color: var(--text); }
+    .view-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .view-panel { display: none; }
+    .view-panel.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+    /* ---- Benchmark view ---- */
+    .benchmark-view {
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .benchmark-table {
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.8125rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    .benchmark-table th, .benchmark-table td {
+      padding: 0.625rem 0.75rem;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+    .benchmark-table th {
+      font-family: 'Poppins', sans-serif;
+      background: var(--header-bg);
+      color: var(--header-text);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .benchmark-table tr:hover { background: var(--bg); }
+    .benchmark-table tr.benchmark-row-with { background: rgba(33, 150, 243, 0.06); }
+    .benchmark-table tr.benchmark-row-without { background: rgba(255, 193, 7, 0.06); }
+    .benchmark-table tr.benchmark-row-with:hover { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-without:hover { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-table tr.benchmark-row-avg { font-weight: 600; border-top: 2px solid var(--border); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-with { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-without { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-delta-positive { color: var(--green); font-weight: 600; }
+    .benchmark-delta-negative { color: var(--red); font-weight: 600; }
+    .benchmark-notes {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+    .benchmark-notes h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+    .benchmark-notes ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+    }
+    .benchmark-notes li {
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      margin-bottom: 0.375rem;
+    }
+    .benchmark-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    /* ---- Navigation ---- */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .nav-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .done-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .done-btn:hover {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .done-btn.ready {
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+    .done-btn.ready:hover {
+      background: var(--accent-hover);
+    }
+    /* ---- Done overlay ---- */
+    .done-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    .done-overlay.visible {
+      display: flex;
+    }
+    .done-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+    }
+    .done-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .done-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .done-card .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .done-card button {
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .done-card button:hover {
+      background: var(--bg);
+    }
+    /* ---- Toast ---- */
+    .toast {
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .toast.visible {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Jekyll Skill Evaluation Review</h1>
-
-    <div class="tabs">
-      <button class="tab active" onclick="showTab('outputs')">Outputs</button>
-      <button class="tab" onclick="showTab('benchmark')">Benchmark</button>
+  <div id="app" style="height:100vh; display:flex; flex-direction:column;">
+    <div class="header">
+      <div>
+        <h1>Eval Review: <span id="skill-name"></span></h1>
+        <div class="instructions">Review each output and leave feedback below. Navigate with arrow keys or buttons. When done, copy feedback and paste into Claude Code.</div>
+      </div>
+      <div class="progress" id="progress"></div>
     </div>
 
-    <div id="outputs" class="tab-content active">
-      <div class="eval-nav">
-        <button onclick="prevEval()">← Previous</button>
-        <span id="evalCounter">Eval 1 of 4</span>
-        <button onclick="nextEval()">Next →</button>
-      </div>
-
-      <div id="evalContainer"></div>
-
-      <div class="feedback-section">
-        <label>Your Feedback:</label>
-        <textarea id="feedbackInput" placeholder="Enter your feedback for this evaluation..."></textarea>
-      </div>
-
-      <button onclick="submitAllReviews()" style="margin-top: 20px; padding: 12px 24px; background: #e94560; border: none; color: white; cursor: pointer; border-radius: 6px; font-size: 16px;">Submit All Reviews</button>
+    <!-- View tabs (only shown when benchmark data exists) -->
+    <div class="view-tabs" id="view-tabs" style="display:none;">
+      <button class="view-tab active" onclick="switchView('outputs')">Outputs</button>
+      <button class="view-tab" onclick="switchView('benchmark')">Benchmark</button>
     </div>
 
-    <div id="benchmark" class="tab-content">
-      <div class="summary">
-        <h2>Summary</h2>
-        <div class="summary-grid">
-          <div class="summary-item">
-            <div class="value">100%</div>
-            <div class="label">With Skill Pass Rate</div>
-          </div>
-          <div class="summary-item">
-            <div class="value">+52.4%</div>
-            <div class="label">Delta vs Baseline</div>
-          </div>
-          <div class="summary-item">
-            <div class="value">+15K</div>
-            <div class="label">Avg Tokens (with skill)</div>
-          </div>
+    <!-- Outputs panel (qualitative review) -->
+    <div class="view-panel active" id="panel-outputs">
+    <div class="main">
+      <!-- Prompt -->
+      <div class="section">
+        <div class="section-header">Prompt <span class="config-badge" id="config-badge" style="display:none;"></span></div>
+        <div class="section-body">
+          <div class="prompt-text" id="prompt-text"></div>
         </div>
       </div>
 
-      <table class="benchmark-table">
-        <thead>
-          <tr>
-            <th>Eval</th>
-            <th>Config</th>
-            <th>Pass Rate</th>
-            <th>Avg Tokens</th>
-            <th>Avg Duration</th>
-          </tr>
-        </thead>
-        <tbody id="benchmarkBody"></tbody>
-      </table>
+      <!-- Outputs -->
+      <div class="section">
+        <div class="section-header">Output</div>
+        <div class="section-body" id="outputs-body">
+          <div class="empty-state">No output files found</div>
+        </div>
+      </div>
 
-      <div style="margin-top: 30px;">
-        <h3 style="color: #e94560;">Eval Results</h3>
-        <div id="evalResults"></div>
+      <!-- Previous Output (collapsible) -->
+      <div class="section" id="prev-outputs-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="togglePrevOutputs()">
+            <span class="arrow" id="prev-outputs-arrow">&#9654;</span>
+            Previous Output
+          </div>
+        </div>
+        <div class="grades-content" id="prev-outputs-content"></div>
+      </div>
+
+      <!-- Grades (collapsible) -->
+      <div class="section" id="grades-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="toggleGrades()">
+            <span class="arrow" id="grades-arrow">&#9654;</span>
+            Formal Grades
+          </div>
+        </div>
+        <div class="grades-content" id="grades-content"></div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="section">
+        <div class="section-header">Your Feedback</div>
+        <div class="section-body">
+          <textarea
+            class="feedback-textarea"
+            id="feedback"
+            placeholder="What do you think of this output? Any issues, suggestions, or things that look great?"
+          ></textarea>
+          <div class="feedback-status" id="feedback-status"></div>
+          <div class="prev-feedback" id="prev-feedback" style="display:none;">
+            <div class="prev-feedback-label">Previous feedback</div>
+            <div id="prev-feedback-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav" id="outputs-nav">
+      <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">&#8592; Previous</button>
+      <button class="done-btn" id="done-btn" onclick="showDoneDialog()">Submit All Reviews</button>
+      <button class="nav-btn" id="next-btn" onclick="navigate(1)">Next &#8594;</button>
+    </div>
+    </div><!-- end panel-outputs -->
+
+    <!-- Benchmark panel (quantitative stats) -->
+    <div class="view-panel" id="panel-benchmark">
+      <div class="benchmark-view" id="benchmark-content">
+        <div class="benchmark-empty">No benchmark data available. Run a benchmark to see quantitative results here.</div>
       </div>
     </div>
   </div>
 
+  <!-- Done overlay -->
+  <div class="done-overlay" id="done-overlay">
+    <div class="done-card">
+      <h2>Review Complete</h2>
+      <p>Your feedback has been saved. Go back to your Claude Code session and tell Claude you're done reviewing.</p>
+      <div class="btn-row">
+        <button onclick="closeDoneDialog()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
   <script>
-    const evals = [
-      {
-        id: 1,
-        name: "gh-pages-paginate-v2-failure",
-        prompt: "I pushed my Jekyll blog to GitHub Pages and the Actions build is failing with `Could not find gem 'jekyll-paginate-v2'`. My Gemfile has both `github-pages` and `jekyll-paginate-v2` in `:jekyll_plugins`. It builds fine locally with `bundle exec jekyll serve`. Repo is at github.com/me/blog and the site lives at me.github.io/blog. What do I need to change?",
-        with_skill_output: "Identifies that jekyll-paginate-v2 is NOT on the GitHub Pages plugin allowlist as the root cause. Explains why the same Gemfile works locally but fails on GitHub Pages. Offers GitHub Actions migration as the primary fix. Also offers dropping to jekyll-paginate as an in-allowlist fallback. Correctly acknowledges the /blog baseurl for project pages.",
-        without_skill_output: "Missing or partial - did not properly diagnose the allowlist issue.",
-        grading: { with_skill: "6/6 passed", without_skill: "0/6 passed" }
-      },
-      {
-        id: 2,
-        name: "post-page-liquid-features",
-        prompt: "On my Jekyll site I have `_posts/*.md` and I want each post page to show: (a) estimated reading time, (b) a table of contents built from the post's H2 and H3 headings, (c) related posts that share at least one tag. I'm on Jekyll 4.4 and use kramdown. Where do I put this and what's the actual code?",
-        with_skill_output: "Provides working Liquid code for: (a) reading time via word count divided by 200; (b) TOC via kramdown's `* TOC\\n{:toc}` with proper config; (c) related posts via tag overlap with correct concat/uniq logic.",
-        without_skill_output: "Missing or partial - did not provide all three required features correctly.",
-        grading: { with_skill: "4/4 passed", without_skill: "1/4 passed" }
-      },
-      {
-        id: 3,
-        name: "docs-site-from-scratch",
-        prompt: "Help me set up a Jekyll docs site from scratch on macOS. About 40 pages, sidebar nav, light/dark mode. Ruby 3.4. I deploy via GitHub Actions to GitHub Pages. Need: a working Gemfile, a `_config.yml`, the deployment workflow, and an html-proofer step that breaks the build on broken internal links.",
-        with_skill_output: "Expected: Ruby setup via rbenv/mise, Gemfile with Jekyll 4.4 + just-the-docs + html-proofer, _config.yml, GitHub Actions workflow with htmlproofer step.",
-        without_skill_output: "Pending grading...",
-        grading: { with_skill: "5/5 passed", without_skill: "5/5 passed" }
-      },
-      {
-        id: 4,
-        name: "responsive-images",
-        prompt: "My Jekyll travel blog has ~150 posts each with a 3MB hero photo. PageSpeed scores are terrible — LCP is 5+ seconds. I want responsive images with WebP fallback and lazy loading. I host on Netlify so I'm not stuck on the GH Pages allowlist. Walk me through the changes — Gemfile, _config.yml, layout changes, and the build pipeline.",
-        with_skill_output: "Comprehensive: jekyll-picture-tag gem, _config.yml with picture presets, responsive image markup (both plugin and hand-rolled), sharp pre-processing build pipeline, netlify.toml and _headers for caching, explicit loading=\"eager\" for hero/LCP images.",
-        without_skill_output: "Good but missing: explicit guidance on loading=\"eager\" for above-fold hero images (critical for LCP).",
-        grading: { with_skill: "6/6 passed", without_skill: "5/6 passed" }
+    // ---- Embedded data (injected by generate_review.py) ----
+    const EMBEDDED_DATA = {"skill_name": "jekyll", "runs": [{"id": "eval-1-gh-pages-paginate-v2-with_skill", "prompt": "I pushed my Jekyll blog to GitHub Pages and the Actions build is failing with `Could not find gem 'jekyll-paginate-v2'`. My Gemfile has both `github-pages` and `jekyll-paginate-v2` in `:jekyll_plugins`. It builds fine locally with `bundle exec jekyll serve`. Repo is at github.com/me/blog and the site lives at me.github.io/blog. What do I need to change?", "eval_id": 1, "outputs": [{"name": "_meta.md", "type": "text", "content": "/Users/antonioneto/Documents/workspace/skills/skills/jekyll/SKILL.md\n/Users/antonioneto/Documents/workspace/skills/skills/jekyll/references/deployment.md\n/Users/antonioneto/Documents/workspace/skills/skills/jekyll/assets/Gemfile\n"}, {"name": "answer.md", "type": "text", "content": "# Why it builds locally but fails on GitHub Pages\n\nShort version: `jekyll-paginate-v2` is **not** on GitHub Pages' plugin allowlist. The classic GitHub Pages builder only loads the plugins listed at <https://pages.github.com/versions/>, regardless of what your `Gemfile` says. Locally `bundle exec jekyll serve` happily loads anything in your `:jekyll_plugins` group \u2014 that's why it works on your machine. On Pages, the builder sandbox refuses to install or load `jekyll-paginate-v2`, so the resolver can't find the gem and the build dies with `Could not find gem 'jekyll-paginate-v2'`.\n\nThis is also why mixing the `github-pages` meta-gem with extra plugins is misleading: the gem itself resolves fine in Bundler, but the runtime on Pages won't actually load anything beyond the allowlist.\n\nYou have two clean paths. Pick based on whether you need `paginate-v2`.\n\n---\n\n## Option A (recommended): build with GitHub Actions and deploy to Pages\n\nThis is the modern default. You keep free Pages hosting, drop the allowlist entirely, and get current Jekyll (4.4.x) plus any plugin you want \u2014 including `jekyll-paginate-v2`.\n\n### 1. Switch the Pages source\n\nIn your repo: **Settings \u2192 Pages \u2192 Build and deployment \u2192 Source: GitHub Actions**.\n\n### 2. Replace `github-pages` in your `Gemfile`\n\nDrop the `github-pages` gem (it pins you to Jekyll 3.10.x and pulls in a pile of unneeded transitive deps). Use a modern Gemfile instead:\n\n```ruby\nsource \"https://rubygems.org\"\n\ngem \"jekyll\", \"~> 4.4.1\"\n\ngroup :jekyll_plugins do\n  gem \"jekyll-feed\",          \"~> 0.17\"\n  gem \"jekyll-seo-tag\",       \"~> 2.8\"\n  gem \"jekyll-sitemap\",       \"~> 1.4\"\n  gem \"jekyll-redirect-from\", \"~> 0.16\"\n  gem \"jekyll-paginate-v2\",   \"~> 3.0\"\nend\n\ngem \"webrick\", \"~> 1.9\"\ngem \"sass-embedded\", \"~> 1.77\"\ngem \"jekyll-include-cache\", \"~> 0.2\"\n```\n\nThen locally:\n\n```bash\nrm Gemfile.lock\nbundle install\n```\n\nCommit the new `Gemfile` and `Gemfile.lock`.\n\n### 3. List every plugin explicitly in `_config.yml`\n\nWhen you used `github-pages`, you could rely on it auto-registering allowlisted plugins. Now you need to be explicit:\n\n```yaml\nplugins:\n  - jekyll-feed\n  - jekyll-seo-tag\n  - jekyll-sitemap\n  - jekyll-redirect-from\n  - jekyll-paginate-v2\n```\n\nPlugins must be in **both** the `Gemfile` (under `:jekyll_plugins`) **and** `_config.yml` \u2014 the most common cause of \"it doesn't run\" bugs is forgetting one of the two.\n\n### 4. Fix `baseurl` for a project site\n\nYour site lives at `me.github.io/blog`, so it's a **project page**, not a user page. That means:\n\n```yaml\n# _config.yml\nurl: \"https://me.github.io\"\nbaseurl: \"/blog\"\n```\n\nAnd in templates, always pipe through `relative_url`:\n\n```liquid\n<a href=\"{{ \"/about/\" | relative_url }}\">About</a>\n<img src=\"{{ \"/logo.png\" | relative_url }}\">\n```\n\nHardcoded `/about/` works locally but 404s under `/blog/`.\n\nThe workflow below also passes `--baseurl` from `actions/configure-pages`, which is the safety belt for this.\n\n### 5. Add `.github/workflows/jekyll.yml`\n\n```yaml\nname: Build and deploy Jekyll site\n\non:\n  push:\n    branches: [main]\n  workflow_dispatch:\n\npermissions:\n  contents: read\n  pages: write\n  id-token: write\n\nconcurrency:\n  group: pages\n  cancel-in-progress: true\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n        with:\n          fetch-depth: 0\n\n      - uses: ruby/setup-ruby@v1\n        with:\n          ruby-version: '3.4'\n          bundler-cache: true\n\n      - id: pages\n        uses: actions/configure-pages@v5\n\n      - name: Build\n        run: bundle exec jekyll build --baseurl \"${{ steps.pages.outputs.base_path }}\"\n        env:\n          JEKYLL_ENV: production\n\n      - uses: actions/upload-pages-artifact@v3\n\n  deploy:\n    needs: build\n    runs-on: ubuntu-latest\n    environment:\n      name: github-pages\n      url: ${{ steps.deployment.outputs.page_url }}\n    steps:\n      - id: deployment\n        uses: actions/deploy-pages@v4\n```\n\n`JEKYLL_ENV: production` matters \u2014 without it, `jekyll-seo-tag` and many themes emit dev placeholders instead of your real analytics ID, canonical URL, etc.\n\n### 6. Push to `main`\n\nFirst build takes ~2 minutes; subsequent runs cache gems via `bundler-cache: true` and finish in ~30s. You can watch it under **Actions** in your repo.\n\n---\n\n## Option B: stay on the classic builder and drop paginate-v2\n\nIf you don't want to maintain a workflow, you have to live within the allowlist:\n\n1. Remove `jekyll-paginate-v2` from `Gemfile` and `_config.yml`.\n2. Use the original `jekyll-paginate` (which **is** on the allowlist) \u2014 but it only works on `index.html` and only paginates `site.posts`. No per-category/tag pagination, no custom permalinks. If that's enough for your blog, this is fine.\n3. Anything else you add later must also be on <https://pages.github.com/versions/>.\n\n`Gemfile`:\n\n```ruby\nsource \"https://rubygems.org\"\ngem \"github-pages\", group: :jekyll_plugins\ngem \"webrick\", \"~> 1.9\"\n```\n\n`_config.yml`:\n\n```yaml\npaginate: 10\npaginate_path: \"/page:num/\"\nplugins:\n  - jekyll-paginate\n  - jekyll-feed\n  - jekyll-seo-tag\n  - jekyll-sitemap\n```\n\n---\n\n## My call\n\nGo with Option A. The classic builder is a dead end the moment you want per-tag pagination, Tailwind, Pagefind, image processing, a newer Jekyll feature like the `find` filter, or any custom `_plugins/` Ruby. Once you've done it once, you never go back, and the workflow above is the same one I'd give for any new Jekyll site in 2026.\n\nAfter you push the workflow, sanity-check three things in the Actions log:\n\n- The `Build` step prints `Configuration file: _config.yml` and lists `jekyll-paginate-v2` among loaded plugins.\n- `JEKYLL_ENV` shows `production`.\n- `--baseurl /blog` is actually being passed (it'll be in the command line echo).\n\nIf the build still fails after the switch, the next-most-likely culprit is a hardcoded `/path/` somewhere in your layouts that worked at `localhost:4000/` but 404s under `/blog/`. Grep for `href=\"/` and `src=\"/` and pipe each through `relative_url`.\n"}], "grading": {"assertions": [{"text": "Identifies that jekyll-paginate-v2 is NOT on the GitHub Pages plugin allowlist as the root cause", "passed": true, "evidence": "Line 3: 'jekyll-paginate-v2 is not on GitHub Pages' plugin allowlist'"}, {"text": "Explains why the same Gemfile works locally but fails on the GitHub Pages classic builder", "passed": true, "evidence": "Line 3: 'Locally bundle exec jekyll serve happily loads anything in your :jekyll_plugins group \u2014 that's why it works on your machine. On Pages, the builder sandbox refuses to install or load jekyll-paginate-v2'"}, {"text": "Offers migrating to GitHub Actions deployment as a fix (unlocks current Jekyll + any plugin)", "passed": true, "evidence": "Option A (recommended): build with GitHub Actions and deploy to Pages \u2014 includes full workflow YAML with actions/checkout@v4, ruby/setup-ruby@v1, actions/configure-pages@v5"}, {"text": "Offers an in-allowlist alternative (e.g., drop jekyll-paginate-v2 and use jekyll-paginate)", "passed": true, "evidence": "Option B: 'stay on the classic builder and drop paginate-v2' with jekyll-paginate config"}, {"text": "Acknowledges the site lives at /blog (project site) \u2014 does not assume root deployment", "passed": true, "evidence": "Lines 66-84: 'Your site lives at me.github.io/blog, so it's a project page' with baseurl: /blog and relative_url filter usage"}, {"text": "Does not (incorrectly) attribute the failure solely to bundle install / Gemfile.lock issues", "passed": true, "evidence": "Correctly identifies the root cause as the allowlist, not bundle install or lockfile issues"}]}}, {"id": "eval-1-gh-pages-paginate-v2-without_skill", "prompt": "I pushed my Jekyll blog to GitHub Pages and the Actions build is failing with `Could not find gem 'jekyll-paginate-v2'`. My Gemfile has both `github-pages` and `jekyll-paginate-v2` in `:jekyll_plugins`. It builds fine locally with `bundle exec jekyll serve`. Repo is at github.com/me/blog and the site lives at me.github.io/blog. What do I need to change?", "eval_id": 1, "outputs": [{"name": "answer.md", "type": "text", "content": "# El problema\n\nGitHub Pages no soporta `jekyll-paginate-v2`. El gem `github-pages` solo permite una whitelist fija de plugins (la \"Dependency versions\" list que mantiene GitHub), y `jekyll-paginate-v2` no est\u00e1 en ella. Solo `jekyll-paginate` (v1) est\u00e1 soportado, y ese es muy limitado.\n\nPor eso falla en Actions pero te funciona en local: localmente `bundle exec jekyll serve` corre Jekyll directamente con el plugin que tienes instalado, mientras que el workflow oficial de GitHub Pages corre dentro del sandbox de `github-pages` que ignora gems fuera de la whitelist.\n\nTienes tres caminos. El segundo es el que recomiendo.\n\n---\n\n## Opci\u00f3n 1: Bajar a `jekyll-paginate` v1 (soportado por GitHub Pages)\n\nSi la paginaci\u00f3n que necesitas es b\u00e1sica (solo paginar el blog principal en `/`):\n\n**Gemfile**\n```ruby\nsource \"https://rubygems.org\"\n\ngem \"github-pages\", group: :jekyll_plugins\n\ngroup :jekyll_plugins do\n  gem \"jekyll-paginate\"\nend\n```\n\n**_config.yml**\n```yaml\nplugins:\n  - jekyll-paginate\n\npaginate: 10\npaginate_path: \"/page:num/\"\n```\n\nLimitaciones: solo pagina un feed, no soporta paginaci\u00f3n por categor\u00eda/tag, no autopaging, sin `sort_field`. Si solo paginas posts en el index, sirve.\n\nDespu\u00e9s: `bundle update`, commit del `Gemfile.lock`, push.\n\n---\n\n## Opci\u00f3n 2 (recomendada): Cambiar al workflow de GitHub Actions y dejar de usar el gem `github-pages`\n\nGitHub recomienda esto desde hace a\u00f1os. Te deshaces de la whitelist y puedes usar **cualquier** plugin de Jekyll, incluyendo `jekyll-paginate-v2`, y adem\u00e1s usar una versi\u00f3n de Jekyll m\u00e1s nueva (el gem `github-pages` est\u00e1 congelado en Jekyll 3.9).\n\n### Paso 1: Cambiar la fuente del deploy\n\nEn GitHub: **Settings \u2192 Pages \u2192 Build and deployment \u2192 Source: GitHub Actions** (no \"Deploy from a branch\").\n\n### Paso 2: Reemplaza el `github-pages` gem en tu Gemfile\n\n```ruby\nsource \"https://rubygems.org\"\n\ngem \"jekyll\", \"~> 4.3\"\n\ngroup :jekyll_plugins do\n  gem \"jekyll-paginate-v2\"\n  # otros plugins que uses, ej:\n  # gem \"jekyll-seo-tag\"\n  # gem \"jekyll-feed\"\n  # gem \"jekyll-sitemap\"\nend\n\n# Windows / JRuby compat (opcional)\nplatforms :mingw, :x64_mingw, :mswin, :jruby do\n  gem \"tzinfo\", \">= 1\", \"< 3\"\n  gem \"tzinfo-data\"\nend\n\ngem \"webrick\", \"~> 1.8\"\n```\n\nLuego:\n```\nbundle update\n```\ny commitea el nuevo `Gemfile.lock`.\n\n### Paso 3: Crea `.github/workflows/pages.yml`\n\n```yaml\nname: Deploy Jekyll site to Pages\n\non:\n  push:\n    branches: [\"main\"]\n  workflow_dispatch:\n\npermissions:\n  contents: read\n  pages: write\n  id-token: write\n\nconcurrency:\n  group: \"pages\"\n  cancel-in-progress: false\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: ruby/setup-ruby@v1\n        with:\n          ruby-version: \"3.2\"\n          bundler-cache: true\n      - uses: actions/configure-pages@v5\n      - name: Build with Jekyll\n        run: bundle exec jekyll build --baseurl \"${{ steps.pages.outputs.base_path }}\"\n        env:\n          JEKYLL_ENV: production\n      - uses: actions/upload-pages-artifact@v3\n        with:\n          path: ./_site\n\n  deploy:\n    environment:\n      name: github-pages\n      url: ${{ steps.deployment.outputs.page_url }}\n    runs-on: ubuntu-latest\n    needs: build\n    steps:\n      - name: Deploy to GitHub Pages\n        id: deployment\n        uses: actions/deploy-pages@v4\n```\n\n### Paso 4: Verifica `_config.yml`\n\nComo tu sitio vive en `me.github.io/blog`, aseg\u00farate de tener:\n\n```yaml\nurl: \"https://me.github.io\"\nbaseurl: \"/blog\"\n\nplugins:\n  - jekyll-paginate-v2\n  # los dem\u00e1s que uses\n\npagination:\n  enabled: true\n  per_page: 10\n  permalink: \"/page/:num/\"\n  title: \":title - page :num\"\n  sort_field: \"date\"\n  sort_reverse: true\n```\n\nE importante con paginate-v2: en tu `index.html` (o `index.md`) necesitas el front matter de paginaci\u00f3n:\n\n```yaml\n---\nlayout: home\npagination:\n  enabled: true\n---\n```\n\nSin ese bloque, paginate-v2 no genera las p\u00e1ginas (es uno de los gotchas cl\u00e1sicos al migrar desde v1).\n\nHaz push y mira la pesta\u00f1a Actions. El job \"build\" deber\u00eda instalar `jekyll-paginate-v2` desde tu Gemfile sin reclamar.\n\n---\n\n## Opci\u00f3n 3: Generar el sitio localmente y commitear `_site/`\n\nFunciona pero es feo: tendr\u00edas que recordar correr `JEKYLL_ENV=production bundle exec jekyll build` antes de cada push y publicar desde una rama `gh-pages`. No lo recomiendo, la Opci\u00f3n 2 es estrictamente mejor.\n\n---\n\n# TL;DR\n\n`github-pages` (el gem) tiene una whitelist y `jekyll-paginate-v2` no est\u00e1 en ella, por eso falla solo en CI. Migra al workflow oficial de GitHub Actions (Settings \u2192 Pages \u2192 Source: GitHub Actions), quita `github-pages` del Gemfile, usa `jekyll ~> 4.3` directo, y a\u00f1ade el workflow `pages.yml` de arriba. Con eso `jekyll-paginate-v2` funcionar\u00e1 igual que en local, y de paso te subes a Jekyll 4.\n"}], "grading": {"assertions": [{"text": "Identifies that jekyll-paginate-v2 is NOT on the GitHub Pages plugin allowlist as the root cause", "passed": true, "evidence": "Line 3: 'GitHub Pages no soporta jekyll-paginate-v2. El gem github-pages solo permite una whitelist fija de plugins'"}, {"text": "Explains why the same Gemfile works locally but fails on the GitHub Pages classic builder", "passed": true, "evidence": "Lines 3-5: 'localmente bundle exec jekyll serve corre Jekyll directamente con el plugin que tienes instalado, mientras que el workflow oficial de GitHub Pages corre dentro del sandbox de github-pages que ignora gems fuera de la whitelist'"}, {"text": "Offers migrating to GitHub Actions deployment as a fix (unlocks current Jekyll + any plugin)", "passed": true, "evidence": "Option 2 (recomendada): 'Cambiar al workflow de GitHub Actions' with full workflow YAML"}, {"text": "Offers an in-allowlist alternative (e.g., drop jekyll-paginate-v2 and use jekyll-paginate)", "passed": true, "evidence": "Option 1: 'Bajar a jekyll-paginate v1 (soportado por GitHub Pages)'"}, {"text": "Acknowledges the site lives at /blog (project site) \u2014 does not assume root deployment", "passed": true, "evidence": "Lines 130-147: 'Como tu sitio vive en me.github.io/blog' with baseurl: '/blog' config"}, {"text": "Does not (incorrectly) attribute the failure solely to bundle install / Gemfile.lock issues", "passed": true, "evidence": "Correctly identifies the whitelist/allowlist as the root cause"}]}}, {"id": "eval-2-post-page-liquid-features-with_skill", "prompt": "On my Jekyll site I have `_posts/*.md` and I want each post page to show: (a) estimated reading time, (b) a table of contents built from the post's H2 and H3 headings, (c) related posts that share at least one tag. I'm on Jekyll 4.4 and use kramdown. Where do I put this and what's the actual code?", "eval_id": 2, "outputs": [{"name": "_meta.md", "type": "text", "content": "/Users/antonioneto/Documents/workspace/skills/skills/jekyll/SKILL.md\n/Users/antonioneto/Documents/workspace/skills/skills/jekyll/references/liquid.md\n/Users/antonioneto/Documents/workspace/skills/skills/jekyll/references/kramdown.md\n"}, {"name": "answer.md", "type": "text", "content": "# Reading time + TOC + related posts on every post page\n\nYou can do all three with pure Liquid \u2014 no extra plugins required, which keeps things simple on Jekyll 4.4 with kramdown. Here is exactly where each piece lives and the code that goes in it.\n\n## Where this stuff lives\n\nYour posts use `layout: post`, so the place to edit is the `post` layout file:\n\n```\n_layouts/post.html\n```\n\nIf you don't have one yet (because you're using a theme that ships its own), create it. Jekyll will use your local `_layouts/post.html` and fall back to the theme for anything you don't override. If you want to keep the changes isolated, break each feature into its own include under `_includes/` and reference them from the layout \u2014 that's the pattern I'll use below.\n\nFinal shape:\n\n```\n_layouts/post.html\n_includes/reading-time.html\n_includes/post-toc.html\n_includes/related-posts.html\n```\n\n## (a) Estimated reading time\n\nThis one is a one-liner. Put it in `_includes/reading-time.html`:\n\n```liquid\n{%- assign words = page.content | number_of_words -%}\n{%- assign minutes = words | divided_by: 200 | plus: 1 -%}\n<span class=\"reading-time\">{{ minutes }} min read</span>\n```\n\n`number_of_words` is a Jekyll filter that strips HTML and counts words in the rendered content. 200 wpm is the conventional average; `| plus: 1` avoids \"0 min read\" on very short posts and gives a ceiling-ish round.\n\nIf you want it more accurate for code-heavy posts, lower the divisor (e.g. `divided_by: 180`).\n\n## (b) Table of contents from H2 and H3\n\nYou have two real options. Pick one \u2014 I'd pick option 1.\n\n### Option 1 (recommended): kramdown's built-in `{:toc}`\n\nkramdown already builds the TOC for you and respects heading levels via `_config.yml`. Add this to `_config.yml`:\n\n```yaml\nkramdown:\n  input: GFM\n  toc_levels: 2..3       # H2 and H3 only\n  auto_ids: true         # default true, but be explicit \u2014 needed for anchor links\n```\n\nRestart `jekyll serve` after editing `_config.yml` \u2014 it doesn't hot-reload.\n\nThen in each post (or in the layout, see below) put a UL marker followed by the `{:toc}` IAL:\n\n```markdown\n* TOC placeholder \u2014 this line is replaced\n{:toc}\n```\n\nPros: built into kramdown, zero JS, anchor IDs match what kramdown already generates for your headings, you can mark headings to skip with `{:.no_toc}`.\n\nCons: it has to be inside the post body, not the layout. So either:\n- Drop the two-line marker at the top of every post (annoying), OR\n- Make a small layout trick: render the TOC marker in the layout *before* `{{ content }}` and rely on the fact that Liquid runs before kramdown \u2014 but kramdown only processes `{:toc}` inside the markdown file itself, not in HTML layouts. So this trick doesn't actually work. Stick to putting `* TOC\\n{:toc}` at the top of each post.\n\nIf sprinkling that snippet in every post bothers you, use Option 2.\n\n### Option 2: Build the TOC in the layout from `page.content`\n\nThis scans the rendered post HTML for `<h2>` and `<h3>` tags and writes anchor links. Put this in `_includes/post-toc.html`:\n\n```liquid\n{%- comment -%}\n  Build a TOC from H2/H3 in the rendered post.\n  kramdown auto-generates id=\"...\" on headings, so we can link to them.\n{%- endcomment -%}\n\n{%- assign html = page.content -%}\n{%- assign chunks = html | split: \"<h\" -%}\n\n{%- assign headings = \"\" | split: \"\" -%}\n{%- for chunk in chunks -%}\n  {%- assign level = chunk | slice: 0, 1 -%}\n  {%- if level == \"2\" or level == \"3\" -%}\n    {%- assign id_part = chunk | split: 'id=\"' -%}\n    {%- if id_part.size > 1 -%}\n      {%- assign id = id_part[1] | split: '\"' | first -%}\n      {%- assign after_gt = chunk | split: \">\" -%}\n      {%- assign text_with_close = after_gt | shift | join: \">\" -%}\n      {%- assign text = text_with_close | split: \"</h\" | first | strip_html | strip -%}\n      {%- capture entry -%}{{ level }}|{{ id }}|{{ text }}{%- endcapture -%}\n      {%- assign headings = headings | push: entry -%}\n    {%- endif -%}\n  {%- endif -%}\n{%- endfor -%}\n\n{%- if headings.size > 0 -%}\n<nav class=\"post-toc\" aria-label=\"Table of contents\">\n  <p class=\"post-toc__title\">On this page</p>\n  <ul class=\"post-toc__list\">\n    {%- assign in_h3 = false -%}\n    {%- for h in headings -%}\n      {%- assign parts = h | split: \"|\" -%}\n      {%- assign level = parts[0] -%}\n      {%- assign id = parts[1] -%}\n      {%- assign text = parts[2] -%}\n      {%- if level == \"2\" -%}\n        {%- if in_h3 %}</ul></li>{% endif -%}\n        {%- assign in_h3 = false -%}\n        <li><a href=\"#{{ id }}\">{{ text }}</a>\n      {%- elsif level == \"3\" -%}\n        {%- unless in_h3 %}<ul>{% assign in_h3 = true %}{% endunless -%}\n          <li><a href=\"#{{ id }}\">{{ text }}</a></li>\n      {%- endif -%}\n    {%- endfor -%}\n    {%- if in_h3 %}</ul></li>{% endif -%}\n  </ul>\n</nav>\n{%- endif -%}\n```\n\nNotes:\n- kramdown gives every heading an `id` automatically (`auto_ids: true`, which is the default). So the `#fragment` links will resolve.\n- It works on the rendered HTML of the post, which Liquid sees via `page.content` inside a layout.\n- It nests H3s under their parent H2 as `<ul>` inside `<li>`.\n- If a post has no H2/H3, the whole TOC block is skipped.\n\nThe split-and-parse is a little ugly, but Liquid has no regex; this is the standard idiom. Anything fancier and you'd write a Jekyll plugin (`_plugins/toc.rb`) \u2014 only worth it if you have hundreds of posts and care about build time.\n\n## (c) Related posts via shared tags\n\nJekyll has a built-in `site.related_posts`, but it uses LSI (latent semantic indexing), which (i) requires the `classifier-reborn` gem plus the `--lsi` flag, and (ii) is slow. For tag-overlap, do it yourself in Liquid \u2014 fast, no extra dependency.\n\n`_includes/related-posts.html`:\n\n```liquid\n{%- comment -%}\n  Related posts = other posts that share at least one tag with this one.\n  Trick: concat the two tag arrays; if uniq shrinks it, there was overlap.\n{%- endcomment -%}\n\n{%- assign my_tags = page.tags -%}\n{%- assign related = \"\" | split: \"\" -%}\n\n{%- if my_tags.size > 0 -%}\n  {%- for p in site.posts -%}\n    {%- if p.url == page.url -%}{%- continue -%}{%- endif -%}\n    {%- if p.tags.size == 0 -%}{%- continue -%}{%- endif -%}\n    {%- assign combined = p.tags | concat: my_tags -%}\n    {%- assign deduped = combined | uniq -%}\n    {%- if deduped.size < combined.size -%}\n      {%- assign related = related | push: p -%}\n    {%- endif -%}\n  {%- endfor -%}\n{%- endif -%}\n\n{%- if related.size > 0 -%}\n<aside class=\"related-posts\">\n  <h2>Related posts</h2>\n  <ul>\n    {%- for p in related limit: 3 -%}\n      <li>\n        <a href=\"{{ p.url | relative_url }}\">{{ p.title }}</a>\n        <time datetime=\"{{ p.date | date_to_xmlschema }}\">\n          {{ p.date | date: \"%B %-d, %Y\" }}\n        </time>\n      </li>\n    {%- endfor -%}\n  </ul>\n</aside>\n{%- endif -%}\n```\n\nWhy the `concat | uniq` trick: Liquid has no set-intersection filter. If `my_tags = [a,b]` and `p.tags = [b,c]`, then `combined = [a,b,b,c]` (size 4) and `deduped = [a,b,c]` (size 3) \u2014 `deduped.size < combined.size` is true exactly when there's at least one shared tag. Cheap and works.\n\nIf you want to **rank by overlap count** (most shared tags first) you can extend this, but it gets noticeably more verbose in pure Liquid. For the \"share at least one tag\" requirement, the snippet above is enough. Notice the `limit: 3` to cap the list \u2014 adjust to taste.\n\nNote: this iterates `site.posts` for every post on every build. On a small blog (< 200 posts) it's fine. If you grow past a few hundred posts and builds slow down, wrap the include with `{% include_cached related-posts.html %}` \u2014 that requires the `jekyll-include-cache` plugin and a self-hosted build (Netlify, Cloudflare Pages, or GitHub Actions; the plugin is not on the GitHub Pages allowlist).\n\n## Wiring it all together in `_layouts/post.html`\n\n```html\n---\nlayout: default\n---\n<article class=\"post\">\n  <header class=\"post-header\">\n    <h1>{{ page.title }}</h1>\n    <p class=\"post-meta\">\n      <time datetime=\"{{ page.date | date_to_xmlschema }}\">\n        {{ page.date | date: \"%B %-d, %Y\" }}\n      </time>\n      &middot;\n      {% include reading-time.html %}\n    </p>\n    {% if page.tags.size > 0 %}\n      <ul class=\"post-tags\">\n        {% for tag in page.tags %}\n          <li>\n            <a href=\"{{ '/tags/' | append: tag | slugify | append: '/' | relative_url }}\">\n              #{{ tag }}\n            </a>\n          </li>\n        {% endfor %}\n      </ul>\n    {% endif %}\n  </header>\n\n  {% include post-toc.html %}\n\n  <div class=\"post-content\">\n    {{ content }}\n  </div>\n\n  {% include related-posts.html %}\n</article>\n```\n\nThe layout itself extends `default` (your site-wide chrome), then renders header + reading time + TOC + content + related posts. Each include is self-contained, so you can move or restyle any of them without touching the others.\n\n## A few small things worth flagging\n\n- **Restart the server** after editing `_config.yml`. `jekyll serve` does not pick up config changes on its own.\n- **kramdown auto-IDs**: if you ever turned `auto_ids: false`, the in-layout TOC links won't resolve. Default is on, but worth checking.\n- If you want headings hidden from the TOC, with **Option 1** use `{:.no_toc}` after the heading in markdown. With **Option 2**, you'd need to extend the parser \u2014 easier to just give those headings a class and filter them out, or stay on Option 1.\n- The reading-time and related-posts snippets are also documented as \"common patterns\" in the Liquid reference under this skill if you ever want to tweak them.\n- Tag slugify: posts tagged `Web Dev` and `web dev` will be treated as different tags by Liquid's array equality, so be consistent in front matter (lowercase, kebab-case is the safe default).\n"}], "grading": {"assertions": [{"text": "Reading time uses Jekyll's built-in `number_of_words` filter (or `page.content | split | size`) rather than a heavy custom plugin", "passed": true, "evidence": "Line 29: '{%- assign words = page.content | number_of_words -%}' \u2014 Jekyll's built-in filter"}, {"text": "TOC uses kramdown's native `* TOC\\n{:toc}` (or `{:toc}`) \u2014 does NOT introduce jekyll-toc or unrelated plugins", "passed": false, "evidence": "Option 1 (kramdown {:toc}) is presented but explicitly noted as requiring per-post markup. Option 2 (manual HTML parsing from rendered content) is the recommended layout-based approach. The primary solution uses manual HTML splitting, not kramdown native TOC in the layout."}, {"text": "Restricts the TOC to H2 and H3 (e.g., `toc_levels: 2..3` in _config.yml)", "passed": true, "evidence": "Line 49: 'toc_levels: 2..3' in _config.yml kramdown config, and Option 2 manually filters for level == '2' or level == '3'"}, {"text": "Related posts uses a correct tag-overlap algorithm (concat + uniq size comparison, or a where_exp/contains check) \u2014 logic actually finds overlapping tags", "passed": true, "evidence": "Lines 151-156: Uses concat + uniq size comparison: 'if deduped.size < combined.size' \u2014 correct logic"}, {"text": "Does NOT use the invalid `{# \u2026 #}` Liquid comment syntax anywhere in code samples", "passed": true, "evidence": "Uses '{%- comment -%}...{%- endcomment -%}' \u2014 correct Liquid comment syntax"}, {"text": "States that the code belongs in `_layouts/post.html` (or a clearly-scoped include used by post.html)", "passed": true, "evidence": "Lines 7-13: 'the place to edit is the post layout file: _layouts/post.html' with includes structure"}, {"text": "Either uses tag-overlap manually OR mentions Jekyll's built-in `site.related_posts` with its `--lsi`/classifier-reborn cost", "passed": true, "evidence": "Lines 134-135: Uses tag-overlap manually AND mentions 'site.related_posts, but it uses LSI (latent semantic indexing), which requires the classifier-reborn gem plus the --lsi flag'"}]}}, {"id": "eval-2-post-page-liquid-features-without_skill", "prompt": "On my Jekyll site I have `_posts/*.md` and I want each post page to show: (a) estimated reading time, (b) a table of contents built from the post's H2 and H3 headings, (c) related posts that share at least one tag. I'm on Jekyll 4.4 and use kramdown. Where do I put this and what's the actual code?", "eval_id": 2, "outputs": [{"name": "answer.md", "type": "text", "content": "# Adding reading time, TOC, and related posts to Jekyll posts\n\nGood news: all three features can be done with pure Liquid + kramdown \u2014 no plugins, no JavaScript, no gem dependencies. This means it works fine on GitHub Pages too if you ever deploy there.\n\nHere is where each piece goes and the actual code.\n\n---\n\n## 1. The post layout\n\nIn a default Jekyll 4.4 site, posts use `_layouts/post.html`. If you scaffolded from `jekyll new` you got the `minima` theme, which ships its `post.html` inside the gem. To customize it, create your own at `_layouts/post.html` \u2014 Jekyll will use the local file in preference to the gem's copy.\n\nCreate `_layouts/post.html`:\n\n```html\n---\nlayout: default\n---\n<article class=\"post\">\n  <header class=\"post-header\">\n    <h1 class=\"post-title\">{{ page.title }}</h1>\n    <p class=\"post-meta\">\n      <time datetime=\"{{ page.date | date_to_xmlschema }}\">\n        {{ page.date | date: \"%b %-d, %Y\" }}\n      </time>\n      &middot;\n      {% include reading-time.html content=content %}\n    </p>\n  </header>\n\n  {% include toc.html content=content %}\n\n  <div class=\"post-content\">\n    {{ content }}\n  </div>\n\n  {% include related-posts.html %}\n</article>\n```\n\nI'm putting each feature into an `_includes/*.html` partial so the layout stays readable and you can reuse them on other layouts (e.g. a `page.html`).\n\n---\n\n## 2. Reading time \u2014 `_includes/reading-time.html`\n\nThe standard formula: strip HTML, count words, divide by 200 wpm, round up, with a floor of 1 minute.\n\n```liquid\n{% assign words = include.content | strip_html | number_of_words: \"auto\" %}\n{% assign minutes = words | divided_by: 200.0 | ceil %}\n{% if minutes < 1 %}{% assign minutes = 1 %}{% endif %}\n<span class=\"reading-time\">{{ minutes }} min read</span>\n```\n\nNotes:\n\n- `number_of_words` is a built-in Jekyll filter. In Jekyll 4.x, passing `\"auto\"` makes it count CJK characters individually, which is the right behavior if you ever post in Chinese/Japanese/Korean. For English-only sites you can omit the argument.\n- `divided_by: 200.0` \u2014 the `.0` forces float division. With `200` (integer) Liquid would floor the result before `ceil` and you'd get the wrong number.\n- `strip_html` runs *after* the markdown has been rendered (we passed `content`, not `page.content`), so code fences and HTML tags don't inflate the count.\n\n---\n\n## 3. Table of contents \u2014 `_includes/toc.html`\n\nYou have two real options on kramdown. Pick one:\n\n### Option A (recommended): kramdown's built-in `{:toc}`\n\nThis is the simplest and the most robust. Kramdown auto-generates header IDs and can emit a TOC anywhere you put the marker.\n\nIn `_config.yml` make sure kramdown is configured to auto-generate IDs (it is by default in Jekyll 4, but be explicit):\n\n```yaml\nmarkdown: kramdown\nkramdown:\n  auto_ids: true\n  toc_levels: 2..3   # only H2 and H3\n```\n\nThen **in each post** that should have a TOC, put this once near the top of the markdown body:\n\n```markdown\n* TOC\n{:toc}\n```\n\nThe literal text `* TOC` is a placeholder list item \u2014 kramdown replaces the whole `<ul>` with the generated TOC. The `{:toc}` attribute is what triggers it. Only H2/H3 will appear because of `toc_levels: 2..3`.\n\nIf you don't want to add that snippet to every post, set a default in `_config.yml`:\n\n```yaml\ndefaults:\n  - scope:\n      path: \"\"\n      type: posts\n    values:\n      layout: post\n      toc: true\n```\n\n\u2026and then put the marker inside the layout instead of in each post. But because kramdown only processes `{:toc}` inside markdown content, the cleanest pattern is to put it in the post itself, or to prepend it via a Liquid include rendered through `markdownify`. The first is simpler \u2014 recommend just dropping the two-line marker into each post.\n\n### Option B: Pure-Liquid TOC built from the rendered HTML\n\nUse this if you want the TOC generated automatically with **zero** per-post markup. It parses the rendered `content` for `<h2>` and `<h3>` tags. It depends on kramdown still emitting `id=\"...\"` on headings (which it does when `auto_ids: true`).\n\n```liquid\n{% assign headings = include.content\n   | split: '<h'\n   | where_exp: \"item\", \"item contains '>'\" %}\n\n{% assign toc_items = \"\" | split: \"\" %}\n{% for chunk in headings %}\n  {% assign level = chunk | slice: 0, 1 %}\n  {% if level == \"2\" or level == \"3\" %}\n    {% assign toc_items = toc_items | push: chunk %}\n  {% endif %}\n{% endfor %}\n\n{% if toc_items.size > 0 %}\n<nav class=\"toc\" aria-label=\"Table of contents\">\n  <h2>Contents</h2>\n  <ul>\n    {% for chunk in toc_items %}\n      {% assign level = chunk | slice: 0, 1 %}\n      {% assign rest  = chunk | slice: 2, 9999 %}\n      {% assign id    = rest | split: 'id=\"' | last | split: '\"' | first %}\n      {% assign text  = rest | split: '>' | last | split: '</h' | first | strip_html %}\n      <li class=\"toc-level-{{ level }}\">\n        <a href=\"#{{ id }}\">{{ text }}</a>\n      </li>\n    {% endfor %}\n  </ul>\n</nav>\n{% endif %}\n```\n\nThis is fragile-ish (string parsing of HTML in Liquid is never fun), but it works for the normal case where kramdown outputs `<h2 id=\"foo\">Foo</h2>`. If a heading has no `id` (e.g. you disabled `auto_ids`), the link will be broken \u2014 so keep `auto_ids: true`.\n\n**My recommendation:** use Option A. It's three lines of config, two lines per post, and the output is semantically nicer.\n\n---\n\n## 4. Related posts by shared tag \u2014 `_includes/related-posts.html`\n\nJekyll's built-in `site.related_posts` is **not** what you want \u2014 by default it just returns the 10 most recent posts (LSI similarity requires `--lsi` and the `classifier-reborn` gem, which is slow and not on GitHub Pages). Roll your own:\n\n```liquid\n{% assign max_related = 3 %}\n{% assign min_common_tags = 1 %}\n\n{% assign related = \"\" | split: \"\" %}\n{% assign scored = \"\" | split: \"\" %}\n\n{% for post in site.posts %}\n  {% if post.url == page.url %}{% continue %}{% endif %}\n\n  {% assign common = 0 %}\n  {% for tag in page.tags %}\n    {% if post.tags contains tag %}\n      {% assign common = common | plus: 1 %}\n    {% endif %}\n  {% endfor %}\n\n  {% if common >= min_common_tags %}\n    {% capture entry %}{{ common }}|{{ post.date | date: \"%s\" }}|{{ post.url }}|{{ post.title | replace: \"|\", \"&#124;\" }}{% endcapture %}\n    {% assign scored = scored | push: entry %}\n  {% endif %}\n{% endfor %}\n\n{% assign scored = scored | sort | reverse %}\n\n{% if scored.size > 0 %}\n<aside class=\"related-posts\">\n  <h2>Related posts</h2>\n  <ul>\n    {% for entry in scored limit: max_related %}\n      {% assign parts = entry | split: \"|\" %}\n      <li>\n        <a href=\"{{ parts[2] | relative_url }}\">{{ parts[3] }}</a>\n      </li>\n    {% endfor %}\n  </ul>\n</aside>\n{% endif %}\n```\n\nHow it works:\n\n- Loops every post, skips the current one (`page.url` comparison).\n- Counts how many tags overlap with the current post.\n- Keeps only posts with `>= min_common_tags` shared tags.\n- Encodes `score|date|url|title` into a pipe-delimited string and stuffs it into an array. We do this because Liquid doesn't have a \"sort by computed key\" for arbitrary objects \u2014 but `sort` on strings sorts lexicographically, and prefixing with the score (then date as unix timestamp) gives \"most shared tags first, then most recent\". `reverse` puts highest first.\n- The `replace: \"|\", \"&#124;\"` on the title prevents a title containing a literal pipe from breaking the split.\n\nIf you want the ordering \"most shared tags first, ties broken by newest date\" to be robust when scores go double-digit (10+ shared tags), zero-pad the score: `{% assign common_padded = common | prepend: \"00\" | slice: -2, 2 %}` and use `common_padded` in the capture. For a typical blog with 1\u20135 tags per post, the simple version above is fine.\n\n**One gotcha:** make sure your posts actually have tags in their front matter:\n\n```yaml\n---\nlayout: post\ntitle: \"My post\"\ndate: 2026-05-23\ntags: [jekyll, liquid, tutorial]\n---\n```\n\n`tags: [jekyll]` and `tags: jekyll` both work; `category` is a separate thing, don't confuse them.\n\n---\n\n## 5. File layout summary\n\n```\nyour-site/\n\u251c\u2500\u2500 _config.yml                       # kramdown toc_levels: 2..3\n\u251c\u2500\u2500 _layouts/\n\u2502   \u2514\u2500\u2500 post.html                     # the layout above\n\u251c\u2500\u2500 _includes/\n\u2502   \u251c\u2500\u2500 reading-time.html\n\u2502   \u251c\u2500\u2500 toc.html                      # only if using Option B\n\u2502   \u2514\u2500\u2500 related-posts.html\n\u2514\u2500\u2500 _posts/\n    \u2514\u2500\u2500 2026-05-23-example.md         # contains `* TOC` / `{:toc}` if Option A\n```\n\nRun `bundle exec jekyll serve` and you should see the reading time in the header, the TOC at the top of the post body (Option A) or above the content (Option B), and the related posts block at the bottom.\n\n---\n\n## 6. Small quality-of-life notes\n\n- **Reading time on the index page**: you can call the same include from `home.html` / `index.html` by passing `content=post.content` inside a `for post in site.posts` loop. Same partial, no changes needed.\n- **TOC styling**: kramdown's generated TOC is a plain nested `<ul>`. Style with `.post-content > ul` won't work because the TOC sits inside the post too \u2014 give it a class via kramdown:\n  ```markdown\n  * TOC\n  {:toc .post-toc}\n  ```\n  Then style `.post-toc`.\n- **Headings without IDs**: if some headings come out without `id` attributes, you probably have `auto_ids: false` somewhere, or you're using a heading that kramdown can't slugify (e.g. all punctuation). Set `auto_ids: true` and give the heading actual words.\n- **Performance**: the related-posts include is O(posts \u00d7 tags-per-post) per page. On a 500-post blog it's still milliseconds. If you ever push past a few thousand posts, precompute related posts with a generator plugin \u2014 but you're nowhere near that.\n"}], "grading": {"assertions": [{"text": "Reading time uses Jekyll's built-in `number_of_words` filter (or `page.content | split | size`) rather than a heavy custom plugin", "passed": true, "evidence": "Line 50: '{% assign words = include.content | strip_html | number_of_words: \"auto\" %}' \u2014 Jekyll's built-in filter"}, {"text": "TOC uses kramdown's native `* TOC\\n{:toc}` (or `{:toc}`) \u2014 does NOT introduce jekyll-toc or unrelated plugins", "passed": true, "evidence": "Option A (recommended): kramdown's built-in {:toc} with toc_levels: 2..3 in _config.yml"}, {"text": "Restricts the TOC to H2 and H3 (e.g., `toc_levels: 2..3` in _config.yml)", "passed": true, "evidence": "Line 78: 'toc_levels: 2..3' in kramdown config"}, {"text": "Related posts uses a correct tag-overlap algorithm (concat + uniq size comparison, or a where_exp/contains check) \u2014 logic actually finds overlapping tags", "passed": true, "evidence": "Lines 159-169: Uses tag-overlap loop with 'if post.tags contains tag' counter approach"}, {"text": "Does NOT use the invalid `{# \u2026 #}` Liquid comment syntax anywhere in code samples", "passed": true, "evidence": "No invalid Liquid comment syntax found"}, {"text": "States that the code belongs in `_layouts/post.html` (or a clearly-scoped include used by post.html)", "passed": true, "evidence": "Lines 9-13: 'Create _layouts/post.html' with include structure"}, {"text": "Either uses tag-overlap manually OR mentions Jekyll's built-in `site.related_posts` with its `--lsi`/classifier-reborn cost", "passed": true, "evidence": "Lines 147-148: Uses tag-overlap manually AND mentions 'site.related_posts is not what you want \u2014 by default it just returns the 10 most recent posts (LSI similarity requires --lsi and the classifier-reborn gem)'"}]}}, {"id": "eval-3-docs-site-from-scratch-with_skill", "prompt": "Help me set up a Jekyll docs site from scratch on macOS. About 40 pages, sidebar nav, light/dark mode. Ruby 3.4. I deploy via GitHub Actions to GitHub Pages. Need: a working Gemfile, a `_config.yml`, the deployment workflow, and an html-proofer step that breaks the build on broken internal links.", "eval_id": 3, "outputs": [{"name": "_meta.md", "type": "text", "content": "# _meta.md \u2014 Jekyll Docs Site Setup Eval\n\n## Task Summary\nSet up a Jekyll docs site from scratch on macOS with ~40 pages, sidebar nav, light/dark mode, Ruby 3.4, GitHub Actions deployment to GitHub Pages, and an html-proofer step that breaks the build on broken internal links.\n\n## Skill Used\n`jekyll` \u2014 `/Users/antonioneto/Documents/workspace/skills/skills/jekyll/SKILL.md`\n\n## Key Outputs\n\n| Output | File |\n|---|---|\n| Gemfile | `answer.md` (Step 2) |\n| `_config.yml` | `answer.md` (Step 3) |\n| GitHub Actions workflow (with html-proofer) | `answer.md` (Step 7) |\n| Weekly external link-check workflow | `answer.md` (Step 7) |\n| Local dev commands | `answer.md` (Step 9) |\n| Quick reference table | `answer.md` (Quick Reference) |\n\n## Theme Choice: Just the Docs\nChosen over Minima because:\n- Built-in sidebar nav with `order:` front matter sorting\n- Native light/dark/auto mode via `theme_mode:`\n- Search built in\n- Actively maintained in 2026\n- Works well with GitHub Actions (not on classic Pages allowlist, so Actions is the deploy path anyway)\n\n## html-proofer Strategy\n- **PR/push CI**: `--disable-external --check-html --allow-hash-href` \u2014 blocks on broken internal links only\n- **Weekly scheduled**: `--enforce-https` on all links \u2014 catches external link rot without slowing PRs\n\n## Files Written\n- `evals/jekyll-workspace/iteration-1/eval-3-docs-site-from-scratch/with_skill/outputs/answer.md`\n- `evals/jekyll-workspace/iteration-1/eval-3-docs-site-from-scratch/with_skill/outputs/_meta.md`\n\n## Notes\n- html-proofer gem added to the Gemfile implicitly via the `group :jekyll_plugins` block (not shown \u2014 add manually: `gem \"html-proofer\", \"~> 5.0\"` under a `:test` group, or install globally)\n- Ruby version pinned via `.ruby-version: \"3.4.8\"` (honored by `ruby/setup-ruby@v1` automatically)\n- `JEKYLL_ENV: production` set in CI to enable production-only features (analytics, SEO tags)\n- Just the Docs uses a `_docs/` collection configured via `collections: docs:` in `_config.yml`"}, {"name": "answer.md", "type": "text", "content": "# Jekyll Docs Site Setup \u2014 Iteration 1\n\n## Overview\n\n**Recommended theme**: [Just the Docs](https://just-the-docs.com/) \u2014 built-in sidebar nav, native light/dark mode, search, actively maintained. Perfect for ~40-page documentation sites.\n\n**Deploy target**: GitHub Pages via GitHub Actions (builds unlocked from classic allowlist).\n\n---\n\n## Step 1 \u2014 Ruby Setup (macOS)\n\n```bash\nbrew install rbenv ruby-build\nrbenv install 3.4.8\nrbenv global 3.4.8\nruby -v        # \u2192 ruby 3.4.8\ngem install bundler\n```\n\nAdd to shell rc (zsh): `eval \"$(rbenv init - zsh)\"`\n\n---\n\n## Step 2 \u2014 Gemfile\n\n**File**: `Gemfile`\n\n```ruby\nsource \"https://rubygems.org\"\n\ngem \"jekyll\", \"~> 4.4.1\"\ngem \"just-the-docs\", \"~> 0.10\"\n\ngroup :jekyll_plugins do\n  gem \"jekyll-feed\",          \"~> 0.17\"\n  gem \"jekyll-seo-tag\",       \"~> 2.8\"\n  gem \"jekyll-sitemap\",       \"~> 1.4\"\n  gem \"jekyll-redirect-from\", \"~> 0.16\"\n  gem \"jekyll-paginate-v2\",   \"~> 3.0\"\nend\n\ngem \"webrick\", \"~> 1.9\"\ngem \"sass-embedded\", \"~> 1.77\"\ngem \"jekyll-include-cache\", \"~> 0.2\"\n\nplatforms :mingw, :x64_mingw, :mswin, :jruby do\n  gem \"tzinfo\", \">= 1\", \"< 3\"\n  gem \"tzinfo-data\"\nend\ngem \"wdm\", \"~> 0.1\", platforms: [:mingw, :x64_mingw, :mswin]\n```\n\n**File**: `.ruby-version`\n\n```\n3.4.8\n```\n\n---\n\n## Step 3 \u2014 _config.yml\n\n**File**: `_config.yml`\n\n```yaml\ntitle: \"My Docs Site\"\ndescription: \"Documentation for My Project\"\nurl: \"https://yourusername.github.io\"\nbaseurl: \"/my-docs-site\"\n\ntheme: just-the-docs\n\nmarkdown: kramdown\nhighlighter: rouge\nencoding: utf-8\ntimezone: UTC\n\npermalink: /:year/:month/:day/:title/\n\nliquid:\n  error_mode: strict\n  strict_filters: true\n  strict_variables: false\n\ninclude:\n  - _redirects\n  - _headers\n\nexclude:\n  - README.md\n  - LICENSE\n  - Gemfile\n  - Gemfile.lock\n  - node_modules\n  - vendor\n  - .git\n  - .github\n  - .vscode\n  - scripts\n\nplugins:\n  - jekyll-feed\n  - jekyll-seo-tag\n  - jekyll-sitemap\n  - jekyll-redirect-from\n  - jekyll-paginate-v2\n  - jekyll-include-cache\n\njekyll-redirect-from:\n  quiet: true\n\nkramdown:\n  input: GFM\n  hard_wrap: false\n  auto_ids: true\n  syntax_highlighter: rouge\n  syntax_highlighter_opts:\n    block:\n      line_numbers: false\n\nsass:\n  style: compressed\n  sass_dir: _sass\n\ndefaults:\n  - scope:\n      path: \"_docs\"\n    values:\n      layout: doc\n      searchable: true\n  - scope:\n      path: \"\"\n    values:\n      layout: default\n\nfooter_content: \"Copyright &copy; 2026 Your Name\"\n\ncolor_scheme: light\n\nsearch_enabled: true\nsearch_tokenizer_separator: /[\\\\/]+/\nsearch_heading_level: 2\nsearch_min_length: 2\nsearch_lang: en\n\nnav_external_links:\n  - title: GitHub\n    url: https://github.com/yourusername/yourrepo\n\ncallouts_level: quiet\ncallouts: true\n\n# \u2500\u2500\u2500 Collections \u2500\u2500\u2500\ncollections:\n  docs:\n    output: true\n    permalink: /docs/:path/\n    sort_by: order\n\ndocs_collection:\n  name: Documentation\n  folder: _docs\n  singleton: false\n\n# \u2500\u2500\u2500 Front-matter defaults for docs \u2500\u2500\u2500\ndefaults:\n  - scope:\n      path: \"_docs\"\n    values:\n      layout: doc\n      order: 999\n  - scope:\n      path: \"\"\n    values:\n      layout: default\n```\n\n---\n\n## Step 4 \u2014 Create Docs Collection Structure\n\n```bash\nmkdir -p _docs _layouts _includes _sass assets/css\n```\n\n**File**: `_docs/.gitkeep` (or add your first doc)\n\n**File**: `_docs/getting-started.md`\n\n```markdown\n---\ntitle: Getting Started\norder: 1\n---\n\n# Getting Started\n\nWelcome to the documentation site.\n\n## Installation\n\n...\n```\n\n---\n\n## Step 5 \u2014 Custom Sidebar (Optional Override)\n\n**File**: `_includes/sidebar.html`\n\n```liquid\n{%- if page.url contains '/docs/' -%}\n<nav class=\"sidebar-nav\">\n  {% assign docs = site.docs | sort: \"order\" %}\n  {% for doc in docs %}\n    <a href=\"{{ doc.url | relative_url }}\" {% if page.url == doc.url %}class=\"active\"{% endif %}>\n      {{ doc.title }}\n    </a>\n  {% endfor %}\n</nav>\n{%- endif -%}\n```\n\n---\n\n## Step 6 \u2014 Light/Dark Mode\n\nJust the Docs supports `theme_mode` out of the box:\n\n```yaml\n# In _config.yml \u2014 uncomment one:\n# theme_mode: light    # force light\n# theme_mode: dark     # force dark\ntheme_mode: auto       # follows OS (default)\n```\n\nOr set per-user via a toggle by overriding `_includes/head_custom.html`:\n\n```liquid\n<script>\n  const theme = localStorage.getItem('jd-theme');\n  document.documentElement.setAttribute('data-theme', theme || 'auto');\n</script>\n```\n\n---\n\n## Step 7 \u2014 GitHub Actions Deployment + html-proofer\n\n**File**: `.github/workflows/jekyll.yml`\n\n```yaml\nname: Build and deploy Jekyll site\n\non:\n  push:\n    branches: [main]\n  pull_request:\n  workflow_dispatch:\n\npermissions:\n  contents: read\n  pages: write\n  id-token: write\n\nconcurrency:\n  group: pages\n  cancel-in-progress: true\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n        with:\n          fetch-depth: 0\n\n      - uses: ruby/setup-ruby@v1\n        with:\n          ruby-version: '3.4'\n          bundler-cache: true\n\n      - id: pages\n        uses: actions/configure-pages@v5\n\n      - name: Build\n        run: bundle exec jekyll build --baseurl \"${{ steps.pages.outputs.base_path }}\"\n        env:\n          JEKYLL_ENV: production\n\n      - name: HTML proofer (internal links)\n        run: bundle exec htmlproofer ./_site --disable-external --check-html --allow-hash-href\n\n      - uses: actions/upload-pages-artifact@v3\n        with:\n          path: ./_site\n\n  deploy:\n    needs: build\n    runs-on: ubuntu-latest\n    environment:\n      name: github-pages\n      url: ${{ steps.deployment.outputs.page_url }}\n    steps:\n      - id: deployment\n        uses: actions/deploy-pages@v4\n```\n\n### Why `--disable-external` on the proofer step\n\n- PRs and pushes should not be blocked by third-party sites going down.\n- External link rot is checked weekly via a scheduled workflow (see below).\n\n**File**: `.github/workflows/link-check.yml`\n\n```yaml\nname: Weekly external link check\n\non:\n  schedule:\n    - cron: \"0 9 * * 1\"   # 09:00 UTC every Monday\n  workflow_dispatch:\n\njobs:\n  link-check:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n        with:\n          fetch-depth: 0\n\n      - uses: ruby/setup-ruby@v1\n        with:\n          ruby-version: '3.4'\n          bundler-cache: true\n\n      - run: bundle exec jekyll build\n        env:\n          JEKYLL_ENV: production\n\n      - run: bundle exec htmlproofer ./_site --enforce-https\n```\n\n---\n\n## Step 8 \u2014 GitHub Pages Settings\n\n1. Go to **Settings \u2192 Pages \u2192 Build and deployment \u2192 Source**: select **GitHub Actions**.\n2. Push to `main`. The workflow runs automatically.\n\n---\n\n## Step 9 \u2014 Local Dev\n\n```bash\nbundle install\nbundle exec jekyll serve                    # http://localhost:4000\nbundle exec jekyll serve --livereload       # with browser auto-refresh\nbundle exec jekyll build                    # one-shot build to _site/\n```\n\n---\n\n## Quick Reference\n\n| Task | Command |\n|---|---|\n| Create new doc page | Add `_docs/filename.md` with front matter |\n| Add to sidebar sort | Set `order: N` in front matter |\n| Switch dark mode | Set `theme_mode: dark` in `_config.yml` |\n| Check for broken links locally | `bundle exec jekyll build && bundle exec htmlproofer ./_site --disable-external` |\n| Rebuild from clean | `bundle exec jekyll clean && bundle exec jekyll build` |\n\n---\n\n## File Structure Summary\n\n```\nmy-site/\n\u251c\u2500\u2500 .github/\n\u2502   \u2514\u2500\u2500 workflows/\n\u2502       \u251c\u2500\u2500 jekyll.yml         # build + deploy + html-proofer\n\u2502       \u2514\u2500\u2500 link-check.yml     # weekly external link check\n\u251c\u2500\u2500 .ruby-version\n\u251c\u2500\u2500 Gemfile\n\u251c\u2500\u2500 Gemfile.lock\n\u251c\u2500\u2500 _config.yml\n\u251c\u2500\u2500 _docs/                     # ~40 doc pages go here\n\u2502   \u251c\u2500\u2500 getting-started.md\n\u2502   \u2514\u2500\u2500 ...\n\u251c\u2500\u2500 _layouts/\n\u251c\u2500\u2500 _includes/\n\u251c\u2500\u2500 _sass/\n\u251c\u2500\u2500 assets/\n\u2502   \u2514\u2500\u2500 css/\n\u2514\u2500\u2500 index.md\n```"}], "grading": {"assertions": [{"text": "Gemfile includes Jekyll 4.4 and theme (just-the-docs or similar)", "passed": true, "evidence": "Lines 32-33: gem 'jekyll', '~> 4.4.1', gem 'just-the-docs', '~> 0.10'"}, {"text": "_config.yml has theme, plugins, and sensible defaults", "passed": true, "evidence": "Lines 72-177: full _config.yml with theme: just-the-docs, plugins array, collections config, nav_external_links, etc."}, {"text": "GitHub Actions workflow present with checkout, ruby/setup-ruby, configure-pages, jekyll build", "passed": true, "evidence": "Lines 253-308: complete workflow with actions/checkout@v4, ruby/setup-ruby@v1, actions/configure-pages@v5, bundle exec jekyll build with JEKYLL_ENV: production"}, {"text": "html-proofer step that breaks build on broken internal links", "passed": true, "evidence": "Line 293: bundle exec htmlproofer ./_site --disable-external --check-html --allow-hash-href"}, {"text": "Ruby version pinned (3.4.x) and rbenv/mise setup mentioned", "passed": true, "evidence": "Lines 13-22: rbenv install 3.4.8; Lines 54-58: .ruby-version file with 3.4.8"}]}}, {"id": "eval-3-docs-site-from-scratch-without_skill", "prompt": "Help me set up a Jekyll docs site from scratch on macOS. About 40 pages, sidebar nav, light/dark mode. Ruby 3.4. I deploy via GitHub Actions to GitHub Pages. Need: a working Gemfile, a `_config.yml`, the deployment workflow, and an html-proofer step that breaks the build on broken internal links.", "eval_id": 3, "outputs": [{"name": "Gemfile", "type": "binary", "mime": "application/octet-stream", "data_uri": "data:application/octet-stream;base64,c291cmNlICJodHRwczovL3J1YnlnZW1zLm9yZyIKCnJ1YnkgIj49IDMuNC4wIgoKZ2VtICJqZWt5bGwiLCAifj4gNC40IgpnZW0gImpla3lsbC1zaXRlbWFwIgpnZW0gImpla3lsbC1zZW8tdGFnIgpnZW0gImpla3lsbC1yZW1vdGUtdGhlbWUiCmdlbSAiZ2l0aHViLXBhZ2VzIiwgIn4+IDIzMiIKCmdyb3VwIDp0ZXN0IGRvCiAgZ2VtICJodG1sLXByb29mZXIiLCAifj4gNS4wIgplbmQ="}, {"name": "_config.yml", "type": "text", "content": "title: Documentation Site\ndescription: A Jekyll-powered documentation site\nremote_theme: mmistakes/minimal-mistakes@4.24.0\nplugins:\n  - jekyll-sitemap\n  - jekyll-seo-tag\n  - jekyll-remote-theme\n\n minima:\n   skin: auto\n   dark_mode_skin: dark\n\nnavigation:\n  - title: Getting Started\n    url: /docs/getting-started/\n  - title: Installation\n    url: /docs/installation/\n  - title: Configuration\n    url: /docs/configuration/\n  - title: Writing Posts\n    url: /docs/writing-posts/\n  - title: Collections\n    url: /docs/collections/\n  - title: Helpers\n    url: /docs/helpers/\n  - title: Extras\n    url: /docs/extras/\n\ndefaults:\n  - scope:\n      path: \"_docs\"\n    values:\n      layout: single\n      sidebar_nav: true\n\ngithub:\n  repository_url: https://github.com/example/docs\n\nexclude:\n  - Gemfile\n  - Gemfile.lock\n  - node_modules\n  - vendor/bundle/\n  - vendor/cache/\n  - vendor/gems/\n  - vendor/ruby/\n\njekyll_plugins:\n  - jekyll-sitemap\n  - jekyll-seo-tag\n  - jekyll-remote-theme"}, {"name": "_meta.md", "type": "text", "content": "task: Jekyll docs site setup from scratch\nruby: \"3.4\"\npages: ~40\nnav: sidebar with light/dark mode\ndeploy: GitHub Actions to GitHub Pages\nhtml-proofer: enabled, breaks build on broken internal links"}, {"name": "answer.md", "type": "text", "content": "# Jekyll Docs Site Setup Guide\n\n## Files Created\n\n### 1. Gemfile\n```ruby\nsource \"https://rubygems.org\"\nruby \">= 3.4.0\"\n\ngem \"jekyll\", \"~> 4.4\"\ngem \"jekyll-sitemap\"\ngem \"jekyll-seo-tag\"\ngem \"jekyll-remote-theme\"\ngem \"github-pages\", \"~> 232\"\n\ngroup :test do\n  gem \"html-proofer\", \"~> 5.0\"\nend\n```\n\n### 2. _config.yml\nUses **minimal-mistakes** theme (GitHub's recommended theme for Pages) with:\n- Auto light/dark mode skin switching\n- Sidebar navigation defined in `navigation:` key\n- Proper defaults for `_docs` collection (single layout with sidebar)\n\n### 3. .github/workflows/jekyll.yml\nThree-job pipeline:\n1. **build** - Builds Jekyll site, uploads Pages artifact\n2. **html-proofer** - Downloads artifact, runs broken link checks, fails build on errors\n3. **deploy** - Runs only on main push, depends on html-proofer passing\n\n**Critical html-proofer flags:**\n- `--disable-external` - Only checks internal links\n- `--internal-domains` - Allows internal URLs on 127.0.0.1/localhost\n- `--allow-hash-href` - Allows fragment-only links like `#anchor`\n\n## Setup Commands\n```bash\nbundle install\nbundle exec jekyll serve --livereload\n```\n\n## Notes\n- About 40 pages: organize in `_docs/` collection with `permalink: /docs/:slug/` in front matter\n- Light/dark toggle: minima skin set to `auto` with dark mode override via `dark_mode_skin: dark`\n- html-proofer runs in CI **before** deploy, ensuring no broken links reach production"}], "grading": {"assertions": [{"text": "Provides a `.ruby-version` (or `.tool-versions`) file pinning Ruby 3.4.x", "passed": false, "evidence": "No .ruby-version file mentioned. Only 'ruby >= 3.4.0' in Gemfile which is a version constraint, not a pin."}, {"text": "Installs Ruby via rbenv/asdf/mise \u2014 does NOT recommend system Ruby", "passed": false, "evidence": "No Ruby installation method mentioned at all. Relies on system Ruby or assumes it's already installed."}, {"text": "Gemfile pins Jekyll `~> 4.4`", "passed": true, "evidence": "Line 10: gem 'jekyll', '~> 4.4'"}, {"text": "Gemfile includes a docs-appropriate theme (e.g., just-the-docs) that supports sidebar nav and light/dark", "passed": false, "evidence": "Uses minimal-mistakes via github-pages gem, not a standalone theme gem. No just-the-docs or equivalent."}, {"text": "Gemfile includes `html-proofer` in a `:test`/`:development` group (not `:jekyll_plugins`)", "passed": true, "evidence": "Lines 16-18: 'group :test do; gem \"html-proofer\", \"~> 5.0\"; end'"}, {"text": "`_config.yml` sets the chosen `theme:` (or `remote_theme:`)", "passed": false, "evidence": "No theme: or remote_theme: in _config.yml. Uses github-pages gem with minimal-mistakes but no explicit theme setting shown."}, {"text": "Workflow gives `actions/configure-pages` step an `id: pages` so `steps.pages.outputs.base_path` resolves", "passed": false, "evidence": "No actions/configure-pages step shown in the workflow. Uses peaceiris/actions-gh-pages instead."}, {"text": "Workflow sets `JEKYLL_ENV=production` on the build step", "passed": false, "evidence": "No JEKYLL_ENV: production shown in the workflow."}, {"text": "Workflow has an htmlproofer step that runs against `_site` and fails on broken internal links", "passed": true, "evidence": "Lines 33-37: htmlproofer with --disable-external, --internal-domains, --allow-hash-href flags"}, {"text": "htmlproofer step is scoped to internal links (e.g., `--disable-external`) to keep PR checks fast and stable", "passed": true, "evidence": "Line 35: '--disable-external' flag present"}, {"text": "Uses current major versions: actions/checkout@v4, ruby/setup-ruby@v1, actions/configure-pages@v5, actions/upload-pages-artifact@v3, actions/deploy-pages@v4", "passed": false, "evidence": "Uses peaceiris/actions-gh-pages instead of the modern actions/configure-pages + actions/deploy-pages pattern"}, {"text": "Build step passes `--baseurl` from `${{ steps.pages.outputs.base_path }}` (or equivalent)", "passed": false, "evidence": "No --baseurl passed. Uses peaceiris/actions-gh-pages which deploys to root."}]}}, {"id": "eval-4-responsive-images-with_skill", "prompt": "My Jekyll travel blog has ~150 posts each with a 3MB hero photo. PageSpeed scores are terrible \u2014 LCP is 5+ seconds. I want responsive images with WebP fallback and lazy loading. I host on Netlify so I'm not stuck on the GH Pages allowlist. Walk me through the changes \u2014 Gemfile, _config.yml, layout changes, and the build pipeline.", "eval_id": 4, "outputs": [{"name": "_meta.md", "type": "text", "content": "{\n  \"eval_id\": 4,\n  \"eval_name\": \"responsive-images-jekyll\",\n  \"prompt\": \"My Jekyll travel blog has ~150 posts each with a 3MB hero photo. PageSpeed scores are terrible \u2014 LCP is 5+ seconds. I want responsive images with WebP fallback and lazy loading. I host on Netlify so I'm not stuck on the GH Pages allowlist. Walk me through the changes \u2014 Gemfile, _config.yml, layout changes, and the build pipeline.\",\n  \"skill_path\": \"skills/jekyll/SKILL.md\",\n  \"outputs_expected\": [\n    \"Gemfile changes (add jekyll-picture-tag)\",\n    \"_config.yml plugin config and picture preset\",\n    \"Layout/post.html hero image changes (with picture tag or hand-rolled srcset)\",\n    \"Build pipeline (netlify.toml, sharp pre-processing)\",\n    \"Netlify cache headers for generated assets\"\n  ],\n  \"domain\": \"jekyll\",\n  \"created\": \"2026-05-23\"\n}"}, {"name": "answer.md", "type": "text", "content": "# Responsive Images with WebP Fallback and Lazy Loading \u2014 Jekyll Travel Blog\n\n## The Problem\n\n150 posts \u00d7 3MB hero photo = 450MB of raw images being served as uncompressed JPEGs. At 5+ Mbps average mobile connections, that's a 2.4-second load just for images \u2014 before any HTML downloads. LCP (Largest Contentful Paint) suffers directly because the hero image is the largest thing the browser finds.\n\nThe fix has four layers:\n1. **Compress** \u2014 3MB \u2192 ~200KB WebP (90%+ reduction)\n2. **Resize** \u2014 Generate 3\u20134 widths so mobile doesn't download desktop size\n3. **Modern formats** \u2014 WebP for modern browsers, JPEG fallback\n4. **Lazy load** \u2014 Don't fetch below-fold images at all\n\nBecause you're on Netlify, you can use any plugin you want. `jekyll-picture-tag` handles all four layers automatically at build time.\n\n---\n\n## 1. Gemfile\n\n```ruby\nsource \"https://rubygems.org\"\n\ngem \"jekyll\", \"~> 4.4.1\"\n\ngroup :jekyll_plugins do\n  gem \"jekyll-feed\",          \"~> 0.17\"\n  gem \"jekyll-seo-tag\",       \"~> 2.8\"\n  gem \"jekyll-sitemap\",       \"~> 1.4\"\n  gem \"jekyll-redirect-from\", \"~> 0.16\"\n  gem \"jekyll-paginate-v2\",   \"~> 3.0\"\n  gem \"jekyll-picture-tag\",   \"~> 2.1\"   # \u2190 add this\nend\n\ngem \"webrick\", \"~> 1.9\"\ngem \"sass-embedded\", \"~> 1.77\"\ngem \"jekyll-include-cache\", \"~> 0.2\"\n\nplatforms :mingw, :x64_mingw, :mswin, :jruby do\n  gem \"tzinfo\", \">= 1\", \"< 3\"\n  gem \"tzinfo-data\"\nend\ngem \"wdm\", \"~> 0.1\", platforms: [:mingw, :x64_mingw, :mswin]\n```\n\n`jekyll-picture-tag` is not on the GitHub Pages allowlist, which is fine \u2014 Netlify builds your site, not GitHub.\n\nThen run:\n\n```bash\nbundle install\n```\n\n---\n\n## 2. _config.yml \u2014 plugin and picture settings\n\n```yaml\nplugins:\n  - jekyll-feed\n  - jekyll-seo-tag\n  - jekyll-sitemap\n  - jekyll-redirect-from\n  - jekyll-paginate-v2\n  - jekyll-include-cache\n  - jekyll-picture-tag   # \u2190 add this\n\npicture:\n  source: assets/images          # where your original 3MB photos live\n  output: generated              # processed images go to _site/generated/\n  presets:\n    hero:\n      formats: [webp, jpeg]     # WebP first, JPEG fallback\n      widths: [400, 800, 1200, 1600]\n      attributes:\n        img: 'loading=\"lazy\" decoding=\"async\"'\n    thumbnail:\n      formats: [webp, jpeg]\n      widths: [200, 400, 600]\n      attributes:\n        img: 'loading=\"lazy\" decoding=\"async\"'\n```\n\nThe `generated/` directory is cacheable \u2014 only new/changed images get reprocessed on subsequent builds. Add it to your `.gitignore` if you don't want to commit processed images (or add it if you do \u2014 saves rebuild time).\n\n---\n\n## 3. Layout changes \u2014 post.html (or wherever your hero image lives)\n\n### Option A: Use `jekyll-picture-tag` (recommended \u2014 handles everything automatically)\n\nIn your post layout, replace the hardcoded `<img>` for the hero:\n\n```liquid\n{% if page.hero %}\n  {% picture hero {{ page.hero }} --alt {{ page.excerpt | default: page.title }} %}\n{% endif %}\n```\n\nOr with explicit srcset control using a Liquid include:\n\n```liquid\n{% assign hero = page.hero | split: '.' %}\n{% assign ext = hero | last %}\n{% assign base = hero | join: '.' | replace: '.' | append: ext %}\n\n<picture>\n  <source\n    type=\"image/webp\"\n    srcset=\"\n      {% for w in (400,800,1200,1600) %}\n        {{ base }}-{{ w }}.webp {{ w }}w{% unless forloop.last %},{% endunless %}\n      {% endfor %}\n    \"\n    sizes=\"(min-width: 768px) 1200px, 100vw\">\n  <img\n    src=\"{{ page.hero | relative_url }}\"\n    srcset=\"\n      {% for w in (400,800,1200,1600) %}\n        {{ base }}-{{ w }}.jpg {{ w }}w{% unless forloop.last %},{% endunless %}\n      {% endfor %}\n    \"\n    sizes=\"(min-width: 768px) 1200px, 100vw\"\n    alt=\"{{ page.excerpt | default: page.title }}\"\n    loading=\"lazy\"\n    decoding=\"async\"\n    width=\"1200\"\n    height=\"675\">\n</picture>\n```\n\nBut the cleanest approach is just `{% picture %}`:\n\n```liquid\n{% picture hero {{ page.hero }} --alt {{ page.excerpt | default: page.title }} %}\n```\n\nThe `hero` preset in `_config.yml` tells it to generate WebP + JPEG at 400/800/1200/1600px with lazy loading attributes.\n\n### Option B: Hand-rolled responsive images (no plugin)\n\nIf you want to avoid the plugin entirely, generate the variants yourself before building and use this markup pattern:\n\n```html\n<img\n  src=\"{{ '/assets/images/hero-1200.jpg' | relative_url }}\"\n  srcset=\"\n    /assets/images/hero-400.jpg  400w,\n    /assets/images/hero-800.jpg  800w,\n    /assets/images/hero-1200.jpg 1200w,\n    /assets/images/hero-1600.jpg 1600w\"\n  sizes=\"(min-width: 768px) 1200px, 100vw\"\n  alt=\"{{ page.excerpt | default: page.title }}\"\n  loading=\"lazy\"\n  decoding=\"async\"\n  width=\"1200\"\n  height=\"675\">\n```\n\nYou'd pre-generate the variants with ImageMagick or `sharp` (see Build Pipeline section).\n\n### Critical rule \u2014 hero images must NOT be lazy loaded\n\nAbove-the-fold images should use `loading=\"eager\"`:\n\n```liquid\n{% picture hero {{ page.hero }} --alt {{ page.excerpt }} %}\n```\n\nThis gets baked in via the `attributes.img` in the preset. But if you're hand-rolling, make sure your post hero has `loading=\"eager\"` \u2014 it's the single biggest LCP improvement you can make.\n\n---\n\n## 4. Post front matter \u2014 declare the hero image path\n\nIn each post's front matter:\n\n```yaml\n---\nlayout: post\ntitle: \"Hiking the Dolomites\"\ndate: 2026-05-01 08:00:00 +0100\nhero: /assets/images/dolomites-hero.jpg   # path to the original 3MB image\nexcerpt: \"Three days of via ferratas above the clouds.\"\n---\n```\n\n`jekyll-picture-tag` reads the `hero` value, looks for the file in `assets/images/`, and generates all variants automatically.\n\n---\n\n## 5. Build pipeline \u2014 pre-processing with Sharp\n\n`jekyll-picture-tag` does image processing at build time, but with 150 posts \u00d7 3MB photos, it can be slow if it has to process everything from scratch every build. The `sharp` CLI in a pre-build step is faster and gives you more control.\n\n### netlify.toml (root of your repo)\n\n```toml\n[build]\n  command = \"npm run build:images && bundle exec jekyll build\"\n  publish = \"_site\"\n\n[build.environment]\n  JEKYLL_ENV = \"production\"\n  RUBY_VERSION = \"3.4.8\"\n\n[[plugins]]\n  type = \"build\"\n  name = \"@netlify/plugin-cache-nextjs\"\n```\n\n### Build script (scripts/build-images.js)\n\n```javascript\n#!/usr/bin/env node\nconst sharp = require('sharp');\nconst glob = require('fast-glob');\nconst path = require('path');\nconst fs = require('fs');\n\nconst SOURCE = 'assets/images';\nconst OUTPUT = 'assets/images-optimized';\nconst WIDTHS = [400, 800, 1200, 1600];\n\nasync function processImage(srcPath) {\n  const dir = path.dirname(srcPath).replace(SOURCE, OUTPUT);\n  fs.mkdirSync(dir, { recursive: true });\n\n  const image = sharp(srcPath);\n  const meta = await image.metadata();\n\n  await Promise.all(\n    WIDTHS.filter(w => w < meta.width).map(async (w) => {\n      const name = path.basename(srcPath, path.extname(srcPath));\n      const webpOut = path.join(dir, `${name}-${w}.webp`);\n      const jpgOut = path.join(dir, `${name}-${w}.jpg`);\n\n      await Promise.all([\n        image.clone().resize(w).webp({ quality: 80 }).toFile(webpOut),\n        image.clone().resize(w).jpeg({ quality: 85 }).toFile(jpgOut),\n      ]);\n    })\n  );\n\n  // Also generate the original-format version at full width for fallback\n  const name = path.basename(srcPath, path.extname(srcPath));\n  await image.clone().jpeg({ quality: 90 }).toFile(path.join(dir, `${name}-original.jpg`));\n  await image.clone().webp({ quality: 80 }).toFile(path.join(dir, `${name}-original.webp`));\n}\n\nasync function main() {\n  const files = await glob(`${SOURCE}/**/*.{jpg,jpeg,png}`, { absolute: true });\n  console.log(`Processing ${files.length} images...`);\n  await Promise.all(files.map(processImage));\n  console.log('Done.');\n}\n\nmain().catch(console.error);\n```\n\nRun it:\n\n```bash\nnpm install sharp fast-glob\nchmod +x scripts/build-images.js\nnode scripts/build-images.js\n```\n\nThis is a pre-build step. Netlify runs `npm run build:images` (defined in `package.json`) before Jekyll. Add to `package.json`:\n\n```json\n{\n  \"scripts\": {\n    \"build:images\": \"node scripts/build-images.js\"\n  },\n  \"devDependencies\": {\n    \"sharp\": \"^0.33\",\n    \"fast-glob\": \"^3.3\"\n  }\n}\n```\n\n**Caching**: Netlify caches `node_modules/` between builds. If you have a `vendor/` or `generated/` directory with processed images, cache that too. Add this to `netlify.toml`:\n\n```toml\n[build]\n  command = \"bundle exec jekyll build\"\n  publish = \"_site\"\n\n[build.environment]\n  JEKYLL_ENV = \"production\"\n  RUBY_VERSION = \"3.4.8\"\n```\n\nAdd a `.netlify/cache-opt-in` marker or use Netlify's build plugins to cache the image output directory. The `sharp` processing is the expensive part \u2014 you only want to rerun it when images actually change.\n\n---\n\n## 6. Layout update \u2014 responsive images in post.html\n\nAssuming your posts use `_layouts/post.html`, update the hero section:\n\n```liquid\n<article class=\"post\">\n  {% if page.hero %}\n  <header class=\"post-hero\">\n    {% picture hero {{ page.hero }} --alt {{ page.excerpt | default: page.title }} %}\n  </header>\n  {% endif %}\n\n  <h1>{{ page.title }}</h1>\n  <time>{{ page.date | date: \"%B %-d, %Y\" }}</time>\n  {{ content }}\n</article>\n```\n\nAnd add CSS to prevent layout shift:\n\n```css\n.post-hero img {\n  width: 100%;\n  height: auto;\n  aspect-ratio: 16 / 9;\n  object-fit: cover;\n}\n```\n\nThe `width` and `height` attributes on every `<img>` prevent Cumulative Layout Shift (CLS) \u2014 without these, images cause the page to jump as they load, which kills your Core Web Vitals score.\n\n---\n\n## 7. Netlify-specific headers for aggressive caching\n\nCreate `_headers` file in your repo root (already in the `include:` list in `_config.yml`):\n\n```\n/generated/*\n  Cache-Control: public, max-age=31536000, immutable\n\n/*.webp\n  Cache-Control: public, max-age=31536000, immutable\n\n/*.jpg\n  Cache-Control: public, max-age=31536000, immutable\n```\n\nWebP and the processed variants never change \u2014 once generated, they get a content hash in the filename (handled by `jekyll-picture-tag`). Aggressive caching means return visitors never re-download your hero images.\n\n---\n\n## 8. Full pipeline summary\n\n```\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502  Local / Netlify build                                           \u2502\n\u2502                                                                  \u2502\n\u2502  1. npm run build:images                                         \u2502\n\u2502     \u2192 sharp processes 150 \u00d7 3MB photos \u2192 5-8 sizes \u00d7 2 formats  \u2502\n\u2502     \u2192 outputs to assets/images-optimized/                       \u2502\n\u2502     \u2192 cached between builds (only reprocess changed images)      \u2502\n\u2502                                                                  \u2502\n\u2502  2. bundle exec jekyll build                                     \u2502\n\u2502     \u2192 jekyll-picture-tag generates <picture> elements           \u2502\n\u2502     \u2192 outputs to _site/generated/                                \u2502\n\u2502     \u2192 fingerprinting via content hash                           \u2502\n\u2502                                                                  \u2502\n\u2502  3. Netlify serves _site/                                        \u2502\n\u2502     \u2192 _headers enables immutable cache for generated/            \u2502\n\u2502     \u2192 WebP served to Chromium browsers, JPEG to Safari < 14     \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n```\n\nExpected results:\n- Hero images: 3MB \u2192 ~150KB WebP at 1600px (95% reduction)\n- Mobile downloads: 1600px image \u2192 400px version = ~25KB\n- LCP improvement: 5+ seconds \u2192 under 2 seconds (depending on network)\n- CLS: eliminated by `width`/`height` attributes\n- Lighthouse Performance: 40\u201350 range \u2192 85\u201395 range\n\n---\n\n## Key files to modify\n\n| File | Change |\n|---|---|\n| `Gemfile` | Add `jekyll-picture-tag` to `:jekyll_plugins` |\n| `_config.yml` | Add `jekyll-picture-tag` to plugins + `picture:` preset config |\n| `_layouts/post.html` | Replace `<img>` with `{% picture %}` tag |\n| `netlify.toml` | Add `npm run build:images` pre-step, set `JEKYLL_ENV=production` |\n| `_headers` | Aggressive cache headers for `generated/` |\n| `_posts/2026-*.md` | Add `hero: /assets/images/...` to front matter |\n| `package.json` | Add `sharp`, `fast-glob`, `build:images` script |\n| `scripts/build-images.js` | Pre-processing script (optional but recommended) |\n\n---\n\n## What you don't need to do\n\n- **Don't** pre-generate all the `photo-400.webp`, `photo-800.webp` variants manually. `jekyll-picture-tag` does it at build time, or `sharp` does it in the pre-build step.\n- **Don't** use a JavaScript-based lazy loader (lazysizes, etc.) \u2014 native `loading=\"lazy\"` is supported in all browsers in 2026 and has zero runtime cost.\n- **Don't** serve AVIF unless you're willing to wait a long time in CI. WebP at quality 80 gives you ~90% of the gain at 10% of the compute cost. If you do want AVIF, add it as a third format in the preset but know that encoding is 5\u201310\u00d7 slower than WebP.\n\n---\n\n## Verification\n\nAfter implementing, run Lighthouse against your Netlify preview URL:\n\n```bash\nnpx Lighthouse https://your-preview-url.netlify.app --preset desktop\n```\n\nFocus on:\n- **LCP** (target: < 2.5s) \u2014 should drop dramatically on hero images\n- **CLS** (target: < 0.1) \u2014 `width`/`height` attributes fix this\n- **Total Blocking Time** \u2014 large images blocking the main thread during decode\n\nAlso check in Chrome DevTools \u2192 Network \u2192Img to confirm `.webp` variants are being requested by Chromium browsers and `.jpg` fallback is used in Safari."}], "grading": {"assertions": [{"text": "Gemfile includes jekyll-picture-tag or similar responsive image plugin", "passed": true, "evidence": "Line 30: gem \"jekyll-picture-tag\", \"~> 2.1\""}, {"text": "_config.yml has picture plugin configured with WebP and widths", "passed": true, "evidence": "Lines 64-80: picture config with formats: [webp, jpeg] and widths: [400, 800, 1200, 1600]"}, {"text": "Layout/post.html uses responsive image markup (picture tag or srcset with sizes)", "passed": true, "evidence": "Lines 92-96, 133: {% picture hero ... %} - comprehensive picture tag implementation with both plugin and hand-rolled options"}, {"text": "Build pipeline includes sharp pre-processing or similar for image optimization", "passed": true, "evidence": "Lines 212-257: scripts/build-images.js using sharp for image processing with WebP and JPEG generation"}, {"text": "Netlify deployment configuration present (netlify.toml or _headers)", "passed": true, "evidence": "Lines 194-208: netlify.toml; Lines 330-343: _headers file with Cache-Control for generated assets"}, {"text": "Mentions that hero/lcp images should NOT be lazy loaded (loading eager for above-fold)", "passed": true, "evidence": "Lines 160-168: 'Critical rule \u2014 hero images must NOT be lazy loaded' with explicit loading=\"eager\" guidance"}]}}, {"id": "eval-4-responsive-images-without_skill", "prompt": "My Jekyll travel blog has ~150 posts each with a 3MB hero photo. PageSpeed scores are terrible \u2014 LCP is 5+ seconds. I want responsive images with WebP fallback and lazy loading. I host on Netlify so I'm not stuck on the GH Pages allowlist. Walk me through the changes \u2014 Gemfile, _config.yml, layout changes, and the build pipeline.", "eval_id": 4, "outputs": [{"name": "_meta.md", "type": "text", "content": "# Eval 4: Responsive Images - Without Skill\n\n## Task Summary\nOptimize a Jekyll travel blog with ~150 posts, each having 3MB hero photos. Target: improve LCP from 5+ seconds to acceptable levels using responsive images, WebP fallback, and lazy loading.\n\n## Approach\n- Created complete Gemfile with image processing dependencies\n- Created Jekyll config with responsive image plugin\n- Created includes for responsive image component\n- Documented build pipeline with Sharp image processing\n- Showed Netlify deployment configuration\n\n## Key Technologies\n- jekyll-picture-tag (responsive images with WebP)\n- Sharp (high-performance image processing)\n- Netlify plugin for automated image optimization\n\n## Files Created\n1. Gemfile - Dependencies for image optimization\n2. _config.yml - Jekyll configuration with plugins\n3. _includes/responsive-image.html - Reusable component\n4. _layouts/post.html - Layout with responsive images\n5. assets/js/lazyload.js - Intersection Observer lazy loading\n6. netlify.toml - Build pipeline configuration\n\n## Measured Outcomes\n- LCP improvement: 5s+ \u2192 ~1.5s (estimated)\n- Bandwidth reduction: ~65% with WebP + srcset\n- Full solution provided with all code changes"}, {"name": "answer.md", "type": "text", "content": "# Jekyll Responsive Images Setup Guide\n\nComplete walkthrough for optimizing your Jekyll travel blog's 3MB hero photos to achieve sub-2s LCP.\n\n---\n\n## 1. Gemfile\n\n```ruby\nsource \"https://rubygems.org\"\n\ngem \"jekyll\", \"~> 4.3\"\ngem \"jekyll-picture-tag\", \"~> 1.14\"\ngem \"sharp\", \"~> 0.33\"\ngem \"image_processing\", \"~> 1.12\"\n\ngroup :jekyll_plugins do\n  gem \"jekyll-postcss-v2\"\nend\n```\n\n**Why these gems:**\n- `jekyll-picture-tag`: Liquid tag that generates `<picture>` with srcset, WebP, and lazy loading\n- `sharp`: High-performance ImageMagick bindings for fast CI builds\n- `image_processing`: Ruby wrapper for Sharp with automatic format detection\n\n---\n\n## 2. _config.yml\n\n```yaml\ntitle: Your Travel Blog\nbaseurl: \"\"\nurl: \"https://yourblog.com\"\n\nplugins:\n  - jekyll-picture-tag\n\npicture:\n  widths: [400, 800, 1200, 1600, 2000]\n  default_width: 1200\n  formats: [webp, original]\n  lazy: true\n\nassets:\n  compress:\n    enabled: true\n\nbuild:\n  parallel: true\n  max_concurrent: 4\n```\n\n**Key settings:**\n- `widths`: Generates srcset for these breakpoints\n- `formats: [webp, original]`: Creates WebP first, falls back to original\n- `lazy: true`: Adds `loading=\"lazy\"` attribute automatically\n- `parallel: true`: Speeds up builds with 150+ posts\n\n---\n\n## 3. _includes/responsive-image.html\n\n```liquid\n{% comment %}\n  Usage: {% responsive_image path=\"/assets/images/hero.jpg\" alt=\"Description\" %}\n{% endcomment %}\n\n{% assign src = include.path | relative_url %}\n{% assign alt = include.alt | default: \"\" %}\n{% assign class = include.class | default: \"hero-image\" %}\n\n<picture>\n  <source\n    type=\"image/webp\"\n    srcset=\"\n      {% for width in site.picture.widths %}\n        {{ src | replace: '.jpg', '-webp-' | append: width | append: 'w.webp' }} {{ width }}w{% if forloop.last == false %}, {% endif %}\n      {% endfor %}\n    \"\n    sizes=\"(max-width: 800px) 100vw, (max-width: 1200px) 80vw, 1200px\"\n  />\n  <img\n    src=\"{{ src }}\"\n    srcset=\"\n      {% for width in site.picture.widths %}\n        {{ src | replace: '.jpg', '-' | append: width | append: 'w.jpg' }} {{ width }}w{% if forloop.last == false %}, {% endif %}\n      {% endfor %}\n    \"\n    sizes=\"(max-width: 800px) 100vw, (max-width: 1200px) 80vw, 1200px\"\n    alt=\"{{ alt }}\"\n    class=\"{{ class }}\"\n    loading=\"{% if include.lazy != false %}lazy{% else %}eager{% endif %}\"\n    decoding=\"async\"\n    style=\"background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\"\n  />\n</picture>\n```\n\n---\n\n## 4. _layouts/post.html\n\n```liquid\n---\nlayout: default\n---\n\n<article class=\"post\">\n  <header class=\"post-header\">\n    <h1 class=\"post-title\">{{ page.title }}</h1>\n    <div class=\"post-meta\">\n      <time datetime=\"{{ page.date | date: '%Y-%m-%d' }}\">{{ page.date | date: \"%B %d, %Y\" }}</time>\n    </div>\n  </header>\n\n  {% if page.hero_image %}\n  <div class=\"hero-container\">\n    {% responsive_image path: page.hero_image alt: page.title lazy: true %}\n  </div>\n  {% endif %}\n\n  <div class=\"post-content\">\n    {{ content }}\n  </div>\n</article>\n\n<style>\n.hero-container {\n  width: 100%;\n  max-width: 1200px;\n  margin: 0 auto 2rem;\n}\n\n.hero-image {\n  width: 100%;\n  height: auto;\n  display: block;\n  border-radius: 8px;\n  object-fit: cover;\n}\n\n/* Placeholder gradient while loading */\n.hero-image[loading=\"lazy\"] {\n  background: linear-gradient(135deg, #e8e8e8 0%, #f5f5f5 100%);\n}\n</style>\n```\n\n---\n\n## 5. Build Pipeline: Generate Responsive Images\n\nCreate `scripts/generate-images.sh`:\n\n```bash\n#!/bin/bash\nset -e\n\necho \"Generating responsive image variants...\"\n\n# Process all images in assets/images\nfind ./assets/images -type f -name \"*.jpg\" | while read img; do\n  filename=\"${img%.*}\"\n  ext=\"${img##*.}\"\n\n  for width in 400 800 1200 1600 2000; do\n    # Generate WebP versions\n    sharp -i \"$img\" -o \"${filename}-webp-${width}w.webp\" -w \"$width\" -f webp -q 82\n\n    # Generate JPEG versions (for old browser fallback)\n    sharp -i \"$img\" -o \"${filename}-${width}w.jpg\" -w \"$width\" -f jpeg -q 85\n  done\n\n  echo \"Processed: $img\"\ndone\n\necho \"Image generation complete!\"\n```\n\nAdd to `netlify.toml`:\n\n```toml\n[build]\n  command = \"bundle exec jekyll build && bash scripts/generate-images.sh\"\n  publish = \"_site\"\n\n[[plugins]]\n  package = \"@netlify/plugin-cache-nextgen\"\n\n[build.environment]\n  NODE_VERSION = \"18\"\n  NPM_CONFIG_PRODUCTION = \"false\"\n```\n\n---\n\n## 6. Front Matter Example\n\nIn each post's front matter:\n\n```yaml\n---\nlayout: post\ntitle: \"Adventures in Patagonia\"\ndate: 2024-01-15\nhero_image: /assets/images/patagonia-hero.jpg\ncategories:\n  - Travel\n  - Hiking\ntags:\n  - patagonia\n  - chile\n  - trekking\n---\n```\n\n---\n\n## 7. Lazy Loading Enhancement (Optional)\n\nFor older browsers without native lazy loading support, add this polyfill in your head:\n\n```html\n<script>\n  if (\"loading\" in HTMLImageElement.prototype === false) {\n    var script = document.createElement(\"script\");\n    script.async = true;\n    script.src = \"/assets/js/lazyload.min.js\";\n    document.head.appendChild(script);\n  }\n</script>\n```\n\nOr use native Intersection Observer in a custom plugin if you need analytics on lazy load events.\n\n---\n\n## 8. Image Size Reference\n\n| Original | 400w | 800w | 1200w | 1600w | 2000w |\n|----------|------|------|-------|-------|-------|\n| 3MB      | ~25KB| ~60KB| ~120KB| ~180KB| ~250KB|\n\n**Expected savings with WebP**: ~65% smaller than JPEG at equivalent quality.\n\n---\n\n## Netlify-Specific Optimizations\n\n1. **Edge Functions** (optional): Use `@netlify/image-transform` for dynamic resizing\n2. **Cache Headers**: Add `_headers` file:\n   ```\n   /assets/images/*/*\n     Cache-Control: public, max-age=31536000, immutable\n   ```\n3. **Asset Optimization**: Netlify auto-minifies CSS/JS, enable Brotli in `_headers`\n\n---\n\n## Verification\n\nTest your setup:\n```bash\nbundle install\nbundle exec jekyll build\n```\n\nCheck generated HTML for:\n- `<picture>` tag with `<source type=\"image/webp\">`\n- `srcset` with multiple widths (400w, 800w, etc.)\n- `loading=\"lazy\"` on images\n- WebP files in `_site/assets/images/`\n\n---\n\n## Summary of Changes\n\n| File | Change |\n|------|--------|\n| Gemfile | Added jekyll-picture-tag, sharp, image_processing |\n| _config.yml | Configured picture plugin with widths, formats, lazy |\n| _includes/responsive-image.html | New include for responsive image markup |\n| _layouts/post.html | Use responsive_image tag for hero images |\n| scripts/generate-images.sh | Pre-generate all image variants at build time |\n| netlify.toml | Hook generate-images.sh into build pipeline |\n\nThis setup will reduce LCP from 5+ seconds to approximately 1.5s by:\n1. Serving appropriately-sized images via srcset\n2. Using WebP format (65% smaller than JPEG)\n3. Lazy loading below-fold images\n4. Preloading the primary hero image (move it above lazy scope)"}], "grading": {"assertions": [{"text": "Uses jekyll-picture-tag plugin (or equivalent responsive image solution)", "passed": true, "evidence": "Line 13: 'gem jekyll-picture-tag, ~> 1.14'"}, {"text": "Gemfile includes version pin for the plugin (e.g., ~> 2.1)", "passed": true, "evidence": "Line 13: 'gem jekyll-picture-tag, ~> 1.14' with version pin"}, {"text": "Configuration includes WebP format with fallback", "passed": true, "evidence": "Line 43: 'formats: [webp, original]'"}, {"text": "Configuration includes multiple widths for srcset (at least 480, 800, 1200)", "passed": true, "evidence": "Line 40: 'widths: [400, 800, 1200, 1600, 2000]'"}, {"text": "Includes lazy loading attribute in configuration", "passed": true, "evidence": "Line 43: 'lazy: true' in picture config"}, {"text": "Notes about LCP optimization for above-the-fold images", "passed": false, "evidence": "No explicit mention of eager loading for above-the-fold/LCP images. Only mentions lazy loading polyfill for older browsers."}, {"text": "Mentions Netlify build pipeline (no extra setup needed)", "passed": true, "evidence": "Lines 181-194: netlify.toml with build command and cache headers"}]}}], "previous_feedback": {}, "previous_outputs": {}, "benchmark": {"metadata": {"skill_name": "jekyll", "skill_path": "skills/jekyll", "timestamp": "2026-05-25T22:17:33Z", "evals_run": [1, 2, 3, 4], "runs_per_configuration": 1}, "runs": [{"eval_id": 1, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 6, "failed": 0, "total": 6, "time_seconds": 71.2, "tokens": 35139, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Identifies that jekyll-paginate-v2 is NOT on the GitHub Pages plugin allowlist as the root cause", "passed": true, "evidence": "Root Cause section: 'jekyll-paginate-v2 is not on the GitHub Pages plugin allowlist'"}, {"text": "Explains why the same Gemfile works locally but fails on the GitHub Pages classic builder", "passed": true, "evidence": "Explains local build works because gems are resolved freely, while GH Pages builder resolves against its own locked set"}, {"text": "Offers migrating to GitHub Actions deployment as a fix (unlocks current Jekyll + any plugin)", "passed": true, "evidence": "'Recommended: Move to GitHub Actions with a modern Jekyll build' with full workflow YAML"}, {"text": "Offers an in-allowlist alternative (e.g., drop jekyll-paginate-v2 and use jekyll-paginate)", "passed": true, "evidence": "'Alternative: Drop jekyll-paginate-v2 and stay on classic builder' with jekyll-paginate config"}, {"text": "Acknowledges the site lives at /blog (project site) \u2014 does not assume root deployment", "passed": true, "evidence": "Uses '${{ steps.pages.outputs.base_path }}' for baseurl in the build step, correctly handling project site subpath"}, {"text": "Does not (incorrectly) attribute the failure solely to bundle install / Gemfile.lock issues", "passed": true, "evidence": "Correctly identifies the root cause as the allowlist, not bundle install or lockfile issues"}], "notes": []}, {"eval_id": 1, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.833, "passed": 5, "failed": 1, "total": 6, "time_seconds": 41.5, "tokens": 21695, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Identifies that jekyll-paginate-v2 is NOT on the GitHub Pages plugin allowlist as the root cause", "passed": true, "evidence": "'GitHub Pages uses a whitelist of allowed gems... Since jekyll-paginate-v2 is not an allowed dependency of github-pages, Bundler can't resolve it'"}, {"text": "Explains why the same Gemfile works locally but fails on the GitHub Pages classic builder", "passed": true, "evidence": "Includes a comparison table showing local vs CI gem resolution behavior"}, {"text": "Offers migrating to GitHub Actions deployment as a fix (unlocks current Jekyll + any plugin)", "passed": true, "evidence": "'Option B \u2014 Build with Raw Jekyll via GitHub Actions' with workflow file"}, {"text": "Offers an in-allowlist alternative (e.g., drop jekyll-paginate-v2 and use jekyll-paginate)", "passed": true, "evidence": "'Option A \u2014 Switch to jekyll-paginate (Recommended)' with config changes"}, {"text": "Acknowledges the site lives at /blog (project site) \u2014 does not assume root deployment", "passed": false, "evidence": "No explicit mention of /blog baseurl or project site subpath handling. Uses peaceiris/actions-gh-pages which deploys to root"}, {"text": "Does not (incorrectly) attribute the failure solely to bundle install / Gemfile.lock issues", "passed": true, "evidence": "Correctly identifies the whitelist/allowlist as the root cause"}], "notes": []}, {"eval_id": 2, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 7, "failed": 0, "total": 7, "time_seconds": 89.3, "tokens": 38522, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Reading time uses Jekyll's built-in `number_of_words` filter (or `page.content | split | size`) rather than a heavy custom plugin", "passed": true, "evidence": "Uses '{% assign words = page.content | number_of_words %}' \u2014 Jekyll's built-in filter"}, {"text": "TOC uses kramdown's native `* TOC\\n{:toc}` (or `{:toc}`) \u2014 does NOT introduce jekyll-toc or unrelated plugins", "passed": true, "evidence": "Uses `* TOC\\n{:toc}` with `{% capture %}` in the layout \u2014 native kramdown, no plugins"}, {"text": "Restricts the TOC to H2 and H3 (e.g., `toc_levels: 2..3` in _config.yml)", "passed": true, "evidence": "Sets `toc_levels: 2..3` in _config.yml kramdown config"}, {"text": "Related posts uses a correct tag-overlap algorithm (concat + uniq size comparison, or a where_exp/contains check) \u2014 logic actually finds overlapping tags", "passed": true, "evidence": "Uses `concat` + `uniq` size comparison: if deduped.size < combined.size, tags overlap"}, {"text": "Does NOT use the invalid `{# \u2026 #}` Liquid comment syntax anywhere in code samples", "passed": true, "evidence": "Uses `{%- comment -%}...{%- endcomment -%}` \u2014 correct Liquid comment syntax"}, {"text": "States that the code belongs in `_layouts/post.html` (or a clearly-scoped include used by post.html)", "passed": true, "evidence": "'Everything below goes into `_layouts/post.html`' and provides a complete `_layouts/post.html` example"}, {"text": "Either uses tag-overlap manually OR mentions Jekyll's built-in `site.related_posts` with its `--lsi`/classifier-reborn cost", "passed": true, "evidence": "Uses tag-overlap manually AND mentions `site.related_posts` with its `--lsi` requirement"}], "notes": []}, {"eval_id": 2, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.857, "passed": 6, "failed": 1, "total": 7, "time_seconds": 76.0, "tokens": 23553, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Reading time uses Jekyll's built-in `number_of_words` filter (or `page.content | split | size`) rather than a heavy custom plugin", "passed": true, "evidence": "Uses '{% assign words = content | number_of_words %}' \u2014 Jekyll's built-in filter"}, {"text": "TOC uses kramdown's native `* TOC\\n{:toc}` (or `{:toc}`) \u2014 does NOT introduce jekyll-toc or unrelated plugins", "passed": false, "evidence": "Does NOT use kramdown native TOC. Instead manually parses HTML by splitting on `<h2>` and `<h3>` tags"}, {"text": "Restricts the TOC to H2 and H3 (e.g., `toc_levels: 2..3` in _config.yml)", "passed": true, "evidence": "Manually restricts to H2 and H3 by parsing strategy, though via non-standard HTML splitting rather than kramdown config"}, {"text": "Related posts uses a correct tag-overlap algorithm (concat + uniq size comparison, or a where_exp/contains check) \u2014 logic actually finds overlapping tags", "passed": true, "evidence": "Uses Liquid's native `intersect` filter: `{% assign common = post.tags | intersect: page.tags %}`"}, {"text": "Does NOT use the invalid `{# \u2026 #}` Liquid comment syntax anywhere in code samples", "passed": true, "evidence": "No invalid Liquid comment syntax found"}, {"text": "States that the code belongs in `_layouts/post.html` (or a clearly-scoped include used by post.html)", "passed": true, "evidence": "'All three features live in your `_layouts/` and `_includes/` directories. The `_layouts/post.html` pulls everything together'"}, {"text": "Either uses tag-overlap manually OR mentions Jekyll's built-in `site.related_posts` with its `--lsi`/classifier-reborn cost", "passed": true, "evidence": "Uses tag-overlap manually with `intersect` filter"}], "notes": []}, {"eval_id": 3, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 12, "failed": 0, "total": 12, "time_seconds": 88.2, "tokens": 41830, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Provides a `.ruby-version` (or `.tool-versions`) file pinning Ruby 3.4.x", "passed": true, "evidence": "`Create .ruby-version at the project root: 3.4.8`"}, {"text": "Installs Ruby via rbenv/asdf/mise \u2014 does NOT recommend system Ruby", "passed": true, "evidence": "`Do not use system Ruby. Use rbenv:` with `brew install rbenv ruby-build` and `rbenv install 3.4.8`"}, {"text": "Gemfile pins Jekyll `~> 4.4`", "passed": true, "evidence": "`gem \"jekyll\", \"~> 4.4.1\"`"}, {"text": "Gemfile includes a docs-appropriate theme (e.g., just-the-docs) that supports sidebar nav and light/dark", "passed": true, "evidence": "`gem \"just-the-docs\", \"~> 0.10.1\"`"}, {"text": "Gemfile includes `html-proofer` in a `:test`/`:development` group (not `:jekyll_plugins`)", "passed": true, "evidence": "`group :test do; gem \"html-proofer\", \"~> 5.0\"; end`"}, {"text": "`_config.yml` sets the chosen `theme:` (or `remote_theme:`)", "passed": true, "evidence": "`theme: just-the-docs` in _config.yml"}, {"text": "Workflow gives `actions/configure-pages` step an `id: pages` so `steps.pages.outputs.base_path` resolves", "passed": true, "evidence": "`- id: pages\\n  uses: actions/configure-pages@v5`"}, {"text": "Workflow sets `JEKYLL_ENV=production` on the build step", "passed": true, "evidence": "`env:\\n  JEKYLL_ENV: production` on both test and deploy build steps"}, {"text": "Workflow has an htmlproofer step that runs against `_site` and fails on broken internal links", "passed": true, "evidence": "`bundle exec htmlproofer ./_site` with flags that exit non-zero on broken links"}, {"text": "htmlproofer step is scoped to internal links (e.g., `--disable-external`) to keep PR checks fast and stable", "passed": true, "evidence": "`--disable-external` flag present in htmlproofer command"}, {"text": "Uses current major versions: actions/checkout@v4, ruby/setup-ruby@v1, actions/configure-pages@v5, actions/upload-pages-artifact@v3, actions/deploy-pages@v4", "passed": true, "evidence": "checkout@v4, ruby/setup-ruby@v1, configure-pages@v5, upload-pages-artifact@v3, deploy-pages@v4"}, {"text": "Build step passes `--baseurl` from `${{ steps.pages.outputs.base_path }}` (or equivalent)", "passed": true, "evidence": "`bundle exec jekyll build --baseurl \"${{ steps.pages.outputs.base_path }}\"`"}], "notes": []}, {"eval_id": 3, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.667, "passed": 8, "failed": 4, "total": 12, "time_seconds": 79.8, "tokens": 24100, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Provides a `.ruby-version` (or `.tool-versions`) file pinning Ruby 3.4.x", "passed": true, "evidence": "`echo \"3.4\" > .ruby-version`"}, {"text": "Installs Ruby via rbenv/asdf/mise \u2014 does NOT recommend system Ruby", "passed": false, "evidence": "Recommends `brew install ruby@3.4` which installs Homebrew Ruby (system-level), not rbenv/asdf/mise version manager"}, {"text": "Gemfile pins Jekyll `~> 4.4`", "passed": false, "evidence": "Uses `gem \"jekyll\", \"~> 4.3\"` instead of ~> 4.4"}, {"text": "Gemfile includes a docs-appropriate theme (e.g., just-the-docs) that supports sidebar nav and light/dark", "passed": false, "evidence": "No theme gem included \u2014 uses custom layouts with manual CSS/JS for light/dark mode"}, {"text": "Gemfile includes `html-proofer` in a `:test`/`:development` group (not `:jekyll_plugins`)", "passed": true, "evidence": "`group :test do; gem \"html-proofer\", \"~> 5.0\"; end`"}, {"text": "`_config.yml` sets the chosen `theme:` (or `remote_theme:`)", "passed": false, "evidence": "No `theme:` set in _config.yml \u2014 relies on custom layouts"}, {"text": "Workflow gives `actions/configure-pages` step an `id: pages` so `steps.pages.outputs.base_path` resolves", "passed": true, "evidence": "`- id: pages\\n  uses: actions/configure-pages@v5`"}, {"text": "Workflow sets `JEKYLL_ENV=production` on the build step", "passed": true, "evidence": "`env:\\n  JEKYLL_ENV: production`"}, {"text": "Workflow has an htmlproofer step that runs against `_site` and fails on broken internal links", "passed": true, "evidence": "`bundle exec htmlproofer ./_site` with flags, and explanation of non-zero exit"}, {"text": "htmlproofer step is scoped to internal links (e.g., `--disable-external`) to keep PR checks fast and stable", "passed": false, "evidence": "Does not use `--disable-external`. Uses `--only-4xx` which still checks external URLs returning 4xx"}, {"text": "Uses current major versions: actions/checkout@v4, ruby/setup-ruby@v1, actions/configure-pages@v5, actions/upload-pages-artifact@v3, actions/deploy-pages@v4", "passed": true, "evidence": "checkout@v4, ruby/setup-ruby@v1, configure-pages@v5, upload-pages-artifact@v3, deploy-pages@v4"}, {"text": "Build step passes `--baseurl` from `${{ steps.pages.outputs.base_path }}` (or equivalent)", "passed": true, "evidence": "`bundle exec jekyll build --baseurl \"${{ steps.pages.outputs.base_path }}\"`"}], "notes": []}, {"eval_id": 4, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 7, "failed": 0, "total": 7, "time_seconds": 95.1, "tokens": 0, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Uses jekyll-picture-tag plugin (or equivalent responsive image solution)", "passed": true, "evidence": "Line 21: 'gem jekyll-picture-tag, ~> 2.1'"}, {"text": "Gemfile includes version pin for the plugin (e.g., ~> 2.1)", "passed": true, "evidence": "Line 21: 'gem jekyll-picture-tag, ~> 2.1'"}, {"text": "Configuration includes WebP format with fallback", "passed": true, "evidence": "Line 51: 'formats: [webp, original]'"}, {"text": "Configuration includes multiple widths for srcset (at least 480, 800, 1200)", "passed": true, "evidence": "Line 52: 'widths: [480, 768, 1200, 1600]'"}, {"text": "Includes lazy loading attribute in configuration", "passed": true, "evidence": "Line 54: 'loading=\"lazy\" decoding=\"async\"'"}, {"text": "Notes about LCP optimization for above-the-fold images", "passed": true, "evidence": "Line 61: 'For above-the-fold images... set loading=eager explicitly'"}, {"text": "Mentions Netlify build pipeline (no extra setup needed)", "passed": true, "evidence": "Lines 140-156: netlify.toml with build command and caching"}], "notes": []}, {"eval_id": 4, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.86, "passed": 6, "failed": 1, "total": 7, "time_seconds": 67.3, "tokens": 0, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "Uses jekyll-picture-tag plugin (or equivalent responsive image solution)", "passed": true, "evidence": "Line 24: 'gem jekyll-picture-tag'"}, {"text": "Gemfile includes version pin for the plugin (e.g., ~> 2.1)", "passed": false, "evidence": "Line 24: 'gem jekyll-picture-tag' without version pin"}, {"text": "Configuration includes WebP format with fallback", "passed": true, "evidence": "Lines 37-42: webp config with enabled: true"}, {"text": "Configuration includes multiple widths for srcset (at least 480, 800, 1200)", "passed": true, "evidence": "Line 47: 'widths: [480, 768, 1024, 1920]'"}, {"text": "Includes lazy loading attribute in configuration", "passed": true, "evidence": "Lines 52-55: lazyload config with enabled: true"}, {"text": "Notes about LCP optimization for above-the-fold images", "passed": true, "evidence": "Lines 170-204: preload LCP image, and conditional lazy loading"}, {"text": "Mentions Netlify build pipeline (no extra setup needed)", "passed": true, "evidence": "Lines 208-240: netlify.toml config"}], "notes": []}], "run_summary": {"with_skill": {"pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0}, "time_seconds": {"mean": 85.95, "stddev": 10.2887, "min": 71.2, "max": 95.1}, "tokens": {"mean": 28872.75, "stddev": 19441.3643, "min": 0, "max": 41830}}, "without_skill": {"pass_rate": {"mean": 0.8043, "stddev": 0.0923, "min": 0.667, "max": 0.86}, "time_seconds": {"mean": 66.15, "stddev": 17.2462, "min": 41.5, "max": 79.8}, "tokens": {"mean": 17337.0, "stddev": 11603.743, "min": 0, "max": 24100}}, "delta": {"pass_rate": "+0.20", "time_seconds": "+19.8", "tokens": "+11536"}}, "notes": []}};
+
+    // ---- State ----
+    let feedbackMap = {};  // run_id -> feedback text
+    let currentIndex = 0;
+    let visitedRuns = new Set();
+
+    // ---- Init ----
+    async function init() {
+      // Load saved feedback from server — but only if this isn't a fresh
+      // iteration (indicated by previous_feedback being present). When
+      // previous feedback exists, the feedback.json on disk is stale from
+      // the prior iteration and should not pre-fill the textareas.
+      const hasPrevious = Object.keys(EMBEDDED_DATA.previous_feedback || {}).length > 0
+        || Object.keys(EMBEDDED_DATA.previous_outputs || {}).length > 0;
+      if (!hasPrevious) {
+        try {
+          const resp = await fetch("/api/feedback");
+          const data = await resp.json();
+          if (data.reviews) {
+            for (const r of data.reviews) feedbackMap[r.run_id] = r.feedback;
+          }
+        } catch { /* first run, no feedback yet */ }
       }
-    ];
 
-    let currentEval = 0;
-    const feedback = {};
+      document.getElementById("skill-name").textContent = EMBEDDED_DATA.skill_name;
+      showRun(0);
 
-    function showTab(tab) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      document.getElementById(tab).classList.add('active');
-      event.target.classList.add('active');
+      // Wire up feedback auto-save
+      const textarea = document.getElementById("feedback");
+      let saveTimeout = null;
+      textarea.addEventListener("input", () => {
+        clearTimeout(saveTimeout);
+        document.getElementById("feedback-status").textContent = "";
+        saveTimeout = setTimeout(() => saveCurrentFeedback(), 800);
+      });
     }
 
-    function renderEval() {
-      const eval_ = evals[currentEval];
-      document.getElementById('evalCounter').textContent = `Eval ${currentEval + 1} of ${evals.length}`;
-
-      const container = document.getElementById('evalContainer');
-      container.innerHTML = `
-        <div class="eval-card">
-          <h3>${eval_.name}</h3>
-          <p style="color: #aaa; margin-bottom: 10px;"><strong>Prompt:</strong></p>
-          <pre>${eval_.prompt}</pre>
-        </div>
-
-        <div class="eval-card">
-          <h3>With Skill Output</h3>
-          <pre>${eval_.with_skill_output}</pre>
-          <div class="grading">Grading: <span class="pass">${eval_.grading.with_skill}</span></div>
-        </div>
-
-        <div class="eval-card">
-          <h3>Without Skill Output</h3>
-          <pre>${eval_.without_skill_output}</pre>
-          <div class="grading">Grading: <span class="${eval_.grading.without_skill.startsWith('0') ? 'fail' : 'pass'}">${eval_.grading.without_skill}</span></div>
-        </div>
-      `;
-
-      document.getElementById('feedbackInput').value = feedback[`eval-${currentEval}-with_skill`] || '';
+    // ---- Navigation ----
+    function navigate(delta) {
+      const newIndex = currentIndex + delta;
+      if (newIndex >= 0 && newIndex < EMBEDDED_DATA.runs.length) {
+        saveCurrentFeedback();
+        showRun(newIndex);
+      }
     }
 
-    function prevEval() {
-      saveFeedback();
-      if (currentEval > 0) { currentEval--; renderEval(); }
+    function updateNavButtons() {
+      document.getElementById("prev-btn").disabled = currentIndex === 0;
+      document.getElementById("next-btn").disabled =
+        currentIndex === EMBEDDED_DATA.runs.length - 1;
     }
 
-    function nextEval() {
-      saveFeedback();
-      if (currentEval < evals.length - 1) { currentEval++; renderEval(); }
+    // ---- Show a run ----
+    function showRun(index) {
+      currentIndex = index;
+      const run = EMBEDDED_DATA.runs[index];
+
+      // Progress
+      document.getElementById("progress").textContent =
+        `${index + 1} of ${EMBEDDED_DATA.runs.length}`;
+
+      // Prompt
+      document.getElementById("prompt-text").textContent = run.prompt;
+
+      // Config badge
+      const badge = document.getElementById("config-badge");
+      const configMatch = run.id.match(/(with_skill|without_skill|new_skill|old_skill)/);
+      if (configMatch) {
+        const config = configMatch[1];
+        const isBaseline = config === "without_skill" || config === "old_skill";
+        badge.textContent = config.replace(/_/g, " ");
+        badge.className = "config-badge " + (isBaseline ? "config-baseline" : "config-primary");
+        badge.style.display = "inline-block";
+      } else {
+        badge.style.display = "none";
+      }
+
+      // Outputs
+      renderOutputs(run);
+
+      // Previous outputs
+      renderPrevOutputs(run);
+
+      // Grades
+      renderGrades(run);
+
+      // Previous feedback
+      const prevFb = (EMBEDDED_DATA.previous_feedback || {})[run.id];
+      const prevEl = document.getElementById("prev-feedback");
+      if (prevFb) {
+        document.getElementById("prev-feedback-text").textContent = prevFb;
+        prevEl.style.display = "block";
+      } else {
+        prevEl.style.display = "none";
+      }
+
+      // Feedback
+      document.getElementById("feedback").value = feedbackMap[run.id] || "";
+      document.getElementById("feedback-status").textContent = "";
+
+      updateNavButtons();
+
+      // Track visited runs and promote done button when all visited
+      visitedRuns.add(index);
+      const doneBtn = document.getElementById("done-btn");
+      if (visitedRuns.size >= EMBEDDED_DATA.runs.length) {
+        doneBtn.classList.add("ready");
+      }
+
+      // Scroll main content to top
+      document.querySelector(".main").scrollTop = 0;
     }
 
-    function saveFeedback() {
-      feedback[`eval-${currentEval}-with_skill`] = document.getElementById('feedbackInput').value;
+    // ---- Render outputs ----
+    function renderOutputs(run) {
+      const container = document.getElementById("outputs-body");
+      container.innerHTML = "";
+
+      const outputs = run.outputs || [];
+      if (outputs.length === 0) {
+        container.innerHTML = '<div class="empty-state">No output files</div>';
+        return;
+      }
+
+      for (const file of outputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        // Always show file header with download link
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const content = document.createElement("div");
+        content.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          content.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          content.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          content.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(content, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          content.appendChild(a);
+        } else if (file.type === "error") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          pre.style.color = "var(--red)";
+          content.appendChild(pre);
+        }
+
+        fileDiv.appendChild(content);
+        container.appendChild(fileDiv);
+      }
     }
 
-    function submitAllReviews() {
-      saveFeedback();
-      const reviews = Object.entries(feedback).map(([run_id, fb]) => ({
-        run_id,
-        feedback: fb,
-        timestamp: new Date().toISOString()
-      }));
-      const blob = new Blob([JSON.stringify({ reviews, status: 'complete' }, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'feedback.json';
-      a.click();
+    // ---- XLSX rendering via SheetJS ----
+    function renderXlsx(container, b64Data) {
+      try {
+        const raw = Uint8Array.from(atob(b64Data), c => c.charCodeAt(0));
+        const wb = XLSX.read(raw, { type: "array" });
+
+        for (let i = 0; i < wb.SheetNames.length; i++) {
+          const sheetName = wb.SheetNames[i];
+          const ws = wb.Sheets[sheetName];
+
+          if (wb.SheetNames.length > 1) {
+            const sheetLabel = document.createElement("div");
+            sheetLabel.style.cssText =
+              "font-weight:600; font-size:0.8rem; color:#b0aea5; margin-top:0.5rem; margin-bottom:0.25rem;";
+            sheetLabel.textContent = "Sheet: " + sheetName;
+            container.appendChild(sheetLabel);
+          }
+
+          const htmlStr = XLSX.utils.sheet_to_html(ws, { editable: false });
+          const wrapper = document.createElement("div");
+          wrapper.innerHTML = htmlStr;
+          container.appendChild(wrapper);
+        }
+      } catch (err) {
+        container.textContent = "Error rendering spreadsheet: " + err.message;
+      }
     }
 
+    // ---- Grades ----
+    function renderGrades(run) {
+      const section = document.getElementById("grades-section");
+      const content = document.getElementById("grades-content");
+
+      if (!run.grading) {
+        section.style.display = "none";
+        return;
+      }
+
+      const grading = run.grading;
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("grades-arrow").classList.remove("open");
+
+      const summary = grading.summary || {};
+      const expectations = grading.expectations || [];
+
+      let html = '<div style="padding: 1rem;">';
+
+      // Summary line
+      const passRate = summary.pass_rate != null
+        ? Math.round(summary.pass_rate * 100) + "%"
+        : "?";
+      const badgeClass = summary.pass_rate >= 0.8 ? "grade-pass" : summary.pass_rate >= 0.5 ? "" : "grade-fail";
+      html += '<div class="grades-summary">';
+      html += '<span class="grade-badge ' + badgeClass + '">' + passRate + '</span>';
+      html += '<span>' + (summary.passed || 0) + ' passed, ' + (summary.failed || 0) + ' failed of ' + (summary.total || 0) + '</span>';
+      html += '</div>';
+
+      // Assertions list
+      html += '<ul class="assertion-list">';
+      for (const exp of expectations) {
+        const statusClass = exp.passed ? "pass" : "fail";
+        const statusIcon = exp.passed ? "\u2713" : "\u2717";
+        html += '<li class="assertion-item">';
+        html += '<span class="assertion-status ' + statusClass + '">' + statusIcon + '</span>';
+        html += '<span>' + escapeHtml(exp.text) + '</span>';
+        if (exp.evidence) {
+          html += '<div class="assertion-evidence">' + escapeHtml(exp.evidence) + '</div>';
+        }
+        html += '</li>';
+      }
+      html += '</ul>';
+
+      html += '</div>';
+      content.innerHTML = html;
+    }
+
+    function toggleGrades() {
+      const content = document.getElementById("grades-content");
+      const arrow = document.getElementById("grades-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Previous outputs (collapsible) ----
+    function renderPrevOutputs(run) {
+      const section = document.getElementById("prev-outputs-section");
+      const content = document.getElementById("prev-outputs-content");
+      const prevOutputs = (EMBEDDED_DATA.previous_outputs || {})[run.id];
+
+      if (!prevOutputs || prevOutputs.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("prev-outputs-arrow").classList.remove("open");
+
+      // Render the files into the content area
+      content.innerHTML = "";
+      const wrapper = document.createElement("div");
+      wrapper.style.padding = "1rem";
+
+      for (const file of prevOutputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const fc = document.createElement("div");
+        fc.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          fc.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          fc.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          fc.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(fc, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          fc.appendChild(a);
+        }
+
+        fileDiv.appendChild(fc);
+        wrapper.appendChild(fileDiv);
+      }
+
+      content.appendChild(wrapper);
+    }
+
+    function togglePrevOutputs() {
+      const content = document.getElementById("prev-outputs-content");
+      const arrow = document.getElementById("prev-outputs-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Feedback (saved to server -> feedback.json) ----
+    function saveCurrentFeedback() {
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // Build reviews array from map
+      const reviews = [];
+      for (const [run_id, feedback] of Object.entries(feedbackMap)) {
+        if (feedback.trim()) {
+          reviews.push({ run_id, feedback, timestamp: new Date().toISOString() });
+        }
+      }
+
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviews, status: "in_progress" }),
+      }).then(() => {
+        document.getElementById("feedback-status").textContent = "Saved";
+      }).catch(() => {
+        // Static mode or server unavailable — no-op on auto-save,
+        // feedback will be downloaded on final submit
+        document.getElementById("feedback-status").textContent = "Will download on submit";
+      });
+    }
+
+    // ---- Done ----
+    function showDoneDialog() {
+      // Save current textarea to feedbackMap (but don't POST yet)
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // POST once with status: complete — include ALL runs so the model
+      // can distinguish "no feedback" (looks good) from "not reviewed"
+      const reviews = [];
+      const ts = new Date().toISOString();
+      for (const r of EMBEDDED_DATA.runs) {
+        reviews.push({ run_id: r.id, feedback: feedbackMap[r.id] || "", timestamp: ts });
+      }
+      const payload = JSON.stringify({ reviews, status: "complete" }, null, 2);
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).then(() => {
+        document.getElementById("done-overlay").classList.add("visible");
+      }).catch(() => {
+        // Server not available (static mode) — download as file
+        const blob = new Blob([payload], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "feedback.json";
+        a.click();
+        URL.revokeObjectURL(url);
+        document.getElementById("done-overlay").classList.add("visible");
+      });
+    }
+
+    function closeDoneDialog() {
+      // Reset status back to in_progress
+      saveCurrentFeedback();
+      document.getElementById("done-overlay").classList.remove("visible");
+    }
+
+    // ---- Toast ----
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("visible");
+      setTimeout(() => toast.classList.remove("visible"), 2000);
+    }
+
+    // ---- Keyboard nav ----
+    document.addEventListener("keydown", (e) => {
+      // Don't capture when typing in textarea
+      if (e.target.tagName === "TEXTAREA") return;
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        navigate(-1);
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        navigate(1);
+      }
+    });
+
+    // ---- Util ----
+    function getDownloadUri(file) {
+      if (file.data_uri) return file.data_uri;
+      if (file.data_b64) return "data:application/octet-stream;base64," + file.data_b64;
+      if (file.type === "text") return "data:text/plain;charset=utf-8," + encodeURIComponent(file.content);
+      return "#";
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ---- View switching ----
+    function switchView(view) {
+      document.querySelectorAll(".view-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+      document.querySelector(`[onclick="switchView('${view}')"]`).classList.add("active");
+      document.getElementById("panel-" + view).classList.add("active");
+    }
+
+    // ---- Benchmark rendering ----
     function renderBenchmark() {
-      const tbody = document.getElementById('benchmarkBody');
-      const data = [
-        ['gh-pages-paginate-v2-failure', 'with_skill', '100%', '35,139', '71.2s'],
-        ['gh-pages-paginate-v2-failure', 'without_skill', '0%', '21,695', '41.5s'],
-        ['post-page-liquid-features', 'with_skill', '100%', '38,522', '89.3s'],
-        ['post-page-liquid-features', 'without_skill', '0%', '23,553', '76.0s'],
-        ['docs-site-from-scratch', 'with_skill', '100%', '41,830', '88.2s'],
-        ['docs-site-from-scratch', 'without_skill', '80%', '24,100', '79.8s'],
-        ['responsive-images', 'with_skill', '100%', '45,230', '95.1s'],
-        ['responsive-images', 'without_skill', '83.3%', '28,940', '67.3s']
-      ];
-      tbody.innerHTML = data.map(row => `<tr>${row.map((cell, i) => `<td class="${i === 0 && row[1] === 'with_skill' ? 'delta' : ''}">${cell}</td>`).join('')}</tr>`).join('');
+      const data = EMBEDDED_DATA.benchmark;
+      if (!data) return;
 
-      document.getElementById('evalResults').innerHTML = evals.map(e => `
-        <div class="eval-card" style="margin-top: 15px;">
-          <h4>${e.name}</h4>
-          <p>With Skill: <span class="pass">${e.grading.with_skill}</span></p>
-          <p>Without Skill: <span class="${e.grading.without_skill.startsWith('0') ? 'fail' : 'pass'}">${e.grading.without_skill}</span></p>
-        </div>
-      `).join('');
+      // Show the tabs
+      document.getElementById("view-tabs").style.display = "flex";
+
+      const container = document.getElementById("benchmark-content");
+      const summary = data.run_summary || {};
+      const metadata = data.metadata || {};
+      const notes = data.notes || [];
+
+      let html = "";
+
+      // Header
+      html += "<h2 style='font-family: Poppins, sans-serif; margin-bottom: 0.5rem;'>Benchmark Results</h2>";
+      html += "<p style='color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.25rem;'>";
+      if (metadata.skill_name) html += "<strong>" + escapeHtml(metadata.skill_name) + "</strong> &mdash; ";
+      if (metadata.timestamp) html += metadata.timestamp + " &mdash; ";
+      if (metadata.evals_run) html += "Evals: " + metadata.evals_run.join(", ") + " &mdash; ";
+      html += (metadata.runs_per_configuration || "?") + " runs per configuration";
+      html += "</p>";
+
+      // Summary table
+      html += '<table class="benchmark-table">';
+
+      function fmtStat(stat, pct) {
+        if (!stat) return "—";
+        const suffix = pct ? "%" : "";
+        const m = pct ? (stat.mean * 100).toFixed(0) : stat.mean.toFixed(1);
+        const s = pct ? (stat.stddev * 100).toFixed(0) : stat.stddev.toFixed(1);
+        return m + suffix + " ± " + s + suffix;
+      }
+
+      function deltaClass(val) {
+        if (!val) return "";
+        const n = parseFloat(val);
+        if (n > 0) return "benchmark-delta-positive";
+        if (n < 0) return "benchmark-delta-negative";
+        return "";
+      }
+
+      // Discover config names dynamically (everything except "delta")
+      const configs = Object.keys(summary).filter(k => k !== "delta");
+      const configA = configs[0] || "config_a";
+      const configB = configs[1] || "config_b";
+      const labelA = configA.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const labelB = configB.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const a = summary[configA] || {};
+      const b = summary[configB] || {};
+      const delta = summary.delta || {};
+
+      html += "<thead><tr><th>Metric</th><th>" + escapeHtml(labelA) + "</th><th>" + escapeHtml(labelB) + "</th><th>Delta</th></tr></thead>";
+      html += "<tbody>";
+
+      html += "<tr><td><strong>Pass Rate</strong></td>";
+      html += "<td>" + fmtStat(a.pass_rate, true) + "</td>";
+      html += "<td>" + fmtStat(b.pass_rate, true) + "</td>";
+      html += '<td class="' + deltaClass(delta.pass_rate) + '">' + (delta.pass_rate || "—") + "</td></tr>";
+
+      // Time (only show row if data exists)
+      if (a.time_seconds || b.time_seconds) {
+        html += "<tr><td><strong>Time (s)</strong></td>";
+        html += "<td>" + fmtStat(a.time_seconds, false) + "</td>";
+        html += "<td>" + fmtStat(b.time_seconds, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.time_seconds) + '">' + (delta.time_seconds ? delta.time_seconds + "s" : "—") + "</td></tr>";
+      }
+
+      // Tokens (only show row if data exists)
+      if (a.tokens || b.tokens) {
+        html += "<tr><td><strong>Tokens</strong></td>";
+        html += "<td>" + fmtStat(a.tokens, false) + "</td>";
+        html += "<td>" + fmtStat(b.tokens, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.tokens) + '">' + (delta.tokens || "—") + "</td></tr>";
+      }
+
+      html += "</tbody></table>";
+
+      // Per-eval breakdown (if runs data available)
+      const runs = data.runs || [];
+      if (runs.length > 0) {
+        const evalIds = [...new Set(runs.map(r => r.eval_id))].sort((a, b) => a - b);
+
+        html += "<h3 style='font-family: Poppins, sans-serif; margin-bottom: 0.75rem;'>Per-Eval Breakdown</h3>";
+
+        const hasTime = runs.some(r => r.result && r.result.time_seconds != null);
+        const hasErrors = runs.some(r => r.result && r.result.errors > 0);
+
+        for (const evalId of evalIds) {
+          const evalRuns = runs.filter(r => r.eval_id === evalId);
+          const evalName = evalRuns[0] && evalRuns[0].eval_name ? evalRuns[0].eval_name : "Eval " + evalId;
+
+          html += "<h4 style='font-family: Poppins, sans-serif; margin: 1rem 0 0.5rem; color: var(--text);'>" + escapeHtml(evalName) + "</h4>";
+          html += '<table class="benchmark-table">';
+          html += "<thead><tr><th>Config</th><th>Run</th><th>Pass Rate</th>";
+          if (hasTime) html += "<th>Time (s)</th>";
+          if (hasErrors) html += "<th>Crashes During Execution</th>";
+          html += "</tr></thead>";
+          html += "<tbody>";
+
+          // Group by config and render with average rows
+          const configGroups = [...new Set(evalRuns.map(r => r.configuration))];
+          for (let ci = 0; ci < configGroups.length; ci++) {
+            const config = configGroups[ci];
+            const configRuns = evalRuns.filter(r => r.configuration === config);
+            if (configRuns.length === 0) continue;
+
+            const rowClass = ci === 0 ? "benchmark-row-with" : "benchmark-row-without";
+            const configLabel = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+            for (const run of configRuns) {
+              const r = run.result || {};
+              const prClass = r.pass_rate >= 0.8 ? "benchmark-delta-positive" : r.pass_rate < 0.5 ? "benchmark-delta-negative" : "";
+              html += '<tr class="' + rowClass + '">';
+              html += "<td>" + configLabel + "</td>";
+              html += "<td>" + run.run_number + "</td>";
+              html += '<td class="' + prClass + '">' + ((r.pass_rate || 0) * 100).toFixed(0) + "% (" + (r.passed || 0) + "/" + (r.total || 0) + ")</td>";
+              if (hasTime) html += "<td>" + (r.time_seconds != null ? r.time_seconds.toFixed(1) : "—") + "</td>";
+              if (hasErrors) html += "<td>" + (r.errors || 0) + "</td>";
+              html += "</tr>";
+            }
+
+            // Average row
+            const rates = configRuns.map(r => (r.result || {}).pass_rate || 0);
+            const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
+            const avgPrClass = avgRate >= 0.8 ? "benchmark-delta-positive" : avgRate < 0.5 ? "benchmark-delta-negative" : "";
+            html += '<tr class="benchmark-row-avg ' + rowClass + '">';
+            html += "<td>" + configLabel + "</td>";
+            html += "<td>Avg</td>";
+            html += '<td class="' + avgPrClass + '">' + (avgRate * 100).toFixed(0) + "%</td>";
+            if (hasTime) {
+              const times = configRuns.map(r => (r.result || {}).time_seconds).filter(t => t != null);
+              html += "<td>" + (times.length ? (times.reduce((a, b) => a + b, 0) / times.length).toFixed(1) : "—") + "</td>";
+            }
+            if (hasErrors) html += "<td></td>";
+            html += "</tr>";
+          }
+          html += "</tbody></table>";
+
+          // Per-assertion detail for this eval
+          const runsWithExpectations = {};
+          for (const config of configGroups) {
+            runsWithExpectations[config] = evalRuns.filter(r => r.configuration === config && r.expectations && r.expectations.length > 0);
+          }
+          const hasAnyExpectations = Object.values(runsWithExpectations).some(runs => runs.length > 0);
+          if (hasAnyExpectations) {
+            // Collect all unique assertion texts across all configs
+            const allAssertions = [];
+            const seen = new Set();
+            for (const config of configGroups) {
+              for (const run of runsWithExpectations[config]) {
+                for (const exp of (run.expectations || [])) {
+                  if (!seen.has(exp.text)) {
+                    seen.add(exp.text);
+                    allAssertions.push(exp.text);
+                  }
+                }
+              }
+            }
+
+            html += '<table class="benchmark-table" style="margin-top: 0.5rem;">';
+            html += "<thead><tr><th>Assertion</th>";
+            for (const config of configGroups) {
+              const label = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+              html += "<th>" + escapeHtml(label) + "</th>";
+            }
+            html += "</tr></thead><tbody>";
+
+            for (const assertionText of allAssertions) {
+              html += "<tr><td>" + escapeHtml(assertionText) + "</td>";
+
+              for (const config of configGroups) {
+                html += "<td>";
+                for (const run of runsWithExpectations[config]) {
+                  const exp = (run.expectations || []).find(e => e.text === assertionText);
+                  if (exp) {
+                    const cls = exp.passed ? "benchmark-delta-positive" : "benchmark-delta-negative";
+                    const icon = exp.passed ? "\u2713" : "\u2717";
+                    html += '<span class="' + cls + '" title="Run ' + run.run_number + ': ' + escapeHtml(exp.evidence || "") + '">' + icon + "</span> ";
+                  } else {
+                    html += "— ";
+                  }
+                }
+                html += "</td>";
+              }
+              html += "</tr>";
+            }
+            html += "</tbody></table>";
+          }
+        }
+      }
+
+      // Notes
+      if (notes.length > 0) {
+        html += '<div class="benchmark-notes">';
+        html += "<h3>Analysis Notes</h3>";
+        html += "<ul>";
+        for (const note of notes) {
+          html += "<li>" + escapeHtml(note) + "</li>";
+        }
+        html += "</ul></div>";
+      }
+
+      container.innerHTML = html;
     }
 
-    renderEval();
+    // ---- Start ----
+    init();
     renderBenchmark();
   </script>
 </body>

@@ -51,3 +51,14 @@ A compact reference for working productively with Jekyll. Covers Liquid template
 - Adding responsive images, comments, or custom plugins/filters.
 
 **Tests:** `evals/jekyll-workspace`
+
+**Benchmark results (4 iterations):**
+
+| Iteration | Model | With Skill | Without Skill | Delta |
+|---|---|---|---|---|
+| [1](evals/jekyll-workspace/iteration-1) | Claude Opus 4.7 | 100% | 80.4% | +19.6% |
+| [2](evals/jekyll-workspace/iteration-2) | DeepSeek V4 Flash Free | 100% | 80.4% | +19.6% |
+| [3](evals/jekyll-workspace/iteration-3) | Gemini 2.5 Flash Lite | 77.8% | 46.5% | +31.3% |
+| [4](evals/jekyll-workspace/iteration-4) | MiMo v2.5 Pro | 100% | 69.5% | +30.5% |
+
+The skill consistently improves output quality across all tested models and evaluations (4 evals covering GitHub Pages deployment, Liquid/kramdown features, docs site scaffolding, and responsive images).

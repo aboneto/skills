@@ -1,0 +1,13 @@
+{
+  "eval_id": 1,
+  "configuration": "without_skill",
+  "run_number": 1,
+  "expectations": [
+    {"text": "Identifies that jekyll-paginate-v2 is NOT on the GitHub Pages plugin allowlist as the root cause", "passed": true, "evidence": "Line 5: 'not on that whitelist'"},
+    {"text": "Explains why the same Gemfile works locally but fails on the GitHub Pages classic builder", "passed": true, "evidence": "Line 7: 'local Bundler resolves gems freely from RubyGems without the github-pages constraint'"},
+    {"text": "Offers migrating to GitHub Actions deployment as a fix (unlocks current Jekyll + any plugin)", "passed": true, "evidence": "Option B lines 35-100 with full workflow"},
+    {"text": "Offers an in-allowlist alternative (e.g., drop jekyll-paginate-v2 and use jekyll-paginate)", "passed": true, "evidence": "Option A lines 11-33 with jekyll-paginate"},
+    {"text": "Acknowledges the site lives at /blog (project site) — does not assume root deployment", "passed": true, "evidence": "Line 97: baseurl: '/blog'"},
+    {"text": "Does not (incorrectly) attribute the failure solely to bundle install / Gemfile.lock issues", "passed": true, "evidence": "Correctly identifies whitelist as root cause"}
+  ]
+}

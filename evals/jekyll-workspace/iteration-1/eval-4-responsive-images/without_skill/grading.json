@@ -1,34 +1,39 @@
 {
   "assertions": [
     {
-      "text": "Gemfile includes jekyll-picture-tag or similar responsive image plugin",
+      "text": "Uses jekyll-picture-tag plugin (or equivalent responsive image solution)",
       "passed": true,
-      "evidence": "Lines 12-14: jekyll-picture-tag, sharp, image_processing gems included"
+      "evidence": "Line 13: 'gem jekyll-picture-tag, ~> 1.14'"
     },
     {
-      "text": "_config.yml has picture plugin configured with WebP and widths",
+      "text": "Gemfile includes version pin for the plugin (e.g., ~> 2.1)",
       "passed": true,
-      "evidence": "Lines 39-43: picture widths, formats: [webp, original], lazy: true"
+      "evidence": "Line 13: 'gem jekyll-picture-tag, ~> 1.14' with version pin"
     },
     {
-      "text": "Layout/post.html uses responsive image markup (picture tag or srcset with sizes)",
+      "text": "Configuration includes WebP format with fallback",
       "passed": true,
-      "evidence": "Lines 62-98: _includes/responsive-image.html with picture element, srcset, WebP source; Lines 104-148: post.html using responsive_image tag"
+      "evidence": "Line 43: 'formats: [webp, original]'"
     },
     {
-      "text": "Build pipeline includes sharp pre-processing or similar for image optimization",
+      "text": "Configuration includes multiple widths for srcset (at least 480, 800, 1200)",
       "passed": true,
-      "evidence": "Lines 154-179: scripts/generate-images.sh using sharp for image processing; Lines 181-194: netlify.toml hooks it into build"
+      "evidence": "Line 40: 'widths: [400, 800, 1200, 1600, 2000]'"
     },
     {
-      "text": "Netlify deployment configuration present (netlify.toml or _headers)",
+      "text": "Includes lazy loading attribute in configuration",
       "passed": true,
-      "evidence": "Lines 181-194: netlify.toml with build command; Lines 251-258: _headers with Cache-Control"
+      "evidence": "Line 43: 'lazy: true' in picture config"
     },
     {
-      "text": "Mentions that hero/lcp images should NOT be lazy loaded (loading eager for above-fold)",
+      "text": "Notes about LCP optimization for above-the-fold images",
       "passed": false,
-      "evidence": "No explicit mention that hero images should use loading=\"eager\". Line 292 mentions 'Preloading the primary hero image' but doesn't address lazy loading distinction for above-fold images."
+      "evidence": "No explicit mention of eager loading for above-the-fold/LCP images. Only mentions lazy loading polyfill for older browsers."
+    },
+    {
+      "text": "Mentions Netlify build pipeline (no extra setup needed)",
+      "passed": true,
+      "evidence": "Lines 181-194: netlify.toml with build command and cache headers"
     }
   ]
 }

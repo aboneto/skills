@@ -1,0 +1,57 @@
+{
+  "expectations": [
+    {
+      "text": "Reading time uses Jekyll's built-in `number_of_words` filter (or `page.content | split | size`) rather than a heavy custom plugin",
+      "passed": true,
+      "evidence": "Lines 7-10: uses content | number_of_words - built-in filter"
+    },
+    {
+      "text": "TOC uses kramdown's native `* TOC\\n{:toc}` (or `{:toc}`) — does NOT introduce jekyll-toc or unrelated plugins",
+      "passed": false,
+      "evidence": "Line 17: uses {:toc} but does NOT configure toc_levels to restrict to H2/H3"
+    },
+    {
+      "text": "Restricts the TOC to H2 and H3 (e.g., `toc_levels: 2..3` in _config.yml)",
+      "passed": false,
+      "evidence": "No toc_levels configuration in _config.yml"
+    },
+    {
+      "text": "Related posts uses a correct tag-overlap algorithm (concat + uniq size comparison, or a where_exp/contains check) — logic actually finds overlapping tags",
+      "passed": true,
+      "evidence": "Lines 30-34: uses nested loop with 'contains' - works but less elegant than concat/uniq"
+    },
+    {
+      "text": "Does NOT use the invalid `{# … #}` Liquid comment syntax anywhere in code samples",
+      "passed": true,
+      "evidence": "No invalid Liquid comment syntax found"
+    },
+    {
+      "text": "States that the code belongs in `_layouts/post.html` (or a clearly-scoped include used by post.html)",
+      "passed": true,
+      "evidence": "Line 4 and 22: code belongs in _layouts/post.html"
+    },
+    {
+      "text": "Either uses tag-overlap manually OR mentions Jekyll's built-in `site.related_posts` with its `--lsi`/classifier-reborn cost",
+      "passed": true,
+      "evidence": "Uses tag-overlap manually with nested loop"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 2,
+    "total": 7,
+    "pass_rate": 0.71
+  },
+  "timing": {
+    "total_duration_seconds": 1.5
+  },
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Falta configurar toc_levels para el TOC"
+  }
+}

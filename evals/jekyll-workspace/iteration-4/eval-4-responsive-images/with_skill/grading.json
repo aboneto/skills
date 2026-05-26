@@ -1,0 +1,14 @@
+{
+  "eval_id": 4,
+  "configuration": "with_skill",
+  "run_number": 1,
+  "expectations": [
+    {"text": "Uses jekyll-picture-tag plugin (or equivalent responsive image solution)", "passed": true, "evidence": "Line 21: 'gem jekyll-picture-tag, ~> 2.1'"},
+    {"text": "Gemfile includes version pin for the plugin", "passed": true, "evidence": "Line 21: '~> 2.1'"},
+    {"text": "Configuration includes WebP format with fallback", "passed": true, "evidence": "Line 52: 'formats: [webp, original]'"},
+    {"text": "Configuration includes multiple widths for srcset (at least 480, 800, 1200)", "passed": true, "evidence": "Line 53: 'widths: [480, 720, 1200, 1920]'"},
+    {"text": "Includes lazy loading attribute in configuration", "passed": true, "evidence": "Line 64: 'loading=lazy' on thumbnail preset"},
+    {"text": "Notes about LCP optimization for above-the-fold images", "passed": true, "evidence": "Line 68: 'hero images are above the fold — don't lazy-load them (that hurts LCP)'"},
+    {"text": "Mentions Netlify build pipeline (no extra setup needed)", "passed": true, "evidence": "Lines 169-183: netlify.toml configuration"}
+  ]
+}

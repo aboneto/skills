@@ -1,0 +1,57 @@
+{
+  "expectations": [
+    {
+      "text": "Reading time uses Jekyll's built-in `number_of_words` filter (or `page.content | split | size`) rather than a heavy custom plugin",
+      "passed": false,
+      "evidence": "Uses a custom plugin _plugins/reading_time.rb instead of Jekyll's built-in number_of_words filter"
+    },
+    {
+      "text": "TOC uses kramdown's native `* TOC\\n{:toc}` (or `{:toc}`) — does NOT introduce jekyll-toc or unrelated plugins",
+      "passed": true,
+      "evidence": "Uses {:toc} with kramdown native TOC"
+    },
+    {
+      "text": "Restricts the TOC to H2 and H3 (e.g., `toc_levels: 2..3` in _config.yml)",
+      "passed": true,
+      "evidence": "Line 38: 'toc_levels: 2..3'"
+    },
+    {
+      "text": "Related posts uses a correct tag-overlap algorithm (concat + uniq size comparison, or a where_exp/contains check) — logic actually finds overlapping tags",
+      "passed": true,
+      "evidence": "Lines 65-67: uses concat + uniq size comparison correctly"
+    },
+    {
+      "text": "Does NOT use the invalid `{# … #}` Liquid comment syntax anywhere in code samples",
+      "passed": true,
+      "evidence": "No invalid Liquid comment syntax found"
+    },
+    {
+      "text": "States that the code belongs in `_layouts/post.html` (or a clearly-scoped include used by post.html)",
+      "passed": true,
+      "evidence": "Lines 24-28, 41-48, 55-80: all code marked for '_layouts/post.html'"
+    },
+    {
+      "text": "Either uses tag-overlap manually OR mentions Jekyll's built-in `site.related_posts` with its `--lsi`/classifier-reborn cost",
+      "passed": true,
+      "evidence": "Uses tag-overlap manually with concat/uniq"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 1,
+    "total": 7,
+    "pass_rate": 0.86
+  },
+  "timing": {
+    "total_duration_seconds": 0.45
+  },
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Usa plugin custom en lugar de built-in filter - menos ideal"
+  }
+}

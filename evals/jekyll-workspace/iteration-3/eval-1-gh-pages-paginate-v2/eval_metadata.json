@@ -1,0 +1,6 @@
+{
+  "eval_id": 1,
+  "eval_name": "gh-pages-paginate-v2",
+  "prompt": "I pushed my Jekyll blog to GitHub Pages and the Actions build is failing with `Could not find gem 'jekyll-paginate-v2'`. My Gemfile has both `github-pages` and `jekyll-paginate-v2` in `:jekyll_plugins`. It builds fine locally with `bundle exec jekyll serve`. Repo is at github.com/me/blog and the site lives at me.github.io/blog. What do I need to change?",
+  "assertions": []
+}
