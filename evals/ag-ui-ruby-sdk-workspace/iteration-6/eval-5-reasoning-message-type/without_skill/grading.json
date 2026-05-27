@@ -1,0 +1,28 @@
+{
+  "expectations": [
+    {
+      "text": "Uses AgUiProtocol::Core::Types::ReasoningMessage",
+      "passed": true,
+      "evidence": "Found ReasoningMessage"
+    },
+    {
+      "text": "ReasoningMessage has role 'reasoning'",
+      "passed": false,
+      "evidence": "Missing role/reasoning"
+    },
+    {
+      "text": "Demonstrates encrypted_value for ZDR mode",
+      "passed": true,
+      "evidence": "Found encrypted_value"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 1,
+    "total": 3,
+    "pass_rate": 0.67
+  },
+  "timing": {
+    "executor_duration_seconds": 5.0
+  }
+}

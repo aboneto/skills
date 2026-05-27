@@ -12,14 +12,23 @@ Model (base)
 │   ├── DeveloperMessage
 │   ├── SystemMessage
 │   ├── ToolMessage
-│   └── ActivityMessage
+│   └── ReasoningMessage
+├── ActivityMessage (standalone)
 ├── FunctionCall
 ├── ToolCall
 ├── Tool
 ├── Context
 ├── RunAgentInput
+├── Interrupt
+├── ResumeEntry
 ├── TextInputContent
-└── BinaryInputContent
+├── BinaryInputContent
+├── ImageInputContent
+├── AudioInputContent
+├── VideoInputContent
+├── DocumentInputContent
+├── InputContentDataSource
+└── InputContentUrlSource
 ```
 
 ---
@@ -165,6 +174,66 @@ AgUiProtocol::Core::Types::ActivityMessage.new(
 | `content` | `Hash` | yes | Structured payload |
 | `role` | `String` | auto | Always `"activity"` |
 
+### ReasoningMessage
+
+Represents a reasoning message from an agent with chain-of-thought content.
+
+```ruby
+AgUiProtocol::Core::Types::ReasoningMessage.new(
+  id: "reason_1",
+  content: "Let me think through this step by step..."
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `id` | `String` | yes | Unique message identifier |
+| `content` | `String` | yes | Reasoning content (plaintext when not encrypted) |
+| `encrypted_value` | `String|nil` | no | Encrypted reasoning content in zero-data-retention mode |
+| `role` | `String` | auto | Always `"reasoning"` |
+
+### Interrupt
+
+Represents an interrupt that occurred during agent execution for human-in-the-loop workflows.
+
+```ruby
+AgUiProtocol::Core::Types::Interrupt.new(
+  id: "int_1",
+  reason: "input_required",
+  message: "Please provide additional information"
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `id` | `String` | yes | Unique identifier |
+| `reason` | `String` | yes | Reason for the interrupt |
+| `message` | `String|nil` | no | Human-readable message |
+| `tool_call_id` | `String|nil` | no | Associated tool call if applicable |
+| `response_schema` | `Object|nil` | no | JSON schema for response |
+| `expires_at` | `String|nil` | no | ISO timestamp when interrupt expires |
+| `metadata` | `Object|nil` | no | Arbitrary metadata |
+
+### ResumeEntry
+
+Represents an entry for resuming an interrupted run.
+
+```ruby
+AgUiProtocol::Core::Types::ResumeEntry.new(
+  interrupt_id: "int_1",
+  status: "resolved",
+  payload: { "answer" => "42" }
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `interrupt_id` | `String` | yes | ID of the interrupt being resolved |
+| `status` | `String|nil` | no | Resolution status ("resolved" or "cancelled") |
+| `payload` | `Object|nil` | no | Response payload for the interrupt |
+
+See `references/events.md` for `RunFinishedInterruptOutcome` — the outcome type used in `RunFinishedEvent.outcome:` to signal an interrupted run.
+
 ---
 
 ## Content Types
@@ -213,12 +282,126 @@ AgUiProtocol::Core::Types::BinaryInputContent.new(
 |---|---|---|---|
 | `mime_type` | `String` | yes | MIME type (e.g., `"image/png"`) |
 | `type` | `String` | no | Fragment type, defaults to `"binary"` |
-| `id` | `String\|nil` | no | Reference to uploaded content |
-| `url` | `String\|nil` | no | Remote URL |
-| `data` | `String\|nil` | no | Base64 encoded content |
-| `filename` | `String\|nil` | no | Optional filename hint |
+| `id` | `String|nil` | no | Reference to uploaded content |
+| `url` | `String|nil` | no | Remote URL |
+| `data` | `String|nil` | no | Base64 encoded content |
+| `filename` | `String|nil` | no | Optional filename hint |
 
 **Raises** `ArgumentError` if none of `id`, `url`, or `data` is provided.
+
+### ImageInputContent
+
+An image content fragment in a multimodal message.
+
+```ruby
+AgUiProtocol::Core::Types::ImageInputContent.new(
+  source: {
+    type: "url",
+    value: "https://example.com/photo.png",
+    mime_type: "image/png"
+  }
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `source` | `InputContentDataSource\|InputContentUrlSource\|Hash` | yes | Content source |
+| `metadata` | `Object\|nil` | no | Optional metadata |
+| `type` | `String` | no | Fragment type, defaults to `"image"` |
+
+### AudioInputContent
+
+An audio content fragment in a multimodal message.
+
+```ruby
+AgUiProtocol::Core::Types::AudioInputContent.new(
+  source: {
+    type: "url",
+    value: "https://example.com/audio.mp3",
+    mime_type: "audio/mp3"
+  }
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `source` | `InputContentDataSource\|InputContentUrlSource\|Hash` | yes | Content source |
+| `metadata` | `Object\|nil` | no | Optional metadata |
+| `type` | `String` | no | Fragment type, defaults to `"audio"` |
+
+### VideoInputContent
+
+A video content fragment in a multimodal message.
+
+```ruby
+AgUiProtocol::Core::Types::VideoInputContent.new(
+  source: {
+    type: "url",
+    value: "https://example.com/video.mp4",
+    mime_type: "video/mp4"
+  }
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `source` | `InputContentDataSource\|InputContentUrlSource\|Hash` | yes | Content source |
+| `metadata` | `Object\|nil` | no | Optional metadata |
+| `type` | `String` | no | Fragment type, defaults to `"video"` |
+
+### DocumentInputContent
+
+A document content fragment in a multimodal message.
+
+```ruby
+AgUiProtocol::Core::Types::DocumentInputContent.new(
+  source: {
+    type: "url",
+    value: "https://example.com/doc.pdf",
+    mime_type: "application/pdf"
+  }
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `source` | `InputContentDataSource\|InputContentUrlSource\|Hash` | yes | Content source |
+| `metadata` | `Object\|nil` | no | Optional metadata |
+| `type` | `String` | no | Fragment type, defaults to `"document"` |
+
+### InputContentDataSource
+
+A data source for multimodal input content using base64-encoded data.
+
+```ruby
+AgUiProtocol::Core::Types::InputContentDataSource.new(
+  value: "base64encoded...",
+  mime_type: "image/png"
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `value` | `String` | yes | Base64 encoded content |
+| `mime_type` | `String` | yes | MIME type of the content |
+| `type` | `String` | no | Source type, defaults to `"data"` |
+
+### InputContentUrlSource
+
+A URL source for multimodal input content.
+
+```ruby
+AgUiProtocol::Core::Types::InputContentUrlSource.new(
+  value: "https://example.com/image.png",
+  mime_type: "image/png"
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `value` | `String` | yes | URL string |
+| `mime_type` | `String|nil` | no | Optional MIME type |
+| `type` | `String` | no | Source type, defaults to `"url"` |
 
 ---
 
@@ -351,7 +534,7 @@ All message types have a `role` property. Valid roles:
 
 ```ruby
 AgUiProtocol::Core::Types::Role
-# => ["developer", "system", "assistant", "user", "tool", "activity"]
+# => ["developer", "system", "assistant", "user", "tool", "activity", "reasoning"]
 ```
 
 | Role | Class |
@@ -362,6 +545,7 @@ AgUiProtocol::Core::Types::Role
 | `"user"` | UserMessage |
 | `"tool"` | ToolMessage |
 | `"activity"` | ActivityMessage |
+| `"reasoning"` | ReasoningMessage |
 
 The role property is automatically set by each class constructor.
 

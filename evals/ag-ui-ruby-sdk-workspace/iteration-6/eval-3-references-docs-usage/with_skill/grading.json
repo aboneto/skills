@@ -1,0 +1,28 @@
+{
+  "expectations": [
+    {
+      "text": "Response mentions reference files for SDK details",
+      "passed": true,
+      "evidence": "Content derived from references/events.md (accurate BaseEvent, TextMessageStartEvent, TextMessageChunkEvent attributes with types and descriptions)"
+    },
+    {
+      "text": "Details TextMessageStartEvent attributes (message_id, role, etc)",
+      "passed": true,
+      "evidence": "message_id=True role=True"
+    },
+    {
+      "text": "Details TextMessageChunkEvent attributes (message_id, delta)",
+      "passed": true,
+      "evidence": "message_id=True delta=True"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "executor_duration_seconds": 5.0
+  }
+}

@@ -54,6 +54,76 @@
         "The response accurately details TextMessageStartEvent attributes (message_id, parent_id, role, index, etc.)",
         "The response accurately details TextMessageChunkEvent attributes (message_id, delta, index)"
       ]
+    },
+    {
+      "id": 4,
+      "name": "reasoning-events-stream",
+      "prompt": "Write a Ruby script using the AG-UI SDK that emits a complete reasoning block with streaming reasoning messages. Include ReasoningStartEvent, ReasoningMessageStartEvent, ReasoningMessageContentEvent(s), ReasoningMessageEndEvent, and ReasoningEndEvent.",
+      "expected_output": "The script should correctly emit all reasoning event types in the proper sequence for a reasoning block.",
+      "files": [],
+      "expectations": [
+        "The code uses AgUiProtocol::Core::Events::ReasoningStartEvent with a message_id",
+        "The code uses AgUiProtocol::Core::Events::ReasoningMessageStartEvent with a different message_id and role 'reasoning'",
+        "The code uses AgUiProtocol::Core::Events::ReasoningMessageContentEvent with matching message_id and non-empty delta",
+        "The code uses AgUiProtocol::Core::Events::ReasoningMessageEndEvent to close the reasoning message",
+        "The code uses AgUiProtocol::Core::Events::ReasoningEndEvent to close the reasoning block",
+        "The code uses AgUiProtocol::Core::Events::ReasoningEncryptedValueEvent for encrypted content"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "reasoning-message-type",
+      "prompt": "Create a ReasoningMessage using the AG-UI Ruby SDK types and explain its properties including the encrypted_value field for zero-data-retention mode.",
+      "expected_output": "A ReasoningMessage with id, content, and optional encrypted_value property documented.",
+      "files": [],
+      "expectations": [
+        "The code uses AgUiProtocol::Core::Types::ReasoningMessage",
+        "The ReasoningMessage has role automatically set to 'reasoning'",
+        "The code demonstrates encrypted_value for zero-data-retention mode"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "interrupt-resume-types",
+      "prompt": "Create an Interrupt type and a ResumeEntry type using the AG-UI Ruby SDK for a human-in-the-loop workflow. Show how to resolve an interrupt with a payload.",
+      "expected_output": "Interrupt and ResumeEntry objects with appropriate properties for HITL workflows.",
+      "files": [],
+      "expectations": [
+        "The code uses AgUiProtocol::Core::Types::Interrupt with id, reason, message, tool_call_id, response_schema, expires_at, metadata",
+        "The code uses AgUiProtocol::Core::Types::ResumeEntry with interrupt_id, status, and payload",
+        "The code uses RunFinishedInterruptOutcome with an array of Interrupt objects"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "agent-capabilities-declaration",
+      "prompt": "Create an AgentCapabilities object using the AG-UI Ruby SDK that declares: identity (name, version), transport (streaming, websocket), tools (supported, parallel_calls), state (snapshots, deltas), reasoning (supported, streaming), multimodal (input: image, audio; output: audio), and human_in_the_loop (interrupts).",
+      "expected_output": "A complete AgentCapabilities object with nested capability objects properly configured.",
+      "files": [],
+      "expectations": [
+        "The code uses AgUiProtocol::Core::Capabilities::AgentCapabilities",
+        "The code uses IdentityCapabilities with name and version",
+        "The code uses TransportCapabilities with streaming and websocket",
+        "The code uses ToolsCapabilities with supported and parallel_calls",
+        "The code uses StateCapabilities with snapshots and deltas",
+        "The code uses ReasoningCapabilities with supported and streaming",
+        "The code uses MultimodalCapabilities with MultimodalInputCapabilities and MultimodalOutputCapabilities",
+        "The code uses HumanInTheLoopCapabilities with interrupts"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "multimodal-content-types",
+      "prompt": "Create multimodal content types (ImageInputContent, AudioInputContent, VideoInputContent, DocumentInputContent) using the AG-UI Ruby SDK with URL sources.",
+      "expected_output": "All four multimodal content types properly initialized with source and metadata.",
+      "files": [],
+      "expectations": [
+        "The code uses AgUiProtocol::Core::Types::ImageInputContent with InputContentUrlSource",
+        "The code uses AgUiProtocol::Core::Types::AudioInputContent with InputContentUrlSource",
+        "The code uses AgUiProtocol::Core::Types::VideoInputContent with InputContentUrlSource",
+        "The code uses AgUiProtocol::Core::Types::DocumentInputContent with InputContentUrlSource",
+        "The code uses AgUiProtocol::Core::Types::InputContentDataSource for base64 encoded content"
+      ]
     }
   ]
 }

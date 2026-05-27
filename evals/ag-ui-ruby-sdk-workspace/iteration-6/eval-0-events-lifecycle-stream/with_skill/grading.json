@@ -1,0 +1,33 @@
+{
+  "expectations": [
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::RunStartedEvent",
+      "passed": true,
+      "evidence": "Found RunStartedEvent"
+    },
+    {
+      "text": "The code uses TextMessageStart, Content, End with matching message_id",
+      "passed": true,
+      "evidence": "Start=True Content=True End=True match=True"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::RunFinishedEvent at the end",
+      "passed": true,
+      "evidence": "Found RunFinishedEvent"
+    },
+    {
+      "text": "The code uses EventEncoder and writes to a stream",
+      "passed": true,
+      "evidence": "Found EventEncoder"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "executor_duration_seconds": 5.0
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "expectations": [
+    {
+      "text": "Uses AgentCapabilities",
+      "passed": true,
+      "evidence": "Found AgentCapabilities"
+    },
+    {
+      "text": "Uses IdentityCapabilities with name and version",
+      "passed": true,
+      "evidence": "Identity=True name=True"
+    },
+    {
+      "text": "Uses TransportCapabilities with streaming and websocket",
+      "passed": true,
+      "evidence": "Found TransportCapabilities"
+    },
+    {
+      "text": "Uses ToolsCapabilities with supported and parallel_calls",
+      "passed": true,
+      "evidence": "Found ToolsCapabilities"
+    },
+    {
+      "text": "Uses StateCapabilities with snapshots and deltas",
+      "passed": true,
+      "evidence": "Found StateCapabilities"
+    },
+    {
+      "text": "Uses ReasoningCapabilities with supported and streaming",
+      "passed": true,
+      "evidence": "Found ReasoningCapabilities"
+    },
+    {
+      "text": "Uses MultimodalCapabilities with input and output",
+      "passed": true,
+      "evidence": "Found MultimodalCapabilities"
+    },
+    {
+      "text": "Uses HumanInTheLoopCapabilities with interrupts",
+      "passed": true,
+      "evidence": "Found HumanInTheLoopCapabilities"
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 0,
+    "total": 8,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "executor_duration_seconds": 5.0
+  }
+}

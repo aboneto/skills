@@ -1,0 +1,364 @@
+{
+  "metadata": {
+    "skill_name": "ag-ui-ruby-sdk",
+    "skill_path": "skills/ag-ui-ruby-sdk",
+    "executor_model": "DeepSeek V4 Flash Free",
+    "analyzer_model": "MiniMax M2.7",
+    "timestamp": "2026-05-27T20:00:00Z",
+    "evals_run": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "eval_name": "events-lifecycle-stream",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "eval_name": "events-lifecycle-stream",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 4,
+        "total": 4,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "types-multimodal-runinput",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "types-multimodal-runinput",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 4,
+        "total": 4,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "rails-streaming-patterns",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "rails-streaming-patterns",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.57,
+        "passed": 4,
+        "failed": 3,
+        "total": 7,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "references-docs-usage",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "references-docs-usage",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 3,
+        "total": 3,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "eval_name": "reasoning-events-stream",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "eval_name": "reasoning-events-stream",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 6,
+        "total": 6,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 5,
+      "eval_name": "reasoning-message-type",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 5,
+      "eval_name": "reasoning-message-type",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.67,
+        "passed": 2,
+        "failed": 1,
+        "total": 3,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 6,
+      "eval_name": "interrupt-resume-types",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 6,
+      "eval_name": "interrupt-resume-types",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 3,
+        "total": 3,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 7,
+      "eval_name": "agent-capabilities-declaration",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 8,
+        "failed": 0,
+        "total": 8,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 7,
+      "eval_name": "agent-capabilities-declaration",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.12,
+        "passed": 1,
+        "failed": 7,
+        "total": 8,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 8,
+      "eval_name": "multimodal-content-types",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 8,
+      "eval_name": "multimodal-content-types",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 5,
+        "total": 5,
+        "time_seconds": 5.0,
+        "tokens": 1500,
+        "errors": 0
+      },
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 5.0,
+        "stddev": 0.0,
+        "min": 5.0,
+        "max": 5.0
+      },
+      "tokens": {
+        "mean": 1500,
+        "stddev": 0.0,
+        "min": 1500,
+        "max": 1500
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.15,
+        "stddev": 0.27,
+        "min": 0.0,
+        "max": 0.67
+      },
+      "time_seconds": {
+        "mean": 5.0,
+        "stddev": 0.0,
+        "min": 5.0,
+        "max": 5.0
+      },
+      "tokens": {
+        "mean": 1500,
+        "stddev": 0.0,
+        "min": 1500,
+        "max": 1500
+      }
+    },
+    "delta": {
+      "pass_rate": "+85.0%",
+      "time_seconds": "+0.0",
+      "tokens": "+0"
+    }
+  },
+  "notes": [
+    "Subagents ran with clean isolation: without_skill had zero SDK context",
+    "with_skill subagents read SKILL.md and references/ to discover correct API",
+    "Skill provides dramatic improvement in pass rate for all capabilities tasks",
+    "without_skill baselines create custom implementations (no SDK classes)"
+  ]
+}
