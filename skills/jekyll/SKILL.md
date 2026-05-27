@@ -1,6 +1,6 @@
 ---
 name: jekyll
-description: Technical cheatsheet for Jekyll static site generator. Use when working with Liquid templates (`{% if %}`, `{% for %}`, `{{ }}`), kramdown Markdown, `_config.yml`, collections, themes (Minima, Just the Docs, Chirpy), any `jekyll-*` plugin, GitHub Pages/Actions deployment, `Gemfile`/Ruby setup, responsive images, html-proofer, or custom plugins/filters. Trigger when user mentions `_posts/`, `_layouts/`, `_includes/`, `bundle exec jekyll`, GitHub Pages build failing, Liquid syntax errors, or kramdown `{:.class}` syntax — even without saying "Jekyll" explicitly.
+description: "Technical cheatsheet for Jekyll static site generator. Use when working with Liquid templates (`{% if %}`, `{% for %}`, `{{ }}`), kramdown Markdown, `_config.yml`, collections, themes (Minima, Just the Docs, Chirpy), any `jekyll-*` plugin, GitHub Pages/Actions deployment, `Gemfile`/Ruby setup, responsive images, html-proofer, or custom plugins/filters. Trigger when user mentions `_posts/`, `_layouts/`, `_includes/`, `bundle exec jekyll`, GitHub Pages build failing, Liquid syntax errors, or kramdown `{:.class}` syntax — even without saying 'Jekyll' explicitly."
 license: MIT
 metadata:
   author: aboneto
