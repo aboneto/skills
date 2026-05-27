@@ -1,0 +1,56 @@
+{
+  "expectations": [
+    {
+      "text": "The controller sets Content-Type, Cache-Control, and X-Accel-Buffering headers",
+      "passed": true,
+      "evidence": "Found setting headers on lines 80, 84, and 85 of sse_stream, and lines 29, 30 of client_stream."
+    },
+    {
+      "text": "One action implements the with_stream pattern using response.headers['rack.hijack'] and proc",
+      "passed": true,
+      "evidence": "Found with_stream helper assigning to response.headers['rack.hijack'] a proc with Thread.new loop on lines 182-195."
+    },
+    {
+      "text": "One action includes ActionController::Live and writes to response.stream",
+      "passed": true,
+      "evidence": "Found include ActionController::Live on line 14 and writing to response.stream on line 90."
+    },
+    {
+      "text": "Both endpoints handle IOError for client disconnect",
+      "passed": true,
+      "evidence": "Found rescue IOError in both client_stream and sse_stream."
+    },
+    {
+      "text": "Both endpoints close the stream in ensure blocks",
+      "passed": true,
+      "evidence": "Found stream.close in client_stream ensures and response.stream.close in sse_stream ensure."
+    },
+    {
+      "text": "The controller uses AgUiProtocol::Encoder::EventEncoder to encode events before writing to the streams",
+      "passed": false,
+      "evidence": "The controller does not require or use AgUiProtocol::Encoder::EventEncoder; it writes raw text directly to the socket/stream."
+    },
+    {
+      "text": "The endpoints stream specific AG-UI events such as RunStartedEvent and RunFinishedEvent",
+      "passed": false,
+      "evidence": "The actions stream raw strings like 'Data chunk X' and 'Event message X' instead of AgUiProtocol events."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 2,
+    "total": 7,
+    "pass_rate": 0.7143
+  },
+  "execution_metrics": {
+    "total_steps": 4,
+    "errors_encountered": 0,
+    "output_chars": 3879,
+    "transcript_chars": 2000
+  },
+  "timing": {
+    "executor_duration_seconds": 7.0,
+    "grader_duration_seconds": 2.0,
+    "total_duration_seconds": 9.0
+  }
+}

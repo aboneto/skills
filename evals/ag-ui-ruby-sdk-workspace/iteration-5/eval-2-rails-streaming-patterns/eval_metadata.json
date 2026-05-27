@@ -1,0 +1,14 @@
+{
+  "eval_id": 2,
+  "eval_name": "rails-streaming-patterns",
+  "prompt": "Implement a Rails controller using the AG-UI Ruby SDK that supports two streaming patterns: (1) with_stream with rack.hijack for client streaming, (2) ActionController::Live with text/event-stream content type and client disconnect (IOError) handling. Clean up/close the stream in ensure blocks.",
+  "assertions": [
+    "The controller sets Content-Type, Cache-Control, and X-Accel-Buffering headers",
+    "One action implements the with_stream pattern using response.headers['rack.hijack'] and proc",
+    "One action includes ActionController::Live and writes to response.stream",
+    "Both endpoints handle IOError for client disconnect",
+    "Both endpoints close the stream in ensure blocks",
+    "The controller uses AgUiProtocol::Encoder::EventEncoder to encode events before writing to the streams",
+    "The endpoints stream specific AG-UI events such as RunStartedEvent and RunFinishedEvent"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "expectations": [
+    {
+      "text": "Uses AgUiProtocol::Core::Events::RunStartedEvent",
+      "passed": false,
+      "evidence": "The script creates a mock AgUiClient class that emits plain JSON payloads, not the actual SDK event classes"
+    },
+    {
+      "text": "Uses AgUiProtocol::Core::Events::TextMessageStartEvent, TextMessageContentEvent, and TextMessageEndEvent with matching message_id",
+      "passed": false,
+      "evidence": "Uses custom JSON payload format, not SDK event classes"
+    },
+    {
+      "text": "Uses AgUiProtocol::Core::Events::RunFinishedEvent at the end",
+      "passed": false,
+      "evidence": "Uses finish_run method with custom payload, not the SDK event class"
+    },
+    {
+      "text": "Uses AgUiProtocol::Encoder::EventEncoder to encode events and writes them to a stream",
+      "passed": false,
+      "evidence": "Uses puts to print JSON, not EventEncoder"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "eval_id": 1,
+  "eval_name": "types-multimodal-runinput",
+  "prompt": "Write a Ruby script that creates a multimodal UserMessage with TextInputContent and BinaryInputContent, and constructs a complete RunAgentInput object.",
+  "assertions": [
+    "The code uses AgUiProtocol::Core::Types::UserMessage",
+    "The code uses AgUiProtocol::Core::Types::TextInputContent and AgUiProtocol::Core::Types::BinaryInputContent",
+    "The code initializes UserMessage with content as an array of TextInputContent and BinaryInputContent",
+    "The code uses AgUiProtocol::Core::Types::RunAgentInput with thread_id, run_id, state, messages, tools, context, forwarded_props"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::RunStartedEvent",
+      "passed": true,
+      "evidence": "Found AgUiProtocol::Core::Events::RunStartedEvent.new on line 13."
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::TextMessageStartEvent, TextMessageContentEvent, and TextMessageEndEvent with matching message_id",
+      "passed": true,
+      "evidence": "Found all three text message events using message_id on lines 19, 24, and 30."
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::RunFinishedEvent at the end",
+      "passed": true,
+      "evidence": "Found RunFinishedEvent.new on line 35."
+    },
+    {
+      "text": "The code encodes events with AgUiProtocol::Encoder::EventEncoder before writing to stream",
+      "passed": true,
+      "evidence": "Found AgUiProtocol::Encoder::EventEncoder.new on line 6 and encoder.encode(event) on lines 17, 22, 28, 33, 38."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_steps": 3,
+    "errors_encountered": 0,
+    "output_chars": 1284,
+    "transcript_chars": 1500
+  },
+  "timing": {
+    "executor_duration_seconds": 21.0,
+    "grader_duration_seconds": 1.5,
+    "total_duration_seconds": 22.5
+  }
+}

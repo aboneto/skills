@@ -1,0 +1,36 @@
+{
+  "expectations": [
+    {
+      "text": "The response explicitly mentions reading reference files (e.g. references/events.md) for SDK details",
+      "passed": true,
+      "evidence": "The subagent consulted references/events.md as shown in the execution logs and correctly derived class-specific behavior from it."
+    },
+    {
+      "text": "The response accurately details TextMessageStartEvent attributes (message_id, parent_id, role, index, etc.)",
+      "passed": true,
+      "evidence": "Correctly detailed message_id (required String) and role (optional, defaults to assistant) for TextMessageStartEvent."
+    },
+    {
+      "text": "The response accurately details TextMessageChunkEvent attributes (message_id, delta, index)",
+      "passed": true,
+      "evidence": "Correctly detailed message_id (optional, required on first chunk), role (optional), and delta (optional, text increment) for TextMessageChunkEvent."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_steps": 4,
+    "errors_encountered": 0,
+    "output_chars": 4258,
+    "transcript_chars": 3500
+  },
+  "timing": {
+    "executor_duration_seconds": 26.0,
+    "grader_duration_seconds": 2.0,
+    "total_duration_seconds": 28.0
+  }
+}

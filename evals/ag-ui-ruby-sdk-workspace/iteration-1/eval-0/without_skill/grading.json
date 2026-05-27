@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::RunStartedEvent",
+      "passed": false,
+      "evidence": "The script uses AgUi.start_run instead of AgUiProtocol::Core::Events::RunStartedEvent."
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::TextMessageStartEvent, TextMessageContentEvent, and TextMessageEndEvent with matching message_id",
+      "passed": false,
+      "evidence": "The script uses run.stream_text instead of the start/content/end message events sequence."
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::RunFinishedEvent at the end",
+      "passed": false,
+      "evidence": "The script calls run.finish instead of emitting AgUiProtocol::Core::Events::RunFinishedEvent."
+    },
+    {
+      "text": "The code uses AgUiProtocol::Encoder::EventEncoder to encode events and writes them to a stream",
+      "passed": false,
+      "evidence": "No encoder or serialization library is used; it relies on direct client method calls."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 4,
+    "total": 4,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "total_steps": 2,
+    "errors_encountered": 0,
+    "output_chars": 800,
+    "transcript_chars": 1500
+  },
+  "timing": {
+    "executor_duration_seconds": 7.0,
+    "grader_duration_seconds": 2.0,
+    "total_duration_seconds": 9.0
+  }
+}

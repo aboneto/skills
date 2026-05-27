@@ -1,0 +1,44 @@
+{
+  "expectations": [
+    {
+      "text": "The code uses AgUiProtocol::Core::Types::UserMessage",
+      "passed": false,
+      "evidence": "Output defines its own 'UserMessage' class from scratch instead of using the SDK's AgUiProtocol::Core::Types::UserMessage"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Types::TextInputContent and AgUiProtocol::Core::Types::BinaryInputContent",
+      "passed": false,
+      "evidence": "Output defines custom 'TextInputContent' and 'BinaryInputContent' classes instead of using SDK types"
+    },
+    {
+      "text": "The code initializes UserMessage with content as an array of TextInputContent and BinaryInputContent",
+      "passed": false,
+      "evidence": "Output does create a UserMessage with an array of content parts, but using custom classes, not SDK types"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Types::RunAgentInput with thread_id, run_id, state, messages, tools, context, forwarded_props",
+      "passed": false,
+      "evidence": "Output defines a custom 'RunAgentInput' class with agent_id, max_tokens, temperature - completely different from SDK's RunAgentInput"
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 4,
+    "total": 4,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "total_steps": 1,
+    "errors_encountered": 0,
+    "output_chars": 1388
+  },
+  "timing": {
+    "executor_duration_seconds": 35.0,
+    "total_duration_seconds": 35.0
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Without skill, the agent invented custom type classes from scratch instead of using the actual AG-UI Ruby SDK types. The solution is non-functional with the real SDK."
+  }
+}

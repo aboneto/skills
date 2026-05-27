@@ -1,0 +1,11 @@
+{
+  "eval_id": 0,
+  "eval_name": "events-lifecycle-stream",
+  "prompt": "Write a Ruby script using the AG-UI SDK that starts a run, streams a text message containing 'Hello, World!', and then finishes the run successfully.",
+  "assertions": [
+    "The code uses AgUiProtocol::Core::Events::RunStartedEvent",
+    "The code uses AgUiProtocol::Core::Events::TextMessageStartEvent, TextMessageContentEvent, and TextMessageEndEvent with matching message_id",
+    "The code uses AgUiProtocol::Core::Events::RunFinishedEvent at the end",
+    "The code uses AgUiProtocol::Encoder::EventEncoder to encode events and writes them to a stream"
+  ]
+}

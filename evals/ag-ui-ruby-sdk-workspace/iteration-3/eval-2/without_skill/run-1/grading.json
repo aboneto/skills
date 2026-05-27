@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "The controller sets Content-Type, Cache-Control, and X-Accel-Buffering headers",
+      "passed": true,
+      "evidence": "Both stream_hijack (lines 3-5) and stream_live (lines 30-32) set all three headers"
+    },
+    {
+      "text": "One action implements the with_stream pattern using response.headers['rack.hijack'] and proc",
+      "passed": false,
+      "evidence": "Uses custom ResponseStream class instead of rack.hijack pattern. The with_stream helper is called but not defined in the code using the required rack.hijack approach"
+    },
+    {
+      "text": "One action includes ActionController::Live and writes to response.stream",
+      "passed": false,
+      "evidence": "stream_live writes to response.stream via ResponseStream.emit but does not include ActionController::Live"
+    },
+    {
+      "text": "Both endpoints handle IOError for client disconnect",
+      "passed": true,
+      "evidence": "stream_hijack has 'rescue IOError' (line 24), stream_live has 'rescue IOError, ActionController::Live::ClientDisconnected' (line 41)"
+    },
+    {
+      "text": "Both endpoints close the stream in ensure blocks",
+      "passed": false,
+      "evidence": "stream_hijack has no ensure block with stream.close; stream_live has proper ensure block (lines 45-46) but stream_hijack does not"
+    },
+    {
+      "text": "The controller uses AgUiProtocol::Encoder::EventEncoder to encode events before writing to the streams",
+      "passed": false,
+      "evidence": "Uses custom ResponseStream.emit method that manually formats SSE (event: type\\ndata: json\\n\\n), not EventEncoder"
+    },
+    {
+      "text": "The endpoints stream specific AG-UI events such as RunStartedEvent and RunFinishedEvent",
+      "passed": false,
+      "evidence": "Streams generic events: 'connection', 'message', 'ack', 'error', 'function_call_result' - no RunStartedEvent or RunFinishedEvent"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 5,
+    "total": 7,
+    "pass_rate": 0.286
+  }
+}

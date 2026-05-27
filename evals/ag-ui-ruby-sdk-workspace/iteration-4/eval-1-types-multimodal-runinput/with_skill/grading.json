@@ -1,0 +1,24 @@
+{
+  "expectations": [
+    {
+      "text": "Uses AgUiProtocol::Core::Types::UserMessage",
+      "passed": true,
+      "evidence": "Line 15: AgUiProtocol::Core::Types::UserMessage.new"
+    },
+    {
+      "text": "Uses AgUiProtocol::Core::Types::TextInputContent and AgUiProtocol::Core::Types::BinaryInputContent",
+      "passed": true,
+      "evidence": "Lines 6-13: TextInputContent.new and BinaryInputContent.new"
+    },
+    {
+      "text": "Initializes UserMessage with content as an array of TextInputContent and BinaryInputContent",
+      "passed": true,
+      "evidence": "Line 17: content: [text_content, binary_content]"
+    },
+    {
+      "text": "Uses AgUiProtocol::Core::Types::RunAgentInput with thread_id, run_id, state, messages, tools, context, forwarded_props",
+      "passed": true,
+      "evidence": "Lines 37-45: RunAgentInput.new with all required fields"
+    }
+  ]
+}

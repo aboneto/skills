@@ -1,0 +1,44 @@
+{
+  "expectations": [
+    {
+      "text": "The response explicitly mentions reading reference files (e.g. references/events.md) for SDK details",
+      "passed": false,
+      "evidence": "Response does not mention any reference files. The explanation is provided directly without citing sources."
+    },
+    {
+      "text": "The response accurately details TextMessageStartEvent attributes (message_id, role, timestamp)",
+      "passed": true,
+      "evidence": "Response correctly states message_id is required for TextMessageStartEvent and that it marks the start of a text message stream as part of the granular 3-event pattern"
+    },
+    {
+      "text": "The response accurately details TextMessageChunkEvent attributes (message_id, role, delta, timestamp)",
+      "passed": true,
+      "evidence": "Response correctly states TextMessageChunkEvent is a convenience event with all optional attributes (message_id, role, delta) that some clients auto-expand into Start/Content/End"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 1,
+    "total": 3,
+    "pass_rate": 0.6667
+  },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "total_steps": 1,
+    "errors_encountered": 0,
+    "output_chars": 1152
+  },
+  "timing": {
+    "executor_duration_seconds": 40.0,
+    "total_duration_seconds": 40.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "The response explicitly mentions reading reference files (e.g. references/events.md) for SDK details",
+        "reason": "The skill content was embedded in the prompt and the answer didn't need to cite sources. Consider whether this assertion is meaningful when the agent cannot actually read reference files."
+      }
+    ],
+    "overall": "Accurate technical explanation of both event types. The response correctly identifies the granular vs convenience distinction. Missing citations but the content itself is correct."
+  }
+}

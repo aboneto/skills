@@ -1,0 +1,56 @@
+{
+  "expectations": [
+    {
+      "text": "The controller sets Content-Type, Cache-Control, and X-Accel-Buffering headers",
+      "passed": true,
+      "evidence": "Found response.headers for Cache-Control and X-Accel-Buffering in stream_live (lines 78-79) and with_stream helper (lines 144-145)."
+    },
+    {
+      "text": "One action implements the with_stream pattern using response.headers['rack.hijack'] and proc",
+      "passed": true,
+      "evidence": "Found response.headers['rack.hijack'] assigned to a proc on line 147."
+    },
+    {
+      "text": "One action includes ActionController::Live and writes to response.stream",
+      "passed": true,
+      "evidence": "Found include ActionController::Live on line 6 and stream.write (lines 88, 97, 101, 108, 113) writing to response.stream (assigned to stream on line 84)."
+    },
+    {
+      "text": "Both endpoints handle IOError for client disconnect",
+      "passed": true,
+      "evidence": "Found rescue IOError in stream_hijack/with_stream block (line 55/line 151) and stream_live block (line 121)."
+    },
+    {
+      "text": "Both endpoints close the stream in ensure blocks",
+      "passed": true,
+      "evidence": "Found stream.close in ensure blocks (line 69 and line 135)."
+    },
+    {
+      "text": "The controller uses AgUiProtocol::Encoder::EventEncoder to encode events before writing to the streams",
+      "passed": true,
+      "evidence": "Found AgUiProtocol::Encoder::EventEncoder.new instantiated on lines 10 and 81, and encoder.encode(event) used on lines 17, 27, 32, 40, 46, 59, 88, 97, 101, 108, 113, 126."
+    },
+    {
+      "text": "The endpoints stream specific AG-UI events such as RunStartedEvent and RunFinishedEvent",
+      "passed": true,
+      "evidence": "Found RunStartedEvent.new streamed on lines 18 and 89, and RunFinishedEvent.new streamed on lines 47 and 114."
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "total": 7,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_steps": 5,
+    "errors_encountered": 0,
+    "output_chars": 5194,
+    "transcript_chars": 63187
+  },
+  "timing": {
+    "executor_duration_seconds": 39.0,
+    "grader_duration_seconds": 2.0,
+    "total_duration_seconds": 41.0
+  }
+}

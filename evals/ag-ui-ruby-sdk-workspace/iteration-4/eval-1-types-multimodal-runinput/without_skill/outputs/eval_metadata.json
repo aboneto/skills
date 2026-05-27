@@ -1,0 +1,1 @@
+{"eval_id": 1, "eval_name": "types-multimodal-runinput", "prompt": "Write a Ruby script that creates a multimodal UserMessage with TextInputContent and BinaryInputContent, and constructs a complete RunAgentInput object.", "assertions": []}

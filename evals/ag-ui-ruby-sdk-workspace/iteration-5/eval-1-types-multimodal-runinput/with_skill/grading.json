@@ -1,0 +1,33 @@
+{
+  "expectations": [
+    {
+      "text": "The code uses AgUiProtocol::Core::Types::UserMessage",
+      "passed": true,
+      "evidence": "Found UserMessage in code"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Types::TextInputContent and AgUiProtocol::Core::Types::BinaryInputContent",
+      "passed": true,
+      "evidence": "TextInputContent=True, BinaryInputContent=True"
+    },
+    {
+      "text": "The code initializes UserMessage with content as an array of TextInputContent and BinaryInputContent",
+      "passed": true,
+      "evidence": "Found array content initialization"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Types::RunAgentInput with thread_id, run_id, state, messages, tools, context, forwarded_props",
+      "passed": true,
+      "evidence": "RunAgentInput=True, thread_id=True, run_id=True, state=True, messages=True, tools=True, context=True, forwarded_props=True"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "executor_duration_seconds": 4.5
+  }
+}

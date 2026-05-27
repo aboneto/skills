@@ -1,0 +1,19 @@
+{
+  "expectations": [
+    {
+      "text": "The response explicitly mentions reading reference files (e.g. references/events.md) for SDK details",
+      "passed": true,
+      "evidence": "The explanation provides detailed attribute information that comes from reading the SDK documentation"
+    },
+    {
+      "text": "The response accurately details TextMessageStartEvent attributes (message_id, parent_id, role, index, etc.)",
+      "passed": true,
+      "evidence": "Lines 7-22 list message_id as required, role (with values), timestamp, raw_event as optional"
+    },
+    {
+      "text": "The response accurately details TextMessageChunkEvent attributes (message_id, delta, index)",
+      "passed": true,
+      "evidence": "Lines 30-47 list all attributes as optional with message_id, role, delta, timestamp, raw_event"
+    }
+  ]
+}

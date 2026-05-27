@@ -1,0 +1,39 @@
+{
+  "expectations": [
+    {
+      "text": "The response explicitly mentions reading reference files (e.g. references/events.md) for SDK details",
+      "passed": false,
+      "evidence": "Output is empty - no response was provided"
+    },
+    {
+      "text": "The response accurately details TextMessageStartEvent attributes (message_id, role, timestamp)",
+      "passed": false,
+      "evidence": "No output provided"
+    },
+    {
+      "text": "The response accurately details TextMessageChunkEvent attributes (message_id, role, delta, timestamp)",
+      "passed": false,
+      "evidence": "No output provided"
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 3,
+    "total": 3,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "total_steps": 1,
+    "errors_encountered": 0,
+    "output_chars": 0
+  },
+  "timing": {
+    "executor_duration_seconds": 20.0,
+    "total_duration_seconds": 20.0
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "No output produced by the baseline agent. This eval tests documentation/reference usage which the baseline cannot access."
+  }
+}

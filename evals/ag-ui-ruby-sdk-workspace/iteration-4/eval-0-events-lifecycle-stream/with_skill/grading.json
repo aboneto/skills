@@ -1,0 +1,24 @@
+{
+  "expectations": [
+    {
+      "text": "Uses AgUiProtocol::Core::Events::RunStartedEvent",
+      "passed": true,
+      "evidence": "Line 13: AgUiProtocol::Core::Events::RunStartedEvent.new(thread_id: thread_id, run_id: run_id)"
+    },
+    {
+      "text": "Uses AgUiProtocol::Core::Events::TextMessageStartEvent, TextMessageContentEvent, and TextMessageEndEvent with matching message_id",
+      "passed": true,
+      "evidence": "Lines 18-31 use all three events with the same message_id variable"
+    },
+    {
+      "text": "Uses AgUiProtocol::Core::Events::RunFinishedEvent at the end",
+      "passed": true,
+      "evidence": "Line 33: RunFinishedEvent.new(thread_id: thread_id, run_id: run_id)"
+    },
+    {
+      "text": "Uses AgUiProtocol::Encoder::EventEncoder to encode events and writes them to a stream",
+      "passed": true,
+      "evidence": "Line 9: encoder = AgUiProtocol::Encoder::EventEncoder.new; line 13: stream.write(encoder.encode(...))"
+    }
+  ]
+}
