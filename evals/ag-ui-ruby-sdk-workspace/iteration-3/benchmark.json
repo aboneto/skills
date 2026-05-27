@@ -1,0 +1,390 @@
+{
+  "metadata": {
+    "skill_name": "ag-ui-ruby-sdk",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-05-27T19:38:16Z",
+    "evals_run": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The code uses AgUiProtocol::Core::Events::RunStartedEvent",
+          "passed": true,
+          "evidence": "Line 20: AgUiProtocol::Core::Events::RunStartedEvent.new(thread_id: @thread_id, run_id: @run_id)"
+        },
+        {
+          "text": "The code uses AgUiProtocol::Core::Events::TextMessageStartEvent, TextMessageContentEvent, and TextMessageEndEvent with matching message_id",
+          "passed": true,
+          "evidence": "Lines 27-38: All three events use the same message_id (defined on line 25 as SecureRandom.uuid)"
+        },
+        {
+          "text": "The code uses AgUiProtocol::Core::Events::RunFinishedEvent at the end",
+          "passed": true,
+          "evidence": "Line 40: AgUiProtocol::Core::Events::RunFinishedEvent.new(thread_id: @thread_id, run_id: @run_id)"
+        },
+        {
+          "text": "The code uses AgUiProtocol::Encoder::EventEncoder to encode events and writes them to a stream",
+          "passed": true,
+          "evidence": "Line 8: @encoder = AgUiProtocol::Encoder::EventEncoder.new; Line 15: @stream.write(@encoder.encode(event))"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The code uses AgUiProtocol::Core::Types::UserMessage",
+          "passed": true,
+          "evidence": "Line 8: AgUiProtocol::Core::Types::UserMessage.new"
+        },
+        {
+          "text": "The code uses AgUiProtocol::Core::Types::TextInputContent and AgUiProtocol::Core::Types::BinaryInputContent",
+          "passed": true,
+          "evidence": "Line 11: TextInputContent.new and Line 14: BinaryInputContent.new"
+        },
+        {
+          "text": "The code initializes UserMessage with content as an array of TextInputContent and BinaryInputContent",
+          "passed": true,
+          "evidence": "Lines 10-19: content array containing TextInputContent (text) and BinaryInputContent (mime_type, url, filename)"
+        },
+        {
+          "text": "The code uses AgUiProtocol::Core::Types::RunAgentInput with thread_id, run_id, state, messages, tools, context, forwarded_props",
+          "passed": true,
+          "evidence": "Line 85: RunAgentInput.new with all 7 parameters: thread_id (86), run_id (87), state (88-92), messages (93), tools (94), context (95), forwarded_props (96-99)"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.857,
+        "passed": 6,
+        "failed": 1,
+        "total": 7,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The controller sets Content-Type, Cache-Control, and X-Accel-Buffering headers",
+          "passed": true,
+          "evidence": "with_stream method sets headers at lines 125-127, live_action sets at lines 65-67"
+        },
+        {
+          "text": "One action implements the with_stream pattern using response.headers['rack.hijack'] and proc",
+          "passed": true,
+          "evidence": "with_stream method (line 129) uses response.headers['rack.hijack'] = proc do |stream|"
+        },
+        {
+          "text": "One action includes ActionController::Live and writes to response.stream",
+          "passed": false,
+          "evidence": "Controller only includes ActionController::API (line 4), not ActionController::Live. live_action references undefined 'stream' variable - never gets stream from response.stream"
+        },
+        {
+          "text": "Both endpoints handle IOError for client disconnect",
+          "passed": true,
+          "evidence": "with_stream handles IOError at line 133, live_action at line 112"
+        },
+        {
+          "text": "Both endpoints close the stream in ensure blocks",
+          "passed": true,
+          "evidence": "with_stream ensure block at line 139, live_action ensure block at line 116"
+        },
+        {
+          "text": "The controller uses AgUiProtocol::Encoder::EventEncoder to encode events before writing to the streams",
+          "passed": true,
+          "evidence": "EventEncoder instantiated in with_stream_action (line 6) and live_action (line 69), used to encode all events"
+        },
+        {
+          "text": "The endpoints stream specific AG-UI events such as RunStartedEvent and RunFinishedEvent",
+          "passed": true,
+          "evidence": "with_stream_action streams RunStartedEvent (line 12-16), TextMessageStart/Content/EndEvent, RunFinishedEvent (line 40-46). live_action streams same events at lines 75-79, 83-101, 103-109"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The response explicitly mentions reading reference files (e.g. references/events.md) for SDK details",
+          "passed": true,
+          "evidence": "Line 3: 'Based on the AG-UI Ruby SDK reference documentation (`references/events.md`).' Line 84: 'This explanation is based on `skills/ag-ui-ruby-sdk/references/events.md`'"
+        },
+        {
+          "text": "The response accurately details TextMessageStartEvent attributes (message_id, parent_id, role, index, etc.)",
+          "passed": true,
+          "evidence": "Lines 18-25 detail required attributes: message_id (yes), role (no, defaults to 'assistant'). Optional: timestamp, raw_event. Accurately reflects documentation without hallucinating parent_id or index."
+        },
+        {
+          "text": "The response accurately details TextMessageChunkEvent attributes (message_id, delta, index)",
+          "passed": true,
+          "evidence": "Lines 43-51 detail attributes: message_id (no, required on first chunk), role (no), delta (no - text chunk), timestamp, raw_event. Accurately describes message_id and delta."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The code uses AgUiProtocol::Core::Events::RunStartedEvent",
+          "passed": true,
+          "evidence": "Line 19: Protocol::Events::RunStartedEvent.new(run_id: @run_id)"
+        },
+        {
+          "text": "The code uses AgUiProtocol::Core::Events::TextMessageStartEvent, TextMessageContentEvent, and TextMessageEndEvent with matching message_id",
+          "passed": true,
+          "evidence": "Lines 23-38: All three events used with @message_id across all calls"
+        },
+        {
+          "text": "The code uses AgUiProtocol::Core::Events::RunFinishedEvent at the end",
+          "passed": true,
+          "evidence": "Line 42: Protocol::Events::RunFinishedEvent.new(run_id: @run_id)"
+        },
+        {
+          "text": "The code uses AgUiProtocol::Encoder::EventEncoder to encode events and writes them to a stream",
+          "passed": false,
+          "evidence": "No usage of EventEncoder found. Instead uses puts event.to_json (line 15) which just prints to stdout"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.25,
+        "passed": 1,
+        "failed": 3,
+        "total": 4,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The code uses AgUiProtocol::Core::Types::UserMessage",
+          "passed": false,
+          "evidence": "Line 21 uses AgUiProtocol::UserMessage instead of AgUiProtocol::Core::Types::UserMessage"
+        },
+        {
+          "text": "The code uses AgUiProtocol::Core::Types::TextInputContent and AgUiProtocol::Core::Types::BinaryInputContent",
+          "passed": false,
+          "evidence": "Lines 5 and 9 use AgUiProtocol::TextInputContent and AgUiProtocol::BinaryInputContent instead of AgUiProtocol::Core::Types::TextInputContent and AgUiProtocol::Core::Types::BinaryInputContent"
+        },
+        {
+          "text": "The code initializes UserMessage with content as an array of TextInputContent and BinaryInputContent",
+          "passed": true,
+          "evidence": "Lines 21-23: UserMessage initialized with content: [text_content, image_content, doc_content] where text_content is TextInputContent and image_content, doc_content are BinaryInputContent"
+        },
+        {
+          "text": "The code uses AgUiProtocol::Core::Types::RunAgentInput with thread_id, run_id, state, messages, tools, context, forwarded_props",
+          "passed": false,
+          "evidence": "Line 42 uses AgUiProtocol::RunAgentInput with message:, agent_context:, stream_options: - missing all required fields (thread_id, run_id, state, messages, tools, context, forwarded_props) and wrong namespace"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.286,
+        "passed": 2,
+        "failed": 5,
+        "total": 7,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The controller sets Content-Type, Cache-Control, and X-Accel-Buffering headers",
+          "passed": true,
+          "evidence": "Both stream_hijack (lines 3-5) and stream_live (lines 30-32) set all three headers"
+        },
+        {
+          "text": "One action implements the with_stream pattern using response.headers['rack.hijack'] and proc",
+          "passed": false,
+          "evidence": "Uses custom ResponseStream class instead of rack.hijack pattern. The with_stream helper is called but not defined in the code using the required rack.hijack approach"
+        },
+        {
+          "text": "One action includes ActionController::Live and writes to response.stream",
+          "passed": false,
+          "evidence": "stream_live writes to response.stream via ResponseStream.emit but does not include ActionController::Live"
+        },
+        {
+          "text": "Both endpoints handle IOError for client disconnect",
+          "passed": true,
+          "evidence": "stream_hijack has 'rescue IOError' (line 24), stream_live has 'rescue IOError, ActionController::Live::ClientDisconnected' (line 41)"
+        },
+        {
+          "text": "Both endpoints close the stream in ensure blocks",
+          "passed": false,
+          "evidence": "stream_hijack has no ensure block with stream.close; stream_live has proper ensure block (lines 45-46) but stream_hijack does not"
+        },
+        {
+          "text": "The controller uses AgUiProtocol::Encoder::EventEncoder to encode events before writing to the streams",
+          "passed": false,
+          "evidence": "Uses custom ResponseStream.emit method that manually formats SSE (event: type\\ndata: json\\n\\n), not EventEncoder"
+        },
+        {
+          "text": "The endpoints stream specific AG-UI events such as RunStartedEvent and RunFinishedEvent",
+          "passed": false,
+          "evidence": "Streams generic events: 'connection', 'message', 'ack', 'error', 'function_call_result' - no RunStartedEvent or RunFinishedEvent"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 3,
+        "total": 3,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "The response explicitly mentions reading reference files (e.g. references/events.md) for SDK details",
+          "passed": false,
+          "evidence": "No mention of reading reference files like references/events.md. The response provides general knowledge without citing the actual SDK reference documentation."
+        },
+        {
+          "text": "The response accurately details TextMessageStartEvent attributes (message_id, parent_id, role, index, etc.)",
+          "passed": false,
+          "evidence": "Listed attributes are: message_id, role, content_type. Missing: parent_id, index. The content_type attribute was listed but wasn't in the expected list."
+        },
+        {
+          "text": "The response accurately details TextMessageChunkEvent attributes (message_id, delta, index)",
+          "passed": false,
+          "evidence": "Listed attributes are: message_id, index, content, is_complete. Missing: delta. Has 'content' instead of 'delta' as expected."
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.9643,
+        "stddev": 0.0715,
+        "min": 0.857,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "tokens": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.3215,
+        "stddev": 0.3127,
+        "min": 0.0,
+        "max": 0.75
+      },
+      "time_seconds": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "tokens": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.64",
+      "time_seconds": "+0.0",
+      "tokens": "+0"
+    }
+  },
+  "notes": []
+}

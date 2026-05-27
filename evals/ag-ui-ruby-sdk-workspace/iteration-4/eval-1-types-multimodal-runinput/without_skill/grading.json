@@ -1,0 +1,24 @@
+{
+  "expectations": [
+    {
+      "text": "Uses AgUiProtocol::Core::Types::UserMessage",
+      "passed": false,
+      "evidence": "The script creates its own mock AgUiSdk::UserMessage class, not the actual SDK type"
+    },
+    {
+      "text": "Uses AgUiProtocol::Core::Types::TextInputContent and AgUiProtocol::Core::Types::BinaryInputContent",
+      "passed": false,
+      "evidence": "Uses custom mock classes AgUiSdk::TextInputContent and AgUiSdk::BinaryInputContent"
+    },
+    {
+      "text": "Initializes UserMessage with content as an array of TextInputContent and BinaryInputContent",
+      "passed": true,
+      "evidence": "Line 86-88: UserMessage.new(content: [text_content, binary_content])"
+    },
+    {
+      "text": "Uses AgUiProtocol::Core::Types::RunAgentInput with thread_id, run_id, state, messages, tools, context, forwarded_props",
+      "passed": false,
+      "evidence": "Uses custom AgUiSdk::RunAgentInput with different fields (agent_id, session_id, streaming), not the SDK type"
+    }
+  ]
+}

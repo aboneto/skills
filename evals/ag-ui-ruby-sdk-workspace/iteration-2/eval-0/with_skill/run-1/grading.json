@@ -1,0 +1,44 @@
+{
+  "expectations": [
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::RunStartedEvent",
+      "passed": true,
+      "evidence": "Output line: 'AgUiProtocol::Core::Events::RunStartedEvent.new(thread_id: thread_id, run_id: run_id)'"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::TextMessageStartEvent, TextMessageContentEvent, and TextMessageEndEvent with matching message_id",
+      "passed": true,
+      "evidence": "All three events used with same message_id variable: TextMessageStartEvent, TextMessageContentEvent(delta: 'Hello, World!'), TextMessageEndEvent"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::RunFinishedEvent at the end",
+      "passed": true,
+      "evidence": "Output line: 'AgUiProtocol::Core::Events::RunFinishedEvent.new(thread_id: thread_id, run_id: run_id, result: {})' appears after all message events"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Encoder::EventEncoder to encode events and writes them to a stream",
+      "passed": true,
+      "evidence": "Output uses 'AgUiProtocol::Encoder::EventEncoder.new', 'encoder.encode(...)', and 'stream.flush if stream.respond_to?(:flush)' after each write"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "total_steps": 1,
+    "errors_encountered": 0,
+    "output_chars": 889
+  },
+  "timing": {
+    "executor_duration_seconds": 45.0,
+    "total_duration_seconds": 45.0
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Correct implementation following the skill's guidance. Uses proper event order, encoder, and flush pattern."
+  }
+}

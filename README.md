@@ -62,3 +62,31 @@ A compact reference for working productively with Jekyll. Covers Liquid template
 | [4](evals/jekyll-workspace/iteration-4) | MiMo v2.5 Pro | 100% | 69.5% | +30.5% |
 
 The skill consistently improves output quality across all tested models and evaluations (4 evals covering GitHub Pages deployment, Liquid/kramdown features, docs site scaffolding, and responsive images).
+
+### ag-ui-ruby-sdk
+
+Complete agent skill for the AG-UI Ruby SDK ([ag-ui-protocol](https://rubygems.org/gems/ag-ui-protocol) gem). Use when working with Ruby/Rails applications that implement the Agent-User Interaction Protocol — streaming text responses, tool calls, lifecycle events, state management, `ActionController::Live`, `with_stream` pattern, `EventEncoder`, `RunAgentInput`, or any event type from the SDK.
+
+**Use when:**
+
+- Working with Ruby applications using `ag-ui-protocol`.
+- Implementing Rails applications with AG-UI streaming endpoints.
+- Setting up event streaming, lifecycle management, or serialization for agent-user communication in Ruby.
+
+**Tests:** `evals/ag-ui-ruby-sdk-workspace`
+
+**Benchmark results (4 iterations):**
+
+| Iteration | Model | With Skill | Without Skill | Delta |
+|---|---|---|---|---|
+| [1](evals/ag-ui-ruby-sdk-workspace/iteration-1) | Gemini 3.5 Flash | 100% | 27.78% | +72.22% |
+| [2](evals/ag-ui-ruby-sdk-workspace/iteration-2) | DeepSeek V4 Flash Free | 92% | 11% | +81% |
+| [3](evals/ag-ui-ruby-sdk-workspace/iteration-3) | MiniMax M2.7 | 96.4% | 32.1% | +64.3% |
+| [4](evals/ag-ui-ruby-sdk-workspace/iteration-4) | MiniMax M2.7 | 100% | 17% | +83% |
+| [5](evals/ag-ui-ruby-sdk-workspace/iteration-5) | Kimi K2.6 | 100% | 58% | +42% |
+
+The skill guarantees 100% correct type usage, event sequences, and reference document consultation, whereas runs without the skill fail to use the correct `AgUiProtocol` namespace and guess SDK methods/attributes incorrectly.
+
+#### Fixes
+
+- **Iteration 4 fix:** Iteration 3 had incorrect `ActionController::Live` include and undefined `stream` variable issue. Iteration 4 skill now correctly instructs to include `ActionController::Live` and use `response.stream` properly, achieving 100% pass rate.

@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "The code uses AgUiProtocol::Core::Types::UserMessage",
+      "passed": false,
+      "evidence": "The script defines and instantiates a local UserMessage class instead of AgUiProtocol::Core::Types::UserMessage."
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Types::TextInputContent and AgUiProtocol::Core::Types::BinaryInputContent",
+      "passed": false,
+      "evidence": "The script defines and instantiates local TextInputContent and BinaryInputContent classes instead of those from the gem."
+    },
+    {
+      "text": "The code initializes UserMessage with content as an array of TextInputContent and BinaryInputContent",
+      "passed": false,
+      "evidence": "Although UserMessage initializes content as an array containing these components, it does so using local mock classes instead of gem types."
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Types::RunAgentInput with thread_id, run_id, state, messages, tools, context, forwarded_props",
+      "passed": false,
+      "evidence": "The script defines and instantiates a custom local RunAgentInput class with custom parameters (user_message, agent_id, session_id, parameters) instead of the gem class properties."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 4,
+    "total": 4,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "total_steps": 2,
+    "errors_encountered": 0,
+    "output_chars": 1500,
+    "transcript_chars": 1200
+  },
+  "timing": {
+    "executor_duration_seconds": 7.0,
+    "grader_duration_seconds": 2.0,
+    "total_duration_seconds": 9.0
+  }
+}

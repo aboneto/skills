@@ -1,0 +1,10 @@
+{
+  "eval_id": 3,
+  "eval_name": "references-docs-usage",
+  "prompt": "Based on the AG-UI Ruby SDK documentation, explain the difference between TextMessageStartEvent and TextMessageChunkEvent, listing the attributes required by each.",
+  "assertions": [
+    "The response explicitly mentions reading reference files (e.g. references/events.md) for SDK details",
+    "The response accurately details TextMessageStartEvent attributes (message_id, role, timestamp)",
+    "The response accurately details TextMessageChunkEvent attributes (message_id, role, delta, timestamp)"
+  ]
+}

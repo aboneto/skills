@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "The controller sets Content-Type, Cache-Control, and X-Accel-Buffering headers",
+      "passed": true,
+      "evidence": "with_stream method sets headers at lines 125-127, live_action sets at lines 65-67"
+    },
+    {
+      "text": "One action implements the with_stream pattern using response.headers['rack.hijack'] and proc",
+      "passed": true,
+      "evidence": "with_stream method (line 129) uses response.headers['rack.hijack'] = proc do |stream|"
+    },
+    {
+      "text": "One action includes ActionController::Live and writes to response.stream",
+      "passed": false,
+      "evidence": "Controller only includes ActionController::API (line 4), not ActionController::Live. live_action references undefined 'stream' variable - never gets stream from response.stream"
+    },
+    {
+      "text": "Both endpoints handle IOError for client disconnect",
+      "passed": true,
+      "evidence": "with_stream handles IOError at line 133, live_action at line 112"
+    },
+    {
+      "text": "Both endpoints close the stream in ensure blocks",
+      "passed": true,
+      "evidence": "with_stream ensure block at line 139, live_action ensure block at line 116"
+    },
+    {
+      "text": "The controller uses AgUiProtocol::Encoder::EventEncoder to encode events before writing to the streams",
+      "passed": true,
+      "evidence": "EventEncoder instantiated in with_stream_action (line 6) and live_action (line 69), used to encode all events"
+    },
+    {
+      "text": "The endpoints stream specific AG-UI events such as RunStartedEvent and RunFinishedEvent",
+      "passed": true,
+      "evidence": "with_stream_action streams RunStartedEvent (line 12-16), TextMessageStart/Content/EndEvent, RunFinishedEvent (line 40-46). live_action streams same events at lines 75-79, 83-101, 103-109"
+    }
+  ],
+  "summary": {"passed": 6, "failed": 1, "total": 7, "pass_rate": 0.857}
+}

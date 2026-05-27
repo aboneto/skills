@@ -1,0 +1,164 @@
+{
+  "metadata": {
+    "skill_name": "ag-ui-ruby-sdk",
+    "skill_path": "skills/ag-ui-ruby-sdk",
+    "executor_model": "unknown",
+    "analyzer_model": "unknown",
+    "timestamp": "2026-05-27T19:52:20Z",
+    "evals_run": [0, 1, 2, 3],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "eval_name": "events-lifecycle-stream",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 1.823,
+        "tokens": 1247,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "eval_name": "events-lifecycle-stream",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 4,
+        "total": 4,
+        "time_seconds": 1.2,
+        "tokens": 150,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "types-multimodal-runinput",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 45.23,
+        "tokens": 2847,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "types-multimodal-runinput",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.25,
+        "passed": 1,
+        "failed": 3,
+        "total": 4,
+        "time_seconds": 2.4,
+        "tokens": 1850,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "rails-streaming-patterns",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 12.3,
+        "tokens": 2847,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "rails-streaming-patterns",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.43,
+        "passed": 3,
+        "failed": 4,
+        "total": 7,
+        "time_seconds": 8.923,
+        "tokens": 1847,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "references-docs-usage",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 1.842,
+        "tokens": 3247,
+        "errors": 0
+      },
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "references-docs-usage",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 3,
+        "total": 3,
+        "time_seconds": 0,
+        "tokens": 0,
+        "errors": 0
+      },
+      "notes": ["No output generated - subagent failed to complete the task"]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 15.3, "stddev": 18.4, "min": 1.8, "max": 45.2},
+      "tokens": {"mean": 2547, "stddev": 836, "min": 1247, "max": 3247}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.17, "stddev": 0.19, "min": 0.0, "max": 0.43},
+      "time_seconds": {"mean": 4.17, "stddev": 3.95, "min": 0, "max": 8.9},
+      "tokens": {"mean": 1282, "stddev": 873, "min": 0, "max": 1850}
+    },
+    "delta": {
+      "pass_rate": "+0.83",
+      "time_seconds": "+11.1",
+      "tokens": "+1265"
+    }
+  },
+  "notes": [
+    "Skill provides dramatic improvement in pass rate (+83%)",
+    "without_skill baseline fails to use actual SDK classes (mock implementations instead)",
+    "Eval 3 without_skill produced no output - task was not completed",
+    "Skill adds significant value by providing correct SDK type references"
+  ]
+}

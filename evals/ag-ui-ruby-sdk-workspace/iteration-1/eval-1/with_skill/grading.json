@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "The code uses AgUiProtocol::Core::Types::UserMessage",
+      "passed": true,
+      "evidence": "Found AgUiProtocol::Core::Types::UserMessage.new on line 42."
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Types::TextInputContent and AgUiProtocol::Core::Types::BinaryInputContent",
+      "passed": true,
+      "evidence": "Found AgUiProtocol::Core::Types::TextInputContent.new (line 32) and AgUiProtocol::Core::Types::BinaryInputContent.new (line 37)."
+    },
+    {
+      "text": "The code initializes UserMessage with content as an array of TextInputContent and BinaryInputContent",
+      "passed": true,
+      "evidence": "Found user_message initialized with content: [text_content, binary_content] on lines 42-45."
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Types::RunAgentInput with thread_id, run_id, state, messages, tools, context, forwarded_props",
+      "passed": true,
+      "evidence": "Found AgUiProtocol::Core::Types::RunAgentInput.new with all required parameters on lines 75-84."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_steps": 3,
+    "errors_encountered": 0,
+    "output_chars": 2840,
+    "transcript_chars": 2000
+  },
+  "timing": {
+    "executor_duration_seconds": 11.0,
+    "grader_duration_seconds": 1.5,
+    "total_duration_seconds": 12.5
+  }
+}

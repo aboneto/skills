@@ -1,0 +1,1 @@
+{"eval_id": 3, "eval_name": "references-docs-usage", "prompt": "Based on the AG-UI Ruby SDK documentation, explain the difference between TextMessageStartEvent and TextMessageChunkEvent, listing the attributes required by each.", "assertions": []}

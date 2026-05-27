@@ -1,0 +1,1 @@
+{"eval_id": 0, "eval_name": "events-lifecycle-stream", "prompt": "Write a Ruby script using the AG-UI SDK that starts a run, streams a text message containing 'Hello, World!', and then finishes the run successfully.", "assertions": []}

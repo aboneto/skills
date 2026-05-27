@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "The code uses AgUiProtocol::Core::Types::UserMessage",
+      "passed": false,
+      "evidence": "Line 21 uses AgUiProtocol::UserMessage instead of AgUiProtocol::Core::Types::UserMessage"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Types::TextInputContent and AgUiProtocol::Core::Types::BinaryInputContent",
+      "passed": false,
+      "evidence": "Lines 5 and 9 use AgUiProtocol::TextInputContent and AgUiProtocol::BinaryInputContent instead of AgUiProtocol::Core::Types::TextInputContent and AgUiProtocol::Core::Types::BinaryInputContent"
+    },
+    {
+      "text": "The code initializes UserMessage with content as an array of TextInputContent and BinaryInputContent",
+      "passed": true,
+      "evidence": "Lines 21-23: UserMessage initialized with content: [text_content, image_content, doc_content] where text_content is TextInputContent and image_content, doc_content are BinaryInputContent"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Types::RunAgentInput with thread_id, run_id, state, messages, tools, context, forwarded_props",
+      "passed": false,
+      "evidence": "Line 42 uses AgUiProtocol::RunAgentInput with message:, agent_context:, stream_options: - missing all required fields (thread_id, run_id, state, messages, tools, context, forwarded_props) and wrong namespace"
+    }
+  ],
+  "summary": {"passed": 1, "failed": 3, "total": 4, "pass_rate": 0.25}
+}

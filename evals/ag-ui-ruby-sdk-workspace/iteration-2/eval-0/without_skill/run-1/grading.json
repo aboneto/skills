@@ -1,0 +1,44 @@
+{
+  "expectations": [
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::RunStartedEvent",
+      "passed": false,
+      "evidence": "Output uses 'Ag::UI.start' DSL instead of the actual AG-UI SDK. RunStartedEvent is not referenced."
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::TextMessageStartEvent, TextMessageContentEvent, and TextMessageEndEvent with matching message_id",
+      "passed": false,
+      "evidence": "Output uses 'run.stream_text' helper method. No TextMessageStartEvent, ContentEvent, or EndEvent found."
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::RunFinishedEvent at the end",
+      "passed": false,
+      "evidence": "No RunFinishedEvent in the output. The 'Ag::UI.start' block handles run lifecycle internally."
+    },
+    {
+      "text": "The code uses AgUiProtocol::Encoder::EventEncoder to encode events and writes them to a stream",
+      "passed": false,
+      "evidence": "No EventEncoder usage. No stream.write or stream.flush pattern found."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 4,
+    "total": 4,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "total_tool_calls": 0,
+    "total_steps": 1,
+    "errors_encountered": 0,
+    "output_chars": 72
+  },
+  "timing": {
+    "executor_duration_seconds": 30.0,
+    "total_duration_seconds": 30.0
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "Without skill, the agent invented a fictional 'Ag::UI' API instead of using the real ag-ui-protocol gem. The solution is non-functional."
+  }
+}

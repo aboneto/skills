@@ -1,0 +1,20 @@
+{
+  "expectations": [
+    {
+      "text": "The response explicitly mentions reading reference files (e.g. references/events.md) for SDK details",
+      "passed": false,
+      "evidence": "No mention of reading reference files like references/events.md. The response provides general knowledge without citing the actual SDK reference documentation."
+    },
+    {
+      "text": "The response accurately details TextMessageStartEvent attributes (message_id, parent_id, role, index, etc.)",
+      "passed": false,
+      "evidence": "Listed attributes are: message_id, role, content_type. Missing: parent_id, index. The content_type attribute was listed but wasn't in the expected list."
+    },
+    {
+      "text": "The response accurately details TextMessageChunkEvent attributes (message_id, delta, index)",
+      "passed": false,
+      "evidence": "Listed attributes are: message_id, index, content, is_complete. Missing: delta. Has 'content' instead of 'delta' as expected."
+    }
+  ],
+  "summary": {"passed": 0, "failed": 3, "total": 3, "pass_rate": 0.0}
+}

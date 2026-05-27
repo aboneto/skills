@@ -1,0 +1,36 @@
+{
+  "expectations": [
+    {
+      "text": "The response explicitly mentions reading reference files (e.g. references/events.md) for SDK details",
+      "passed": false,
+      "evidence": "No reference files or paths were mentioned in the generated explanation."
+    },
+    {
+      "text": "The response accurately details TextMessageStartEvent attributes (message_id, parent_id, role, index, etc.)",
+      "passed": false,
+      "evidence": "The explanation incorrectly claimed TextMessageStartEvent requires conversation_id and index."
+    },
+    {
+      "text": "The response accurately details TextMessageChunkEvent attributes (message_id, delta, index)",
+      "passed": false,
+      "evidence": "The explanation incorrectly claimed TextMessageChunkEvent uses the attribute text (it uses delta) and index (not used)."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 3,
+    "total": 3,
+    "pass_rate": 0.0
+  },
+  "execution_metrics": {
+    "total_steps": 2,
+    "errors_encountered": 0,
+    "output_chars": 2000,
+    "transcript_chars": 1200
+  },
+  "timing": {
+    "executor_duration_seconds": 6.0,
+    "grader_duration_seconds": 2.0,
+    "total_duration_seconds": 8.0
+  }
+}

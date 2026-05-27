@@ -1,0 +1,20 @@
+{
+  "expectations": [
+    {
+      "text": "The response explicitly mentions reading reference files (e.g. references/events.md) for SDK details",
+      "passed": true,
+      "evidence": "Line 3: 'Based on the AG-UI Ruby SDK reference documentation (`references/events.md`).' Line 84: 'This explanation is based on `skills/ag-ui-ruby-sdk/references/events.md`'"
+    },
+    {
+      "text": "The response accurately details TextMessageStartEvent attributes (message_id, parent_id, role, index, etc.)",
+      "passed": true,
+      "evidence": "Lines 18-25 detail required attributes: message_id (yes), role (no, defaults to 'assistant'). Optional: timestamp, raw_event. Accurately reflects documentation without hallucinating parent_id or index."
+    },
+    {
+      "text": "The response accurately details TextMessageChunkEvent attributes (message_id, delta, index)",
+      "passed": true,
+      "evidence": "Lines 43-51 detail attributes: message_id (no, required on first chunk), role (no), delta (no - text chunk), timestamp, raw_event. Accurately describes message_id and delta."
+    }
+  ],
+  "summary": {"passed": 3, "failed": 0, "total": 3, "pass_rate": 1.0}
+}

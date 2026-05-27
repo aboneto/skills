@@ -1,0 +1,30 @@
+{
+  "expectations": [
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::RunStartedEvent",
+      "passed": true,
+      "evidence": "Line 19: Protocol::Events::RunStartedEvent.new(run_id: @run_id)"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::TextMessageStartEvent, TextMessageContentEvent, and TextMessageEndEvent with matching message_id",
+      "passed": true,
+      "evidence": "Lines 23-38: All three events used with @message_id across all calls"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::RunFinishedEvent at the end",
+      "passed": true,
+      "evidence": "Line 42: Protocol::Events::RunFinishedEvent.new(run_id: @run_id)"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Encoder::EventEncoder to encode events and writes them to a stream",
+      "passed": false,
+      "evidence": "No usage of EventEncoder found. Instead uses puts event.to_json (line 15) which just prints to stdout"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 1,
+    "total": 4,
+    "pass_rate": 0.75
+  }
+}

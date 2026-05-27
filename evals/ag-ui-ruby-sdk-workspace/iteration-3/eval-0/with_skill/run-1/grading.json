@@ -1,0 +1,30 @@
+{
+  "expectations": [
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::RunStartedEvent",
+      "passed": true,
+      "evidence": "Line 20: AgUiProtocol::Core::Events::RunStartedEvent.new(thread_id: @thread_id, run_id: @run_id)"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::TextMessageStartEvent, TextMessageContentEvent, and TextMessageEndEvent with matching message_id",
+      "passed": true,
+      "evidence": "Lines 27-38: All three events use the same message_id (defined on line 25 as SecureRandom.uuid)"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Core::Events::RunFinishedEvent at the end",
+      "passed": true,
+      "evidence": "Line 40: AgUiProtocol::Core::Events::RunFinishedEvent.new(thread_id: @thread_id, run_id: @run_id)"
+    },
+    {
+      "text": "The code uses AgUiProtocol::Encoder::EventEncoder to encode events and writes them to a stream",
+      "passed": true,
+      "evidence": "Line 8: @encoder = AgUiProtocol::Encoder::EventEncoder.new; Line 15: @stream.write(@encoder.encode(event))"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  }
+}
