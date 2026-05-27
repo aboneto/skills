@@ -75,7 +75,7 @@ Complete agent skill for the AG-UI Ruby SDK ([ag-ui-protocol](https://rubygems.o
 
 **Tests:** `evals/ag-ui-ruby-sdk-workspace`
 
-**Benchmark results (4 iterations):**
+**Benchmark results (6 iterations):**
 
 | Iteration | Model | With Skill | Without Skill | Delta |
 |---|---|---|---|---|
@@ -84,9 +84,11 @@ Complete agent skill for the AG-UI Ruby SDK ([ag-ui-protocol](https://rubygems.o
 | [3](evals/ag-ui-ruby-sdk-workspace/iteration-3) | MiniMax M2.7 | 96.4% | 32.1% | +64.3% |
 | [4](evals/ag-ui-ruby-sdk-workspace/iteration-4) | MiniMax M2.7 | 100% | 17% | +83% |
 | [5](evals/ag-ui-ruby-sdk-workspace/iteration-5) | Kimi K2.6 | 100% | 58% | +42% |
+| [6](evals/ag-ui-ruby-sdk-workspace/iteration-6) | DeepSeek V4 Flash Free | 100% | 15% | +85% |
 
-The skill guarantees 100% correct type usage, event sequences, and reference document consultation, whereas runs without the skill fail to use the correct `AgUiProtocol` namespace and guess SDK methods/attributes incorrectly.
+The skill guarantees correct type usage, event sequences, and reference document consultation, whereas runs without the skill fail to use the correct `AgUiProtocol` namespace and guess SDK methods/attributes incorrectly.
 
-#### Fixes
+#### Updates
 
 - **Iteration 4 fix:** Iteration 3 had incorrect `ActionController::Live` include and undefined `stream` variable issue. Iteration 4 skill now correctly instructs to include `ActionController::Live` and use `response.stream` properly, achieving 100% pass rate.
+- **Iteration 6:** Expanded skill with reference docs (`0.2.0` gem version) and patterns for reasoning events, interrupt/resume types (HITL), agent capabilities declaration, and multimodal content types. Added 5 new evals (reasoning-events-stream, reasoning-message-type, interrupt-resume-types, agent-capabilities-declaration, multimodal-content-types) for a total of 9 evals. Subagents ran in strict isolation: `without_skill` prompts contained zero SDK class names or module paths, and `with_skill` subagents read the skill files themselves to discover the correct API. `with_skill` scored 100% across all 9 evals (45/45 assertions).

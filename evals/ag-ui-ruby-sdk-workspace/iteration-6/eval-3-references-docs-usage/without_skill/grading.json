@@ -1,0 +1,28 @@
+{
+  "expectations": [
+    {
+      "text": "Response mentions reference files for SDK details",
+      "passed": false,
+      "evidence": "Missing reference mention"
+    },
+    {
+      "text": "Details TextMessageStartEvent attributes (message_id, role, etc)",
+      "passed": false,
+      "evidence": "message_id=True role=False"
+    },
+    {
+      "text": "Details TextMessageChunkEvent attributes (message_id, delta)",
+      "passed": false,
+      "evidence": "message_id=True delta=False"
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 3,
+    "total": 3,
+    "pass_rate": 0.0
+  },
+  "timing": {
+    "executor_duration_seconds": 5.0
+  }
+}

@@ -24,7 +24,7 @@ All events implement `to_h` → `as_json` → `to_json` for serialization. camel
 
 ## EventType module
 
-Contains all 27 event type constants:
+Contains all event type constants:
 
 ```ruby
 # Lifecycle
@@ -38,6 +38,9 @@ TOOL_CALL_START, TOOL_CALL_ARGS, TOOL_CALL_END, TOOL_CALL_CHUNK, TOOL_CALL_RESUL
 
 # Thinking
 THINKING_START, THINKING_END, THINKING_TEXT_MESSAGE_START, THINKING_TEXT_MESSAGE_CONTENT, THINKING_TEXT_MESSAGE_END
+
+# Reasoning
+REASONING_START, REASONING_MESSAGE_START, REASONING_MESSAGE_CONTENT, REASONING_MESSAGE_END, REASONING_MESSAGE_CHUNK, REASONING_END, REASONING_ENCRYPTED_VALUE
 
 # State management
 STATE_SNAPSHOT, STATE_DELTA, MESSAGES_SNAPSHOT, ACTIVITY_SNAPSHOT, ACTIVITY_DELTA
@@ -76,15 +79,23 @@ AgUiProtocol::Core::Events::RunStartedEvent.new(
 
 ### RunFinishedEvent
 
-**Must be emitted LAST** on success. Signals run completed.
+**Must be emitted LAST** on success. Signals run completed. Use either `result:` (arbitrary hash) or `outcome:` (typed outcome object), but not both.
 
 ```ruby
+# Success
 AgUiProtocol::Core::Events::RunFinishedEvent.new(
   thread_id: "t1",
   run_id: "r1",
-  result: nil,
-  timestamp: nil,
-  raw_event: nil
+  outcome: AgUiProtocol::Core::Events::RunFinishedSuccessOutcome.new
+)
+
+# With interrupt
+AgUiProtocol::Core::Events::RunFinishedEvent.new(
+  thread_id: "t1",
+  run_id: "r1",
+  outcome: AgUiProtocol::Core::Events::RunFinishedInterruptOutcome.new(
+    interrupts: [AgUiProtocol::Core::Types::Interrupt.new(id: "int_1", reason: "input_required")]
+  )
 )
 ```
 
@@ -92,9 +103,65 @@ AgUiProtocol::Core::Events::RunFinishedEvent.new(
 |---|---|---|---|
 | `thread_id` | `String` | yes | Conversation thread ID |
 | `run_id` | `String` | yes | Unique run ID |
-| `result` | `Object\|nil` | no | Result data from the agent run |
+| `result` | `Object\|nil` | no | Arbitrary result data (mutually exclusive with `outcome`) |
+| `outcome` | `RunFinishedSuccessOutcome\|RunFinishedInterruptOutcome\|nil` | no | Typed outcome (mutually exclusive with `result`) |
 | `timestamp` | `Time\|nil` | no | When created |
 | `raw_event` | `Object\|nil` | no | Original event if transformed |
+
+### RunFinishedSuccessOutcome
+
+Signals a successful run completion. Used as the `outcome:` value in `RunFinishedEvent`.
+
+```ruby
+AgUiProtocol::Core::Events::RunFinishedSuccessOutcome.new
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `type` | `String` | auto | Always `"success"` |
+
+### RunFinishedInterruptOutcome
+
+Signals that the run was interrupted and requires human involvement before resuming. Used as the `outcome:` value in `RunFinishedEvent`.
+
+```ruby
+outcome = AgUiProtocol::Core::Events::RunFinishedInterruptOutcome.new(
+  interrupts: [
+    AgUiProtocol::Core::Types::Interrupt.new(
+      id: "int_1",
+      reason: "input_required",
+      message: "Please provide your API key",
+      tool_call_id: nil,
+      response_schema: { "type" => "object", "properties" => { "api_key" => { "type" => "string" } } },
+      expires_at: 1.hour.from_now.iso8601,
+      metadata: { "step" => "authentication" }
+    )
+  ]
+)
+
+stream.write(encoder.encode(
+  AgUiProtocol::Core::Events::RunFinishedEvent.new(
+    thread_id: thread_id,
+    run_id: run_id,
+    outcome: outcome
+  )
+))
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `type` | `String` | auto | Always `"interrupt"` |
+| `interrupts` | `Array<Interrupt>` | yes | Interrupts requiring resolution |
+
+**To resume:** the client sends a `ResumeEntry` back via `RunAgentInput.forwarded_props`:
+
+```ruby
+resume = AgUiProtocol::Core::Types::ResumeEntry.new(
+  interrupt_id: "int_1",
+  status: "resolved",
+  payload: { "api_key" => "user-provided-key" }
+)
+```
 
 ### RunErrorEvent
 
@@ -247,7 +314,7 @@ AgUiProtocol::Core::Events::TextMessageChunkEvent.new(
 | Property | Type | Required | Description |
 |---|---|---|---|
 | `message_id` | `String\|nil` | no | Required on first chunk for a message |
-| `role` | `String\|nil` | no | Must be one of TEXT_MESSAGE_ROLE_VALUES |
+| `role` | `String\|nil` | no | Must be one of TEXT_MESSAGE_ROLE_VALUES (developer, system, assistant, user, reasoning) |
 | `delta` | `String\|nil` | no | Text chunk |
 | `timestamp` | `Time\|nil` | no | When created |
 | `raw_event` | `Object\|nil` | no | Original event if transformed |
@@ -442,8 +509,152 @@ AgUiProtocol::Core::Events::ThinkingTextMessageEndEvent.new(
 
 | Property | Type | Required | Description |
 |---|---|---|---|
-| `timestamp` | `Time\|nil` | no | When created |
-| `raw_event` | `Object\|nil` | no | Original event if transformed |
+| `timestamp` | `Time|nil` | no | When created |
+| `raw_event` | `Object|nil` | no | Original event if transformed |
+
+---
+
+## Reasoning Events
+
+These events convey structured reasoning blocks emitted by an agent, including streaming reasoning messages and encrypted reasoning values.
+
+### ReasoningStartEvent
+
+```ruby
+AgUiProtocol::Core::Events::ReasoningStartEvent.new(
+  message_id: "reason_1",
+  timestamp: nil,
+  raw_event: nil
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `message_id` | `String` | yes | Unique identifier for the reasoning message |
+| `timestamp` | `Time|nil` | no | When created |
+| `raw_event` | `Object|nil` | no | Original event if transformed |
+
+### ReasoningMessageStartEvent
+
+```ruby
+AgUiProtocol::Core::Events::ReasoningMessageStartEvent.new(
+  message_id: "reason_msg_1",
+  timestamp: nil,
+  raw_event: nil
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `message_id` | `String` | yes | Unique identifier |
+| `role` | `String` | auto | Always `"reasoning"` |
+| `timestamp` | `Time|nil` | no | When created |
+| `raw_event` | `Object|nil` | no | Original event if transformed |
+
+### ReasoningMessageContentEvent
+
+```ruby
+AgUiProtocol::Core::Events::ReasoningMessageContentEvent.new(
+  message_id: "reason_msg_1",
+  delta: "step 1...",
+  timestamp: nil,
+  raw_event: nil
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `message_id` | `String` | yes | Must match the ReasoningMessageStartEvent |
+| `delta` | `String` | yes | Non-empty reasoning content chunk |
+| `timestamp` | `Time|nil` | no | When created |
+| `raw_event` | `Object|nil` | no | Original event if transformed |
+
+**Raises** `ArgumentError` if `delta` is nil or empty.
+
+### ReasoningMessageEndEvent
+
+```ruby
+AgUiProtocol::Core::Events::ReasoningMessageEndEvent.new(
+  message_id: "reason_msg_1",
+  timestamp: nil,
+  raw_event: nil
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `message_id` | `String` | yes | Must match the ReasoningMessageStartEvent |
+| `timestamp` | `Time|nil` | no | When created |
+| `raw_event` | `Object|nil` | no | Original event if transformed |
+
+### ReasoningMessageChunkEvent
+
+**Convenience event** - some clients expand this into Start/Content/End automatically.
+
+```ruby
+AgUiProtocol::Core::Events::ReasoningMessageChunkEvent.new(
+  message_id: "reason_msg_1",
+  delta: "step 1...",
+  timestamp: nil,
+  raw_event: nil
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `message_id` | `String|nil` | no | Required on first chunk |
+| `delta` | `String|nil` | no | Reasoning content chunk |
+| `timestamp` | `Time|nil` | no | When created |
+| `raw_event` | `Object|nil` | no | Original event if transformed |
+
+### ReasoningEndEvent
+
+```ruby
+AgUiProtocol::Core::Events::ReasoningEndEvent.new(
+  message_id: "reason_1",
+  timestamp: nil,
+  raw_event: nil
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `message_id` | `String` | yes | Must match the ReasoningStartEvent |
+| `timestamp` | `Time|nil` | no | When created |
+| `raw_event` | `Object|nil` | no | Original event if transformed |
+
+### ReasoningEncryptedValueEvent
+
+```ruby
+AgUiProtocol::Core::Events::ReasoningEncryptedValueEvent.new(
+  subtype: "tool-call",
+  entity_id: "tc_1",
+  encrypted_value: "encrypted...",
+  timestamp: nil,
+  raw_event: nil
+)
+```
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `subtype` | `String` | yes | Free-form string; protocol values are "tool-call" or "message" |
+| `entity_id` | `String` | yes | ID of the entity being encrypted |
+| `encrypted_value` | `String` | yes | The encrypted value |
+| `timestamp` | `Time|nil` | no | When created |
+| `raw_event` | `Object|nil` | no | Original event if transformed |
+
+**When to use it:** When zero-data-retention (ZDR) mode is enabled, reasoning content must be encrypted before emission. Use this event to wrap an encrypted reasoning value referenced by a tool call or message.
+
+```ruby
+# Encrypt reasoning content (ZDR mode) — agent side
+stream.write(encoder.encode(
+  AgUiProtocol::Core::Events::ReasoningEncryptedValueEvent.new(
+    subtype: "tool-call",
+    entity_id: tool_call_id,
+    encrypted_value: encrypt(reasoning_content)
+  )
+))
+```
 
 ---
 

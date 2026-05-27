@@ -4,7 +4,7 @@ description: "Complete agent skill for the AG-UI Ruby SDK (ag-ui-protocol gem). 
 license: MIT
 metadata:
   author: aboneto
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # ag-ui-ruby-sdk
@@ -17,6 +17,7 @@ Quick reference for using the AG-UI Ruby SDK (`ag-ui-protocol` gem). The body ha
 |---|---|
 | Event types, lifecycle sequences, streaming patterns, chunk events | `references/events.md` |
 | Message types (User, Assistant, Tool...), multimodal content, RunAgentInput, Sorbet validation | `references/types.md` |
+| Agent capabilities, transport, tools, reasoning, multimodal support | `references/capabilities.md` |
 | EventEncoder API, SSE format, content negotiation | `references/encoder.md` |
 | Rails streaming patterns (with_stream or ActionController::Live), headers, error handling, client disconnect | `references/rails.md` |
 
@@ -180,11 +181,12 @@ msg = AgUiProtocol::Core::Types::UserMessage.new(
 AgUiProtocol::Core::Events::EventType::RUN_STARTED
 AgUiProtocol::Core::Events::EventType::TEXT_MESSAGE_START
 AgUiProtocol::Core::Events::EventType::TOOL_CALL_START
+AgUiProtocol::Core::Events::EventType::REASONING_ENCRYPTED_VALUE
 # ... all 27 types in references/events.md
 
 # Roles
 AgUiProtocol::Core::Types::Role
-# => ["developer", "system", "assistant", "user", "tool", "activity"]
+# => ["developer", "system", "assistant", "user", "tool", "activity", "reasoning"]
 ```
 
 ---
@@ -198,6 +200,10 @@ AgUiProtocol::Core::Types::Role
 **State sync:** Use StateSnapshotEvent (full) or StateDeltaEvent (JSON Patch incremental).
 
 **Thinking:** Use ThinkingStart/End for wrapper, ThinkingTextMessageStart/Content/End for text.
+
+**Reasoning:** Use ReasoningStartEvent → ReasoningMessageStart/Content/End → ReasoningEndEvent for streaming. Use ReasoningEncryptedValueEvent when ZDR mode encrypts reasoning content.
+
+**Interrupts:** Use Interrupt + ResumeEntry types with RunFinishedInterruptOutcome via `outcome:` on RunFinishedEvent. See `references/events.md` for the full human-in-the-loop pattern.
 
 See `references/events.md` for all 27 event types with full details.
 

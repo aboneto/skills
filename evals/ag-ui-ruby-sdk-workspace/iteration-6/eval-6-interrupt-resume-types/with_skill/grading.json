@@ -1,0 +1,28 @@
+{
+  "expectations": [
+    {
+      "text": "Uses Interrupt with id, reason, message, etc",
+      "passed": true,
+      "evidence": "Interrupt=True id=True reason=True"
+    },
+    {
+      "text": "Uses ResumeEntry with interrupt_id, status, payload",
+      "passed": true,
+      "evidence": "ResumeEntry=True iid=True st=True pl=True"
+    },
+    {
+      "text": "Uses RunFinishedInterruptOutcome with Interrupt array",
+      "passed": true,
+      "evidence": "Found RunFinishedInterruptOutcome"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "executor_duration_seconds": 5.0
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "expectations": [
+    {
+      "text": "Controller sets Content-Type, Cache-Control, X-Accel-Buffering headers",
+      "passed": true,
+      "evidence": "CT=True CC=True XA=True"
+    },
+    {
+      "text": "One action uses rack.hijack and proc pattern",
+      "passed": false,
+      "evidence": "rack.hijack=True proc=False"
+    },
+    {
+      "text": "One action includes ActionController::Live and uses response.stream",
+      "passed": true,
+      "evidence": "Live=True rstream=True"
+    },
+    {
+      "text": "Both endpoints handle IOError for client disconnect",
+      "passed": true,
+      "evidence": "IOError refs=2"
+    },
+    {
+      "text": "Both endpoints close stream in ensure blocks",
+      "passed": true,
+      "evidence": "ensure blocks=2"
+    },
+    {
+      "text": "Controller uses EventEncoder to encode events",
+      "passed": false,
+      "evidence": "Missing EventEncoder"
+    },
+    {
+      "text": "Endpoints stream RunStartedEvent and RunFinishedEvent",
+      "passed": false,
+      "evidence": "RunStarted=False RunFinished=False"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 3,
+    "total": 7,
+    "pass_rate": 0.57
+  },
+  "timing": {
+    "executor_duration_seconds": 5.0
+  }
+}

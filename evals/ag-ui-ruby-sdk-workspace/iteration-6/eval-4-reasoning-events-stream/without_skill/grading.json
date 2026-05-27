@@ -1,0 +1,43 @@
+{
+  "expectations": [
+    {
+      "text": "Uses ReasoningStartEvent with message_id",
+      "passed": false,
+      "evidence": "Missing ReasoningStartEvent"
+    },
+    {
+      "text": "Uses ReasoningMessageStartEvent with message_id",
+      "passed": false,
+      "evidence": "Missing ReasoningMessageStartEvent"
+    },
+    {
+      "text": "Uses ReasoningMessageContentEvent with matching message_id",
+      "passed": false,
+      "evidence": "Missing ReasoningMessageContentEvent"
+    },
+    {
+      "text": "Uses ReasoningMessageEndEvent",
+      "passed": false,
+      "evidence": "Missing ReasoningMessageEndEvent"
+    },
+    {
+      "text": "Uses ReasoningEndEvent",
+      "passed": false,
+      "evidence": "Missing ReasoningEndEvent"
+    },
+    {
+      "text": "Uses ReasoningEncryptedValueEvent for encrypted content",
+      "passed": false,
+      "evidence": "Missing ReasoningEncryptedValueEvent"
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 6,
+    "total": 6,
+    "pass_rate": 0.0
+  },
+  "timing": {
+    "executor_duration_seconds": 5.0
+  }
+}

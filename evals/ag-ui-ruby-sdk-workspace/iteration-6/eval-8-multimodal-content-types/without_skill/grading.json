@@ -1,0 +1,38 @@
+{
+  "expectations": [
+    {
+      "text": "Uses ImageInputContent with InputContentUrlSource",
+      "passed": false,
+      "evidence": "Image=False URL=False"
+    },
+    {
+      "text": "Uses AudioInputContent with InputContentUrlSource",
+      "passed": false,
+      "evidence": "Missing AudioInputContent"
+    },
+    {
+      "text": "Uses VideoInputContent with InputContentUrlSource",
+      "passed": false,
+      "evidence": "Missing VideoInputContent"
+    },
+    {
+      "text": "Uses DocumentInputContent with InputContentUrlSource",
+      "passed": false,
+      "evidence": "Missing DocumentInputContent"
+    },
+    {
+      "text": "Uses InputContentDataSource for base64 content",
+      "passed": false,
+      "evidence": "Missing InputContentDataSource"
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 5,
+    "total": 5,
+    "pass_rate": 0.0
+  },
+  "timing": {
+    "executor_duration_seconds": 5.0
+  }
+}
